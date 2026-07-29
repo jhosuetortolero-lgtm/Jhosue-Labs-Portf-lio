@@ -1,0 +1,125 @@
+/* Animações de entrada e microinterações.
+   Tudo aqui é desligado por `prefers-reduced-motion` no fim do arquivo. */
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 var(--color-primary-soft);
+  }
+  50% {
+    box-shadow: 0 0 0 6px transparent;
+  }
+}
+
+@keyframes scroll-hint {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(6px);
+    opacity: 1;
+  }
+}
+
+/* --- Reveal ao entrar no viewport ------------------------------------------ */
+
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity var(--duration-slow) var(--ease-out),
+    transform var(--duration-slow) var(--ease-out);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+[data-reveal].is-revealed {
+  opacity: 1;
+  transform: none;
+}
+
+/* Sem JavaScript, o conteúdo aparece normalmente. */
+.no-js [data-reveal] {
+  opacity: 1;
+  transform: none;
+}
+
+/* --- Cursor de terminal ----------------------------------------------------- */
+
+.cursor {
+  display: inline-block;
+  width: 0.6em;
+  animation: blink 1.1s steps(1) infinite;
+}
+
+/* --- Ponto de status -------------------------------------------------------- */
+
+.status-dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  animation: pulse-dot 2.4s var(--ease-out) infinite;
+  flex-shrink: 0;
+}
+
+.status-dot--off {
+  background-color: var(--color-text-muted);
+  animation: none;
+}
+
+/* --- Movimento reduzido ----------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .cursor,
+  .status-dot {
+    animation: none !important;
+  }
+}

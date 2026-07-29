@@ -1,0 +1,82 @@
+---
+import Icon from '../common/Icon.astro';
+import { useTranslations } from '../../i18n';
+import { DEFAULT_LANGUAGE } from '../../types/i18n';
+
+const t = useTranslations(DEFAULT_LANGUAGE);
+---
+
+<button
+  type="button"
+  class="icon-button theme-toggle touch-target"
+  data-theme-toggle
+  aria-label={t('a11y.themeLight')}
+  title={t('a11y.toggleTheme')}
+  data-i18n-attr="title:a11y.toggleTheme"
+>
+  <span class="theme-toggle__icon theme-toggle__icon--sun">
+    <Icon name="sun" size={18} />
+  </span>
+  <span class="theme-toggle__icon theme-toggle__icon--moon">
+    <Icon name="moon" size={18} />
+  </span>
+</button>
+
+<style>
+  .icon-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: var(--border-width) solid var(--color-border-soft);
+    border-radius: var(--radius-medium);
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    transition:
+      border-color var(--duration-fast) var(--ease-out),
+      background-color var(--duration-fast) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out);
+  }
+
+  .icon-button:hover {
+    border-color: var(--color-border);
+    background-color: var(--color-surface-secondary);
+  }
+
+  .theme-toggle {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .theme-toggle__icon {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    inset: 0;
+    transition:
+      opacity var(--duration-base) var(--ease-out),
+      transform var(--duration-base) var(--ease-out);
+  }
+
+  /* Tema claro visível → mostra a lua (ação: ir para o escuro). */
+  .theme-toggle__icon--sun {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.6);
+  }
+
+  .theme-toggle__icon--moon {
+    opacity: 1;
+    transform: none;
+  }
+
+  :global(:root[data-theme='dark']) .theme-toggle__icon--sun {
+    opacity: 1;
+    transform: none;
+  }
+
+  :global(:root[data-theme='dark']) .theme-toggle__icon--moon {
+    opacity: 0;
+    transform: rotate(90deg) scale(0.6);
+  }
+</style>

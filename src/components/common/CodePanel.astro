@@ -1,0 +1,82 @@
+---
+import { siteConfig } from '../../config/site';
+import { useTranslations } from '../../i18n';
+import { DEFAULT_LANGUAGE } from '../../types/i18n';
+
+/** Janela de editor com o "perfil em código". Puramente ilustrativa. */
+const t = useTranslations(DEFAULT_LANGUAGE);
+const available = siteConfig.availability.open;
+---
+
+<div class="panel">
+  <div class="panel__bar">
+    <span class="panel__dot panel__dot--red"></span>
+    <span class="panel__dot panel__dot--yellow"></span>
+    <span class="panel__dot panel__dot--green"></span>
+    <span class="panel__title" data-i18n="hero.panelTitle">{t('hero.panelTitle')}</span>
+  </div>
+  <pre class="panel__code"><code>{`const jhosue = {
+  brand: "${siteConfig.brand.name}",
+  role: "Fullstack + AI",
+  stack: [
+    "Astro", "React", "TypeScript",
+    "Golang", "Fiber", "PostgreSQL",
+    "Redis", "Docker", "N8N"
+  ],
+  focus: ["SaaS", "CRM", "Automação"],
+  status: "${available ? 'open_for_work' : 'busy'}"
+};
+
+export default jhosue;`}</code></pre>
+</div>
+
+<style>
+  .panel {
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-medium);
+    background-color: var(--terminal-bg);
+    box-shadow: var(--shadow-small);
+    overflow: hidden;
+  }
+
+  .panel__bar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 0.6rem 0.8rem;
+    background-color: color-mix(in srgb, var(--terminal-bg) 70%, #ffffff 12%);
+    border-bottom: 1px solid rgb(255 255 255 / 12%);
+  }
+
+  .panel__dot {
+    width: 0.65rem;
+    height: 0.65rem;
+    border-radius: 50%;
+  }
+
+  .panel__dot--red {
+    background-color: #ff5f57;
+  }
+  .panel__dot--yellow {
+    background-color: #febc2e;
+  }
+  .panel__dot--green {
+    background-color: #28c840;
+  }
+
+  .panel__title {
+    margin-left: auto;
+    font-size: var(--text-xs);
+    color: rgb(255 255 255 / 65%);
+  }
+
+  .panel__code {
+    margin: 0;
+    padding: var(--space-4);
+    overflow-x: auto;
+    font-size: clamp(0.72rem, 0.66rem + 0.3vw, 0.82rem);
+    line-height: 1.7;
+    color: var(--terminal-text);
+    tab-size: 2;
+  }
+</style>

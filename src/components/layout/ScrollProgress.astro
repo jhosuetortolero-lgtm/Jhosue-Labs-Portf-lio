@@ -1,0 +1,140 @@
+---
+import { useTranslations } from '../../i18n';
+import { DEFAULT_LANGUAGE } from '../../types/i18n';
+
+const t = useTranslations(DEFAULT_LANGUAGE);
+
+/**
+ * Barra de progresso da leitura em forma de código sendo escrito.
+ *
+ * O texto abaixo é decorativo (aria-hidden) e existe só para dar a sensação
+ * de que o código vai sendo digitado conforme a pessoa desce a página.
+ * A informação real está no `role="progressbar"` com `aria-valuenow`.
+ *
+ * É longo de propósito: precisa cobrir telas largas sem repetir de forma óbvia.
+ */
+const codeLine =
+  'const jhosue = await build({ stack: ["astro","typescript","golang"], focus: "saas+ai" }); ' +
+  'if (!ready) await ship(); export default jhosue; // scroll = compile ';
+---
+
+<div
+  class="progress"
+  role="progressbar"
+  aria-valuemin="0"
+  aria-valuemax="100"
+  aria-valuenow="0"
+  aria-label={t('a11y.scrollProgress')}
+  data-i18n-attr="aria-label:a11y.scrollProgress"
+  data-scroll-progress
+>
+  {/* Camada de baixo: o código ainda "não escrito". */}
+  <span class="progress__ghost" aria-hidden="true">{codeLine}</span>
+
+  {/* Camada de cima: revelada conforme o progresso. */}
+  <span class="progress__written" data-scroll-progress-bar aria-hidden="true">
+    <span class="progress__written-inner">{codeLine}</span>
+  </span>
+
+  {/* Cursor que acompanha a ponta. */}
+  <span class="progress__caret" data-scroll-progress-caret aria-hidden="true"></span>
+
+  <span class="progress__rule" aria-hidden="true"></span>
+</div>
+
+<style>
+  .progress {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -18px;
+    height: 18px;
+    overflow: hidden;
+    pointer-events: none;
+    font-family: var(--font-body);
+    font-size: 10px;
+    line-height: 18px;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+  /* Depois de rolar, o header ganha fundo — a faixa de código acompanha,
+     senão o texto minúsculo brigaria com o conteúdo por baixo. */
+  :global(.header.is-scrolled) .progress {
+    background-color: color-mix(in srgb, var(--color-background) 86%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--color-border-soft);
+  }
+
+  /* Código "por escrever": quase invisível, só sugere o traçado. */
+  .progress__ghost,
+  .progress__written-inner {
+    display: block;
+    padding-left: var(--container-padding);
+  }
+
+  .progress__ghost {
+    color: var(--color-text-muted);
+    opacity: 0.16;
+  }
+
+  /* Código "já escrito": cresce da esquerda para a direita. */
+  .progress__written {
+    position: absolute;
+    inset: 0;
+    width: 0%;
+    overflow: hidden;
+    color: var(--color-primary-ink);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in srgb, var(--color-primary) 14%, transparent)
+    );
+  }
+
+  :global(:root[data-theme='dark']) .progress__written {
+    color: var(--color-primary);
+  }
+
+  /* Cursor de digitação na ponta da barra. */
+  .progress__caret {
+    position: absolute;
+    top: 3px;
+    left: 0;
+    width: 2px;
+    height: 12px;
+    background-color: var(--color-primary);
+    box-shadow: 0 0 8px var(--color-primary);
+    animation: blink 1.1s steps(1) infinite;
+  }
+
+  /* Fio verde na base: a barra de progresso clássica continua existindo. */
+  .progress__rule {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    width: 0%;
+    background-color: var(--color-primary);
+  }
+
+  /* Em telas estreitas o código vira só o fio, para não poluir. */
+  @media (max-width: 640px) {
+    .progress {
+      bottom: -2px;
+      height: 2px;
+    }
+
+    .progress__ghost,
+    .progress__written,
+    .progress__caret {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .progress__caret {
+      animation: none;
+    }
+  }
+</style>

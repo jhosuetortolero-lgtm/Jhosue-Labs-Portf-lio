@@ -1,0 +1,64 @@
+---
+import { projectFilters } from '../../data/projects';
+import { useTranslations } from '../../i18n';
+import { DEFAULT_LANGUAGE } from '../../types/i18n';
+
+const t = useTranslations(DEFAULT_LANGUAGE);
+---
+
+<div
+  class="filters"
+  role="group"
+  aria-label={t('projects.filtersLabel')}
+  data-i18n-attr="aria-label:projects.filtersLabel"
+>
+  {
+    projectFilters.map((category) => (
+      <button
+        type="button"
+        class="filters__button"
+        data-filter={category}
+        aria-pressed={category === 'ALL' ? 'true' : 'false'}
+        data-i18n={`projects.category.${category}`}
+      >
+        {t(`projects.category.${category}`)}
+      </button>
+    ))
+  }
+</div>
+
+<style>
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-bottom: var(--space-5);
+  }
+
+  .filters__button {
+    min-height: 44px;
+    padding: 0.4rem 1rem;
+    font-size: var(--text-sm);
+    font-weight: 700;
+    letter-spacing: var(--tracking-wide);
+    border: var(--border-width) solid var(--color-border-soft);
+    border-radius: var(--radius-pill);
+    background-color: transparent;
+    color: var(--color-text-muted);
+    transition:
+      background-color var(--duration-fast) var(--ease-out),
+      color var(--duration-fast) var(--ease-out),
+      border-color var(--duration-fast) var(--ease-out);
+  }
+
+  .filters__button:hover {
+    border-color: var(--color-border);
+    color: var(--color-text);
+  }
+
+  .filters__button[aria-pressed='true'] {
+    background-color: var(--color-primary);
+    border-color: var(--color-border);
+    color: var(--color-on-primary);
+  }
+</style>

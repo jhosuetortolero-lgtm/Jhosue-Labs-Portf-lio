@@ -1,0 +1,82 @@
+---
+import { navigation } from '../../config/navigation';
+import { useTranslations } from '../../i18n';
+import { DEFAULT_LANGUAGE } from '../../types/i18n';
+
+export interface Props {
+  id: string;
+  class?: string;
+  linkClass?: string;
+}
+
+const { id, class: className = '', linkClass = '' } = Astro.props;
+const t = useTranslations(DEFAULT_LANGUAGE);
+---
+
+<ul id={id} class:list={['nav-list', className]} role="list">
+  {
+    navigation.map((item) => (
+      <li>
+        <a
+          href={`#${item.id}`}
+          class:list={['nav-link', linkClass]}
+          data-nav-link={item.id}
+          data-i18n={item.labelKey}
+        >
+          {t(item.labelKey)}
+        </a>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .nav-list {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .nav-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 0.35rem 0.7rem;
+    font-size: var(--text-sm);
+    text-decoration: none;
+    border-radius: var(--radius-small);
+    color: var(--color-text-muted);
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    left: 0.7rem;
+    right: 0.7rem;
+    bottom: 0.25rem;
+    height: 2px;
+    background-color: var(--color-primary);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--duration-base) var(--ease-out);
+  }
+
+  .nav-link:hover {
+    color: var(--color-text);
+  }
+
+  .nav-link:hover::after,
+  .nav-link[aria-current='true']::after {
+    transform: scaleX(1);
+  }
+
+  .nav-link[aria-current='true'] {
+    color: var(--color-text);
+    font-weight: 700;
+  }
+</style>

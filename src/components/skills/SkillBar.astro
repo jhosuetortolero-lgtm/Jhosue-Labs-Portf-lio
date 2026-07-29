@@ -1,0 +1,80 @@
+---
+import { useTranslations } from '../../i18n';
+import { DEFAULT_LANGUAGE } from '../../types/i18n';
+import type { Skill } from '../../types/skill';
+
+export interface Props {
+  skill: Skill;
+  index?: number;
+}
+
+const { skill, index = 0 } = Astro.props;
+const t = useTranslations(DEFAULT_LANGUAGE);
+const labelId = `skill-label-${skill.id}`;
+---
+
+<li class="skill" data-reveal style={`--reveal-delay: ${Math.min(index, 5) * 60}ms`}>
+  <div class="skill__head">
+    <span id={labelId} data-i18n={`skill.${skill.id}.name`}>{t(`skill.${skill.id}.name`)}</span>
+    <span class="skill__value">{skill.percentage}%</span>
+  </div>
+  <div
+    class="skill__track"
+    role="meter"
+    aria-valuemin="0"
+    aria-valuemax="100"
+    aria-valuenow={skill.percentage}
+    aria-labelledby={labelId}
+  >
+    <div class="skill__fill" data-skill-fill style={`--target: ${skill.percentage}%`}></div>
+  </div>
+</li>
+
+<style>
+  .skill {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .skill__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-3);
+    font-size: var(--text-sm);
+    font-weight: 700;
+  }
+
+  .skill__value {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+
+  .skill__track {
+    height: 10px;
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-pill);
+    background-color: var(--color-surface-secondary);
+    overflow: hidden;
+  }
+
+  .skill__fill {
+    height: 100%;
+    width: var(--target);
+    background-color: var(--color-primary);
+    transition: width 900ms var(--ease-out);
+  }
+
+  /* Antes de entrar no viewport a barra começa vazia (só com JS ativo). */
+  :global(.js) .skill__fill:not(.is-filled) {
+    width: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .skill__fill {
+      transition: none;
+      width: var(--target) !important;
+    }
+  }
+</style>

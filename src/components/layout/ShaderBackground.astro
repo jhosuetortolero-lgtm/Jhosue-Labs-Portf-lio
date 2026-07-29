@@ -1,0 +1,69 @@
+---
+/**
+ * Fundo animado em WebGL, um shader por tema.
+ *
+ * Puramente decorativo: aria-hidden, sem foco, sem eventos de ponteiro.
+ * O canvas só aparece depois que o script confirma que conseguiu compilar
+ * (`data-shader-ready`), então uma falha de WebGL não deixa mancha na tela.
+ */
+---
+
+<div class="shader-bg" aria-hidden="true">
+  <canvas data-shader-bg></canvas>
+  <span class="shader-bg__grain"></span>
+</div>
+
+<style>
+  .shader-bg {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-particles);
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .shader-bg canvas {
+    width: 100%;
+    height: 100%;
+    /* Só aparece quando o shader compilou de verdade. */
+    opacity: 0;
+    transition: opacity 700ms var(--ease-out);
+  }
+
+  /*
+    A opacidade é o que garante o contraste do texto por cima.
+    Mexer aqui para mais alto deixa o fundo mais vistoso — e o texto menos
+    legível. Estes valores foram escolhidos mantendo o contraste AA.
+  */
+  /* Claro: o shader já parte do creme da base, então pode aparecer mais. */
+  .shader-bg canvas[data-shader-ready] {
+    opacity: 0.92;
+  }
+
+  /* Escuro: a nebulosa é bem mais saturada e precisa ser contida. */
+  :global(:root[data-theme='dark']) .shader-bg canvas[data-shader-ready] {
+    opacity: 0.5;
+  }
+
+  /* Suaviza as bordas para o conteúdo central respirar. */
+  .shader-bg__grain {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      ellipse 90% 70% at 50% 40%,
+      transparent 0%,
+      var(--color-background) 100%
+    );
+    opacity: 0.3;
+  }
+
+  :global(:root[data-theme='dark']) .shader-bg__grain {
+    opacity: 0.5;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .shader-bg {
+      display: none;
+    }
+  }
+</style>

@@ -1,0 +1,43 @@
+---
+import SectionHeader from '../common/SectionHeader.astro';
+import CertificateCarousel from '../certificates/CertificateCarousel.astro';
+import { certificates, isCertificatePending } from '../../data/certificates';
+import { useTranslations } from '../../i18n';
+import { DEFAULT_LANGUAGE } from '../../types/i18n';
+
+const t = useTranslations(DEFAULT_LANGUAGE);
+const hasPending = certificates.some(isCertificatePending);
+---
+
+<section id="certificates" class="section" aria-labelledby="certificates-title">
+  <div class="container">
+    <SectionHeader
+      headingId="certificates-title"
+      eyebrowKey="certificates.eyebrow"
+      titleKey="certificates.title"
+      subtitleKey="certificates.subtitle"
+      eyebrow={t('certificates.eyebrow')}
+      title={t('certificates.title')}
+      subtitle={t('certificates.subtitle')}
+    />
+
+    <div data-reveal>
+      <CertificateCarousel />
+    </div>
+
+    {
+      hasPending && (
+        <p class="certificates__note muted" data-i18n="certificates.pendingHint">
+          {t('certificates.pendingHint')}
+        </p>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .certificates__note {
+    margin-top: var(--space-4);
+    font-size: var(--text-xs);
+  }
+</style>

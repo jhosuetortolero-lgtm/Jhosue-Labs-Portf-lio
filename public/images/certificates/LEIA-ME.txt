@@ -1,0 +1,38 @@
+CERTIFICADOS — onde colocar as imagens
+======================================
+
+Coloque aqui os arquivos dos seus certificados.
+
+Formato recomendado:
+  - .webp (menor) ou .jpg
+  - largura entre 1200px e 1600px
+  - precisa dar para LER o texto quando ampliado na tela
+
+Nome do arquivo: use letras minúsculas e hífen, sem acento e sem espaço.
+  Exemplos:  react-avancado.webp
+             golang-fundamentos.webp
+             ia-generativa-openai.jpg
+
+Depois de salvar o arquivo aqui, abra:
+
+    src/data/certificates.ts
+
+e preencha o bloco correspondente:
+
+    {
+      id: 'react-avancado',
+      title: 'React Avançado',
+      issuer: 'Nome da escola ou plataforma',
+      year: '2025',
+      workload: '40h',                                 // ou null
+      image: '/images/certificates/react-avancado.webp',
+      credentialUrl: 'https://link-de-verificacao',    // ou null
+    },
+
+Observações:
+  - O caminho em `image` sempre começa com /images/certificates/
+  - Enquanto `image` for null, o cartão aparece marcado como pendente
+    (nada de imagem quebrada no site).
+  - Pode ter quantos certificados quiser: o carrossel se ajusta sozinho.
+  - Para esconder a seção inteira, mude `certificates` para false em
+    src/config/features.ts

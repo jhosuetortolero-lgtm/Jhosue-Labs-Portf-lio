@@ -1,0 +1,71 @@
+/* Recursos de acessibilidade globais. */
+
+/* Texto visível só para leitores de tela. */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Skip link: escondido acima da tela até receber foco.
+   Sem transform/translate — evita criar rolagem horizontal em telas estreitas. */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: var(--space-3);
+  right: var(--space-3);
+  width: fit-content;
+  max-width: calc(100% - var(--space-3) * 2);
+  z-index: calc(var(--z-boot) + 10);
+  padding: 0.7rem 1.2rem;
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: 0 0 var(--radius-medium) var(--radius-medium);
+  font-weight: 700;
+  text-decoration: none;
+  transition: top var(--duration-fast) var(--ease-out);
+}
+
+.skip-link:focus-visible,
+.skip-link:focus {
+  top: 0;
+}
+
+/* Alvos de toque com no mínimo 44x44 (WCAG 2.2 — Target Size). */
+.touch-target {
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Região de anúncios para leitores de tela. */
+.live-region {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+
+/* Contraste forçado (Windows High Contrast). */
+@media (forced-colors: active) {
+  .card,
+  .tag,
+  .button {
+    border: 1px solid CanvasText;
+  }
+
+  :focus-visible {
+    outline: 3px solid Highlight;
+  }
+}

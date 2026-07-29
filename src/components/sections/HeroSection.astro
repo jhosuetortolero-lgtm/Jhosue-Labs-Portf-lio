@@ -1,0 +1,275 @@
+---
+import Button from '../common/Button.astro';
+import Icon from '../common/Icon.astro';
+import ProfilePhoto from '../common/ProfilePhoto.astro';
+import SplitText from '../common/SplitText.astro';
+import RotatingWords from '../common/RotatingWords.astro';
+import { heroRotator } from '../../config/site';
+import { siteConfig, mailtoUrl } from '../../config/site';
+import { activeSocialLinks } from '../../config/social';
+import { useTranslations } from '../../i18n';
+import { DEFAULT_LANGUAGE } from '../../types/i18n';
+import { withBase } from '../../utils/paths';
+
+const t = useTranslations(DEFAULT_LANGUAGE);
+const available = siteConfig.availability.open;
+const statusKey = available ? 'hero.availableNow' : 'hero.unavailable';
+const contactHref = mailtoUrl(`Contato via ${siteConfig.brand.name}`) ?? '#contact';
+---
+
+<section id="hero" class="hero" aria-labelledby="hero-title">
+  <div class="container hero__inner">
+    <div class="hero__content">
+      <p class="hero__status">
+        <span class:list={['status-dot', !available && 'status-dot--off']} aria-hidden="true"></span>
+        <span data-i18n={statusKey}>{t(statusKey)}</span>
+      </p>
+
+      <p class="hero__greeting" data-i18n="hero.greeting">{t('hero.greeting')}</p>
+
+      <h1 id="hero-title" class="hero__title">
+        <SplitText text={t('hero.title')} i18nKey="hero.title" step={24} offset={140} />
+      </h1>
+
+      <RotatingWords keys={heroRotator} />
+
+      <p class="hero__description lead" data-i18n="hero.description">{t('hero.description')}</p>
+
+      <div class="hero__actions">
+        <Button href="#projects" variant="primary" size="lg" icon="arrow-right" data-i18n="hero.projectsButton">
+          {t('hero.projectsButton')}
+        </Button>
+        <Button href={contactHref} variant="secondary" size="lg" icon="mail" data-i18n="hero.contactButton">
+          {t('hero.contactButton')}
+        </Button>
+        <Button
+          href={withBase(siteConfig.cvUrl)}
+          variant="ghost"
+          size="lg"
+          icon="download"
+          download
+          data-i18n="hero.cvButton"
+        >
+          {t('hero.cvButton')}
+        </Button>
+      </div>
+
+      {
+        activeSocialLinks.length > 0 && (
+          <ul class="hero__social" role="list">
+            {activeSocialLinks.map((item) => (
+              <li>
+                <a
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="hero__social-link touch-target"
+                  aria-label={t(item.labelKey)}
+                  data-i18n-attr={`aria-label:${item.labelKey}`}
+                >
+                  <Icon name={item.icon} size={19} />
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+
+    <aside class="hero__panel" aria-label={siteConfig.brand.name}>
+      <ProfilePhoto />
+
+      <div class="hero__badges" aria-hidden="true">
+        <span class="hero__badge">SaaS</span>
+        <span class="hero__badge">IA</span>
+        <span class="hero__badge">API</span>
+        <span class="hero__badge">CRM</span>
+      </div>
+    </aside>
+  </div>
+
+  <a href="#about" class="hero__scroll" aria-label={t('hero.scrollHint')} data-i18n-attr="aria-label:hero.scrollHint">
+    <span class="mono-label" data-i18n="hero.scrollHint">{t('hero.scrollHint')}</span>
+    <Icon name="chevron-down" size={18} />
+  </a>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: 100svh;
+    padding-top: calc(var(--header-offset) + var(--space-6));
+    padding-bottom: var(--space-8);
+  }
+
+  .hero__inner {
+    display: grid;
+    gap: var(--space-7);
+    grid-template-columns: 1fr;
+    align-items: center;
+  }
+
+  .hero__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .hero__status {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    align-self: flex-start;
+    padding: 0.3rem 0.8rem;
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    border: 1px solid var(--color-border-soft);
+    border-radius: var(--radius-pill);
+    background-color: var(--color-surface);
+  }
+
+  .hero__greeting {
+    font-size: var(--text-lg);
+    color: var(--color-text-muted);
+  }
+
+  .hero__title {
+    max-width: 18ch;
+    text-wrap: balance;
+  }
+
+  /* display: block para os sinais < /> quebrarem junto com o texto,
+     e não sozinhos em uma linha própria no mobile. */
+  .hero__role {
+    display: block;
+    font-size: var(--text-lg);
+    font-weight: 700;
+    color: var(--color-primary-ink);
+  }
+
+  .hero__role-bracket {
+    color: var(--color-text-muted);
+    font-weight: 400;
+  }
+
+  .hero__role-bracket:first-child {
+    margin-right: 0.3ch;
+  }
+
+  .hero__role-bracket:last-child {
+    margin-left: 0.3ch;
+  }
+
+  .hero__description {
+    max-width: 56ch;
+  }
+
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-2);
+  }
+
+  .hero__social {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin: var(--space-3) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .hero__social-link {
+    border: var(--border-width) solid var(--color-border-soft);
+    border-radius: var(--radius-medium);
+    color: var(--color-text);
+    transition:
+      border-color var(--duration-fast) var(--ease-out),
+      background-color var(--duration-fast) var(--ease-out);
+  }
+
+  .hero__social-link:hover {
+    border-color: var(--color-border);
+    background-color: var(--color-surface);
+  }
+
+  /* --- Coluna da foto --------------------------------------------------- */
+
+  .hero__panel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    align-items: center;
+  }
+
+  .hero__badges {
+    justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .hero__badge {
+    padding: 0.2rem 0.7rem;
+    font-size: var(--text-xs);
+    font-weight: 700;
+    letter-spacing: var(--tracking-wide);
+    border: 1px solid var(--color-border-soft);
+    border-radius: var(--radius-pill);
+    color: var(--color-text-muted);
+  }
+
+  /* --- Indicador de rolagem -------------------------------------------- */
+
+  .hero__scroll {
+    position: absolute;
+    left: 50%;
+    bottom: var(--space-4);
+    translate: -50% 0;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-1);
+    text-decoration: none;
+    color: var(--color-text-muted);
+    animation: scroll-hint 2.4s var(--ease-out) infinite;
+  }
+
+  @media (min-width: 768px) {
+    .hero__scroll {
+      display: flex;
+    }
+  }
+
+  /* Até o desktop, a foto vem ANTES do texto: é a primeira coisa que se vê. */
+  @media (max-width: 1023px) {
+    .hero__panel {
+      order: -1;
+    }
+
+    .hero {
+      padding-top: calc(var(--header-offset) + var(--space-4));
+    }
+
+    .hero__inner {
+      gap: var(--space-5);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .hero__inner {
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: var(--space-8);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero__scroll {
+      animation: none;
+    }
+  }
+</style>

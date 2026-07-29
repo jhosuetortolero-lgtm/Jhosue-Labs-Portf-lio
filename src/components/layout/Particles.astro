@@ -1,0 +1,49 @@
+---
+import { features } from '../../config/features';
+
+/**
+ * Fundo decorativo em canvas. Puramente visual:
+ * aria-hidden, sem captura de eventos, e desligado com movimento reduzido.
+ *
+ * Com o fundo de shader ligado, só a grade permanece — dois fundos animados
+ * ao mesmo tempo pesariam e poluiriam a leitura.
+ */
+const showDots = !features.shaderBackground;
+---
+
+<div class="particles" aria-hidden="true">
+  {showDots && <canvas data-particles></canvas>}
+  <div class="particles__grid"></div>
+</div>
+
+<style>
+  .particles {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-particles);
+    pointer-events: none;
+    opacity: 0.55;
+  }
+
+  .particles canvas {
+    width: 100%;
+    height: 100%;
+  }
+
+  .particles__grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--color-border-soft) 1px, transparent 1px),
+      linear-gradient(90deg, var(--color-border-soft) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 20%, transparent 75%);
+    opacity: 0.5;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .particles canvas {
+      display: none;
+    }
+  }
+</style>

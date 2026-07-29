@@ -1,0 +1,6 @@
+# Jhosue Labs
+User-agent: *
+Allow: /
+
+# Troque o domínio ao publicar.
+Sitemap: https://jhosue-labs.example.com/sitemap.xml

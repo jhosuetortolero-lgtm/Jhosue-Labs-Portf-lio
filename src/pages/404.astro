@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/common/Button.astro';
+import { useTranslations } from '../i18n';
+import { DEFAULT_LANGUAGE } from '../types/i18n';
+import { withBase } from '../utils/paths';
+
+const t = useTranslations(DEFAULT_LANGUAGE);
+---
+
+<BaseLayout title={`404 — ${t('notFound.title')}`} noindex>
+  <section class="section notfound" aria-labelledby="notfound-title">
+    <div class="container notfound__inner">
+      <p class="notfound__code" data-i18n="notFound.code">{t('notFound.code')}</p>
+      <h1 id="notfound-title" data-i18n="notFound.title">{t('notFound.title')}</h1>
+      <p class="lead" data-i18n="notFound.description">{t('notFound.description')}</p>
+      <Button href={withBase('/')} variant="primary" size="lg" icon="arrow-right">
+        <span data-i18n="notFound.back">{t('notFound.back')}</span>
+      </Button>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .notfound {
+    display: flex;
+    align-items: center;
+    min-height: 80svh;
+    padding-top: calc(var(--header-offset) + var(--space-6));
+  }
+
+  .notfound__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-4);
+  }
+
+  .notfound__code {
+    font-family: var(--font-display);
+    font-size: var(--text-hero);
+    font-weight: 700;
+    line-height: 1;
+    color: var(--color-primary-ink);
+  }
+</style>

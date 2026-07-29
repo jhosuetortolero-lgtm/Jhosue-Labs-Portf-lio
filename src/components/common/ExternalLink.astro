@@ -1,0 +1,24 @@
+---
+import Icon from './Icon.astro';
+
+/**
+ * Link externo sempre com rel="noopener noreferrer" e aviso acessível
+ * de que abre em nova aba.
+ */
+export interface Props {
+  href: string;
+  class?: string;
+  showIcon?: boolean;
+  hintText: string;
+  'aria-label'?: string;
+  'data-i18n'?: string;
+}
+
+const { href, class: className = '', showIcon = true, hintText, ...rest } = Astro.props;
+---
+
+<a href={href} target="_blank" rel="noopener noreferrer" class:list={[className]} {...rest}>
+  <slot />
+  {showIcon && <Icon name="external" size={15} />}
+  <span class="visually-hidden" data-i18n="a11y.externalLink">{hintText}</span>
+</a>

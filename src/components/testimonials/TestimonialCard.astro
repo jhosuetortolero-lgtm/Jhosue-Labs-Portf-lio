@@ -1,0 +1,197 @@
+---
+import Icon from '../common/Icon.astro';
+import Stars from './Stars.astro';
+import { useTranslations } from '../../i18n';
+import { DEFAULT_LANGUAGE } from '../../types/i18n';
+import type { Testimonial } from '../../types/testimonial';
+
+export interface Props {
+  testimonial: Testimonial;
+  index: number;
+  /** true nas cópias usadas para o loop infinito. */
+  clone?: boolean;
+}
+
+const { testimonial, index, clone = false } = Astro.props;
+const t = useTranslations(DEFAULT_LANGUAGE);
+
+/** Iniciais para o avatar gerado (sem foto de banco de imagens). */
+const initials = testimonial.author
+  .split(/\s+/)
+  .slice(0, 2)
+  .map((word) => word.charAt(0).toUpperCase())
+  .join('');
+---
+
+<li
+  class="quote"
+  data-carousel-item
+  role={clone ? 'presentation' : undefined}
+  aria-hidden={clone ? 'true' : undefined}
+>
+  <button
+    type="button"
+    class="quote__button"
+    data-testimonial-open={index}
+    tabindex={clone ? -1 : 0}
+    aria-label={`${t('testimonials.readFull')}: ${testimonial.author}`}
+  >
+    <span class="quote__mark" aria-hidden="true">&ldquo;</span>
+
+    <span class="quote__head">
+      {
+        testimonial.rating !== null && (
+          <Stars rating={testimonial.rating} label={t('testimonials.rating')} />
+        )
+      }
+      <span class="quote__source">{testimonial.source}</span>
+    </span>
+
+    <span class="quote__text">{testimonial.quote}</span>
+
+    <span class="quote__footer">
+      <span class="quote__avatar" aria-hidden="true">{initials}</span>
+      <span class="quote__who">
+        <span class="quote__author">{testimonial.author}</span>
+        <span class="quote__company">
+          {testimonial.company ?? testimonial.project}
+        </span>
+      </span>
+      <span class="quote__more" aria-hidden="true">
+        <Icon name="arrow-right" size={16} />
+      </span>
+    </span>
+  </button>
+</li>
+
+<style>
+  .quote {
+    flex: 0 0 auto;
+    width: clamp(270px, 82vw, 380px);
+  }
+
+  .quote__button {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    width: 100%;
+    height: 100%;
+    padding: var(--space-5);
+    text-align: left;
+    background-color: var(--color-surface);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-medium);
+    box-shadow: var(--shadow-small);
+    position: relative;
+    overflow: hidden;
+    transition:
+      transform var(--duration-base) var(--ease-out),
+      box-shadow var(--duration-base) var(--ease-out);
+  }
+
+  .quote__button:hover,
+  .quote__button:focus-visible {
+    transform: translate(-3px, -3px);
+    box-shadow: var(--shadow-medium);
+  }
+
+  .quote__mark {
+    position: absolute;
+    top: -0.35em;
+    right: 0.15em;
+    font-family: var(--font-display);
+    font-size: 6rem;
+    line-height: 1;
+    color: var(--color-primary-soft);
+    pointer-events: none;
+  }
+
+  .quote__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    position: relative;
+  }
+
+  .quote__source {
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  .quote__text {
+    position: relative;
+    font-size: var(--text-sm);
+    line-height: 1.65;
+    color: var(--color-text);
+    /* Corta em 6 linhas no cartão; o texto completo abre no diálogo. */
+    display: -webkit-box;
+    -webkit-line-clamp: 6;
+    line-clamp: 6;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .quote__footer {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-top: auto;
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--color-border-soft);
+  }
+
+  .quote__avatar {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background-color: var(--color-primary-soft);
+    color: var(--color-primary-ink);
+    font-size: var(--text-xs);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+
+  .quote__who {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .quote__author {
+    font-weight: 700;
+    font-size: var(--text-sm);
+  }
+
+  .quote__company {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .quote__more {
+    margin-left: auto;
+    color: var(--color-primary-ink);
+    flex-shrink: 0;
+    transition: transform var(--duration-fast) var(--ease-out);
+  }
+
+  .quote__button:hover .quote__more {
+    transform: translateX(3px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .quote__button:hover,
+    .quote__button:focus-visible,
+    .quote__button:hover .quote__more {
+      transform: none;
+    }
+  }
+</style>

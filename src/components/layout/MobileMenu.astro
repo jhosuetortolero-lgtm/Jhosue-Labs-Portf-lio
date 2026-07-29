@@ -1,0 +1,172 @@
+---
+import Icon from '../common/Icon.astro';
+import { navigation } from '../../config/navigation';
+import { activeSocialLinks } from '../../config/social';
+import { useTranslations } from '../../i18n';
+import { DEFAULT_LANGUAGE } from '../../types/i18n';
+import { siteConfig } from '../../config/site';
+
+const t = useTranslations(DEFAULT_LANGUAGE);
+---
+
+<div class="mobile-menu" id="mobile-menu" hidden data-mobile-menu>
+  <div class="mobile-menu__panel" role="dialog" aria-modal="true" aria-label={siteConfig.brand.name}>
+    <div class="mobile-menu__head">
+      <span class="mono-label">{siteConfig.brand.name}</span>
+      <button
+        type="button"
+        class="mobile-menu__close touch-target"
+        data-mobile-close
+        aria-label={t('a11y.closeMenu')}
+        data-i18n-attr="aria-label:a11y.closeMenu"
+      >
+        <Icon name="close" size={22} />
+      </button>
+    </div>
+
+    <nav aria-label={t('a11y.mainNavigation')} data-i18n-attr="aria-label:a11y.mainNavigation">
+      <ul class="mobile-menu__list" role="list">
+        {
+          navigation.map((item, index) => (
+            <li>
+              <a
+                href={`#${item.id}`}
+                class="mobile-menu__link"
+                data-nav-link={item.id}
+                data-mobile-link
+                data-i18n={item.labelKey}
+              >
+                <span class="mobile-menu__index">{String(index + 1).padStart(2, '0')}</span>
+                {t(item.labelKey)}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    {
+      activeSocialLinks.length > 0 && (
+        <div class="mobile-menu__social">
+          {activeSocialLinks.map((item) => (
+            <a
+              href={item.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="mobile-menu__social-link touch-target"
+              aria-label={t(item.labelKey)}
+              data-i18n-attr={`aria-label:${item.labelKey}`}
+            >
+              <Icon name={item.icon} size={20} />
+            </a>
+          ))}
+        </div>
+      )
+    }
+  </div>
+</div>
+
+<style>
+  .mobile-menu {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-mobile-menu);
+    background-color: rgb(0 0 0 / 45%);
+  }
+
+  .mobile-menu[hidden] {
+    display: none;
+  }
+
+  .mobile-menu__panel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    width: min(88vw, 24rem);
+    height: 100%;
+    margin-left: auto;
+    padding: var(--space-5);
+    background-color: var(--color-background);
+    border-left: var(--border-width) solid var(--color-border);
+    overflow-y: auto;
+    animation: slide-in var(--duration-base) var(--ease-out);
+  }
+
+  @keyframes slide-in {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: none;
+    }
+  }
+
+  .mobile-menu__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+
+  .mobile-menu__close {
+    border: var(--border-width) solid var(--color-border-soft);
+    border-radius: var(--radius-medium);
+    color: var(--color-text);
+  }
+
+  .mobile-menu__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .mobile-menu__link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    min-height: 52px;
+    padding: 0.5rem 0.6rem;
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    text-decoration: none;
+    border-radius: var(--radius-small);
+    border-bottom: 1px solid var(--color-border-soft);
+  }
+
+  .mobile-menu__link[aria-current='true'] {
+    color: var(--color-primary-ink);
+  }
+
+  .mobile-menu__index {
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+
+  .mobile-menu__social {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: auto;
+  }
+
+  .mobile-menu__social-link {
+    border: var(--border-width) solid var(--color-border-soft);
+    border-radius: var(--radius-medium);
+    color: var(--color-text);
+  }
+
+  .mobile-menu__social-link:hover {
+    border-color: var(--color-border);
+    background-color: var(--color-surface-secondary);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mobile-menu__panel {
+      animation: none;
+    }
+  }
+</style>

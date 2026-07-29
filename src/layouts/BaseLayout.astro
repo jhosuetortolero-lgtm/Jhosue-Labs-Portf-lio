@@ -1,0 +1,134 @@
+---
+import '@fontsource-variable/space-grotesk';
+import '@fontsource-variable/jetbrains-mono';
+
+import '../assets/styles/tokens.css';
+import '../assets/styles/reset.css';
+import '../assets/styles/global.css';
+import '../assets/styles/animations.css';
+import '../assets/styles/utilities.css';
+import '../assets/styles/accessibility.css';
+
+import Seo from '../components/common/Seo.astro';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import MobileMenu from '../components/layout/MobileMenu.astro';
+import Particles from '../components/layout/Particles.astro';
+import ShaderBackground from '../components/layout/ShaderBackground.astro';
+import BootScreen from '../components/terminal/BootScreen.astro';
+import CommandPalette from '../components/terminal/CommandPalette.astro';
+import CertificateLightbox from '../components/certificates/CertificateLightbox.astro';
+import TestimonialDialog from '../components/testimonials/TestimonialDialog.astro';
+
+import { features } from '../config/features';
+import { siteConfig } from '../config/site';
+import { useTranslations } from '../i18n';
+import { DEFAULT_LANGUAGE, HTML_LANG } from '../types/i18n';
+import { validateContent } from '../data/validate';
+
+// Valida todo o conteúdo de src/data no build (não vai para o navegador).
+validateContent();
+
+export interface Props {
+  title?: string;
+  description?: string;
+  noindex?: boolean;
+  /** false na página 404, que não tem as seções da home. */
+  showChrome?: boolean;
+}
+
+const { title, description, noindex = false, showChrome = true } = Astro.props;
+const t = useTranslations(DEFAULT_LANGUAGE);
+
+const themeStorageKey = siteConfig.storageKeys.theme;
+const defaultTheme = siteConfig.theme.default;
+const darkColor = siteConfig.seo.themeColorDark;
+const lightColor = siteConfig.seo.themeColorLight;
+---
+
+<!doctype html>
+<html lang={HTML_LANG[DEFAULT_LANGUAGE]} class="no-js" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    {/*
+      Tema aplicado ANTES da primeira pintura: sem flash de tela branca.
+      Roda inline, síncrono, e não depende de nenhum bundle.
+    */}
+    <script
+      is:inline
+      define:vars={{ themeStorageKey, defaultTheme, darkColor, lightColor }}
+    >
+      (function () {
+        try {
+          const stored = localStorage.getItem(themeStorageKey);
+          let theme = stored === 'dark' || stored === 'light' ? stored : null;
+          if (!theme) {
+            if (defaultTheme === 'dark' || defaultTheme === 'light') {
+              theme = defaultTheme;
+            } else {
+              theme = window.matchMedia('(prefers-color-scheme: dark)').matches
+                ? 'dark'
+                : 'light';
+            }
+          }
+          document.documentElement.dataset.theme = theme;
+          const meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) meta.setAttribute('content', theme === 'dark' ? darkColor : lightColor);
+        } catch {
+          document.documentElement.dataset.theme = 'light';
+        }
+      })();
+    </script>
+
+    <Seo title={title} description={description} noindex={noindex} />
+  </head>
+
+  <body>
+    <a class="skip-link" href="#main-content" data-i18n="a11y.skipLink">{t('a11y.skipLink')}</a>
+
+    {features.bootScreen && <BootScreen />}
+    {features.shaderBackground && <ShaderBackground />}
+    {features.particles && <Particles />}
+
+    <Header />
+    <MobileMenu />
+
+    <main id="main-content" tabindex="-1">
+      <slot />
+    </main>
+
+    {showChrome && <Footer />}
+    {features.commandPalette && <CommandPalette />}
+    {features.certificates && showChrome && <CertificateLightbox />}
+    {features.testimonials && showChrome && <TestimonialDialog />}
+
+    <script>
+      import '../scripts/main';
+    </script>
+
+    <style is:global>
+      /*
+        Conteúdo acima dos fundos decorativos.
+
+        Só o main e o footer entram nesta camada. Aplicar a regra a TODO filho
+        do body colocava o header (z-index 50) na mesma camada do main — e,
+        por vir antes no documento, ele ficava atrás: o menu de idioma
+        aberto era coberto pelo main e não recebia clique.
+
+        Header, menu mobile, command palette, visualizador e boot screen já
+        têm posicionamento e z-index próprios, acima desta camada.
+      */
+      body > main,
+      body > footer {
+        position: relative;
+        z-index: var(--z-content);
+      }
+
+      main:focus {
+        outline: none;
+      }
+    </style>
+  </body>
+</html>

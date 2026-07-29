@@ -1,0 +1,537 @@
+---
+import SectionHeader from '../common/SectionHeader.astro';
+import Icon from '../common/Icon.astro';
+import Button from '../common/Button.astro';
+import {
+  siteConfig,
+  isPlaceholder,
+  mailtoUrl,
+  whatsappUrl,
+  whatsappDisplay,
+  profileHandle,
+} from '../../config/site';
+import { socialHref } from '../../config/social';
+import { features } from '../../config/features';
+import { FIELD_LIMITS, MESSAGE_MIN_LENGTH } from '../../services/contact/contact.types';
+import { useTranslations } from '../../i18n';
+import { DEFAULT_LANGUAGE } from '../../types/i18n';
+
+const t = useTranslations(DEFAULT_LANGUAGE);
+const available = siteConfig.availability.open;
+const statusKey = available ? 'contact.availableNow' : 'contact.unavailable';
+
+const githubHref = socialHref('github');
+const linkedinHref = socialHref('linkedin');
+
+/** Cada canal mostra um valor legível; os não configurados viram aviso. */
+const channels = [
+  {
+    id: 'email',
+    icon: 'mail',
+    labelKey: 'social.email',
+    href: mailtoUrl(`Contato via ${siteConfig.brand.name}`),
+    value: isPlaceholder(siteConfig.contact.email) ? null : siteConfig.contact.email,
+  },
+  {
+    id: 'whatsapp',
+    icon: 'whatsapp',
+    labelKey: 'social.whatsapp',
+    href: whatsappUrl('Olá Jhosue! Vim pelo site da Jhosue Labs.'),
+    value: whatsappDisplay(),
+  },
+  {
+    id: 'github',
+    icon: 'github',
+    labelKey: 'social.github',
+    href: githubHref,
+    value: githubHref ? profileHandle(githubHref) : null,
+  },
+  {
+    id: 'linkedin',
+    icon: 'linkedin',
+    labelKey: 'social.linkedin',
+    href: linkedinHref,
+    value: linkedinHref ? profileHandle(linkedinHref) : null,
+  },
+];
+
+const projectTypes = ['web', 'saas', 'crm', 'ai', 'automation', 'whatsapp', 'api', 'other'];
+const budgets = ['undefined', 'upTo5k', 'from5to15k', 'from15to40k', 'above40k'];
+---
+
+<section id="contact" class="section" aria-labelledby="contact-title">
+  <div class="container">
+    <SectionHeader
+      headingId="contact-title"
+      eyebrowKey="contact.eyebrow"
+      titleKey="contact.title"
+      subtitleKey="contact.subtitle"
+      eyebrow={t('contact.eyebrow')}
+      title={t('contact.title')}
+      subtitle={t('contact.subtitle')}
+    />
+
+    <div class="contact">
+      <div class="contact__channels" data-reveal>
+        <p class="contact__status">
+          <span class:list={['status-dot', !available && 'status-dot--off']} aria-hidden="true"></span>
+          <span data-i18n={statusKey}>{t(statusKey)}</span>
+        </p>
+
+        <h3 class="contact__heading" data-i18n="contact.channelsTitle">
+          {t('contact.channelsTitle')}
+        </h3>
+
+        <ul class="contact__list" role="list">
+          {
+            channels.map((channel) => (
+              <li>
+                {channel.href ? (
+                  <a
+                    href={channel.href}
+                    class="contact__link"
+                    {...(channel.href.startsWith('http')
+                      ? { target: '_blank', rel: 'noopener noreferrer' }
+                      : {})}
+                  >
+                    <span class="contact__icon">
+                      <Icon name={channel.icon} size={18} />
+                    </span>
+                    <span class="contact__link-text">
+                      <span class="mono-label" data-i18n={channel.labelKey}>
+                        {t(channel.labelKey)}
+                      </span>
+                      <span class="contact__value">{channel.value}</span>
+                    </span>
+                  </a>
+                ) : (
+                  <div class="contact__link contact__link--disabled">
+                    <span class="contact__icon">
+                      <Icon name={channel.icon} size={18} />
+                    </span>
+                    <span class="contact__link-text">
+                      <span class="mono-label" data-i18n={channel.labelKey}>
+                        {t(channel.labelKey)}
+                      </span>
+                      <span class="contact__value muted" data-i18n="contact.notConfigured">
+                        {t('contact.notConfigured')}
+                      </span>
+                    </span>
+                  </div>
+                )}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      {
+        features.contactForm && (
+          <div class="contact__form-wrapper card" data-reveal style="--reveal-delay: 90ms">
+            <h3 class="contact__heading" data-i18n="contact.formTitle">
+              {t('contact.formTitle')}
+            </h3>
+
+            <form class="form" data-contact-form novalidate>
+              {/* Honeypot: invisível para pessoas, atrativo para robôs. */}
+              <div class="form__honeypot" aria-hidden="true">
+                <label for="website">Website</label>
+                <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" />
+              </div>
+
+              <div class="form__row">
+                <div class="form__field">
+                  <label for="contact-name">
+                    <span data-i18n="form.name">{t('form.name')}</span>
+                    <span class="form__required" aria-hidden="true">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="contact-name"
+                    name="name"
+                    required
+                    maxlength={FIELD_LIMITS.name}
+                    autocomplete="name"
+                    placeholder={t('form.namePlaceholder')}
+                    data-i18n-attr="placeholder:form.namePlaceholder"
+                    aria-describedby="error-name"
+                  />
+                  <p class="form__error" id="error-name" data-error-for="name" role="alert" />
+                </div>
+
+                <div class="form__field">
+                  <label for="contact-email">
+                    <span data-i18n="form.email">{t('form.email')}</span>
+                    <span class="form__required" aria-hidden="true">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    id="contact-email"
+                    name="email"
+                    required
+                    maxlength={FIELD_LIMITS.email}
+                    autocomplete="email"
+                    placeholder={t('form.emailPlaceholder')}
+                    data-i18n-attr="placeholder:form.emailPlaceholder"
+                    aria-describedby="error-email"
+                  />
+                  <p class="form__error" id="error-email" data-error-for="email" role="alert" />
+                </div>
+              </div>
+
+              <div class="form__row">
+                <div class="form__field">
+                  <label for="contact-company">
+                    <span data-i18n="form.company">{t('form.company')}</span>
+                    <span class="form__optional" data-i18n="form.companyOptional">
+                      {t('form.companyOptional')}
+                    </span>
+                  </label>
+                  <input
+                    type="text"
+                    id="contact-company"
+                    name="company"
+                    maxlength={FIELD_LIMITS.company}
+                    autocomplete="organization"
+                    placeholder={t('form.companyPlaceholder')}
+                    data-i18n-attr="placeholder:form.companyPlaceholder"
+                  />
+                </div>
+
+                <div class="form__field">
+                  <label for="contact-budget">
+                    <span data-i18n="form.budget">{t('form.budget')}</span>
+                    <span class="form__optional" data-i18n="form.companyOptional">
+                      {t('form.companyOptional')}
+                    </span>
+                  </label>
+                  <select id="contact-budget" name="budget">
+                    <option value="" data-i18n="form.budgetPlaceholder">
+                      {t('form.budgetPlaceholder')}
+                    </option>
+                    {budgets.map((budget) => (
+                      <option value={budget} data-i18n={`form.budgets.${budget}`}>
+                        {t(`form.budgets.${budget}`)}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div class="form__field">
+                <label for="contact-type">
+                  <span data-i18n="form.projectType">{t('form.projectType')}</span>
+                  <span class="form__required" aria-hidden="true">*</span>
+                </label>
+                <select
+                  id="contact-type"
+                  name="projectType"
+                  required
+                  aria-describedby="error-projectType"
+                >
+                  <option value="" data-i18n="form.projectTypePlaceholder">
+                    {t('form.projectTypePlaceholder')}
+                  </option>
+                  {projectTypes.map((type) => (
+                    <option value={type} data-i18n={`form.types.${type}`}>
+                      {t(`form.types.${type}`)}
+                    </option>
+                  ))}
+                </select>
+                <p
+                  class="form__error"
+                  id="error-projectType"
+                  data-error-for="projectType"
+                  role="alert"
+                />
+              </div>
+
+              <div class="form__field">
+                <label for="contact-message">
+                  <span data-i18n="form.message">{t('form.message')}</span>
+                  <span class="form__required" aria-hidden="true">*</span>
+                </label>
+                <textarea
+                  id="contact-message"
+                  name="message"
+                  required
+                  rows="5"
+                  minlength={MESSAGE_MIN_LENGTH}
+                  maxlength={FIELD_LIMITS.message}
+                  placeholder={t('form.messagePlaceholder')}
+                  data-i18n-attr="placeholder:form.messagePlaceholder"
+                  aria-describedby="error-message message-counter"
+                />
+                <p class="form__counter" id="message-counter">
+                  <span data-message-counter>{FIELD_LIMITS.message}</span>
+                  <span data-i18n="form.charactersLeft">{t('form.charactersLeft')}</span>
+                </p>
+                <p class="form__error" id="error-message" data-error-for="message" role="alert" />
+              </div>
+
+              <div class="form__field form__field--check">
+                <label class="form__check">
+                  <input type="checkbox" name="consent" required aria-describedby="error-consent" />
+                  <span data-i18n="form.consent">{t('form.consent')}</span>
+                </label>
+                <p class="form__error" id="error-consent" data-error-for="consent" role="alert" />
+              </div>
+
+              <Button type="submit" variant="primary" size="lg" icon="arrow-right" data-contact-submit>
+                <span data-i18n="form.submit">{t('form.submit')}</span>
+              </Button>
+
+              <p class="form__feedback" data-contact-feedback role="status" aria-live="polite"></p>
+            </form>
+          </div>
+        )
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .contact {
+    display: grid;
+    gap: var(--space-6);
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  .contact__status {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 0.3rem 0.8rem;
+    margin-bottom: var(--space-4);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    border: 1px solid var(--color-border-soft);
+    border-radius: var(--radius-pill);
+    background-color: var(--color-surface);
+  }
+
+  .contact__heading {
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-4);
+  }
+
+  .contact__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .contact__link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    min-height: 56px;
+    padding: var(--space-3);
+    text-decoration: none;
+    border: var(--border-width) solid var(--color-border-soft);
+    border-radius: var(--radius-medium);
+    background-color: var(--color-surface);
+    transition:
+      border-color var(--duration-fast) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out);
+  }
+
+  a.contact__link:hover {
+    border-color: var(--color-border);
+    transform: translateX(3px);
+  }
+
+  .contact__link--disabled {
+    opacity: 0.7;
+  }
+
+  .contact__icon {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 38px;
+    height: 38px;
+    border-radius: var(--radius-small);
+    background-color: var(--color-primary-soft);
+    color: var(--color-primary-ink);
+  }
+
+  .contact__link-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .contact__value {
+    font-size: var(--text-sm);
+    overflow-wrap: anywhere;
+  }
+
+  /* --- Formulário ------------------------------------------------------- */
+
+  .contact__form-wrapper {
+    padding: var(--space-5);
+  }
+
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .form__honeypot {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+
+  .form__row {
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: 1fr;
+  }
+
+  .form__field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .form__field label {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    font-weight: 700;
+  }
+
+  .form__required {
+    color: var(--color-secondary-ink);
+  }
+
+  .form__optional {
+    font-weight: 400;
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+
+  .form input[type='text'],
+  .form input[type='email'],
+  .form select,
+  .form textarea {
+    width: 100%;
+    min-height: 46px;
+    padding: 0.6rem 0.8rem;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    background-color: var(--color-background);
+    color: var(--color-text);
+    border: var(--border-width) solid var(--color-border-soft);
+    border-radius: var(--radius-small);
+    transition: border-color var(--duration-fast) var(--ease-out);
+  }
+
+  .form textarea {
+    resize: vertical;
+    min-height: 8rem;
+    line-height: 1.6;
+  }
+
+  .form input:focus,
+  .form select:focus,
+  .form textarea:focus {
+    border-color: var(--color-primary);
+  }
+
+  .form [aria-invalid='true'] {
+    border-color: var(--color-danger);
+  }
+
+  .form__error {
+    font-size: var(--text-xs);
+    color: var(--color-danger);
+    min-height: 1em;
+  }
+
+  .form__error:empty {
+    display: none;
+  }
+
+  .form__counter {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+    text-align: right;
+  }
+
+  .form__check {
+    display: flex !important;
+    align-items: flex-start;
+    gap: var(--space-3);
+    font-weight: 400 !important;
+    font-size: var(--text-sm);
+    cursor: pointer;
+    min-height: 44px;
+  }
+
+  .form__check input {
+    width: 20px;
+    height: 20px;
+    margin-top: 0.15rem;
+    flex-shrink: 0;
+    accent-color: var(--color-primary);
+  }
+
+  .form__feedback {
+    font-size: var(--text-sm);
+    padding: var(--space-3);
+    border-radius: var(--radius-small);
+    border: 1px solid transparent;
+  }
+
+  .form__feedback:empty {
+    display: none;
+  }
+
+  .form__feedback.is-success {
+    border-color: var(--color-primary);
+    background-color: var(--color-primary-soft);
+    color: var(--color-success);
+  }
+
+  .form__feedback.is-error {
+    border-color: var(--color-danger);
+    color: var(--color-danger);
+  }
+
+  .form__feedback.is-info {
+    border-color: var(--color-border-soft);
+    background-color: var(--color-surface-secondary);
+    color: var(--color-text-muted);
+  }
+
+  @media (min-width: 560px) {
+    .form__row {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .contact {
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: var(--space-7);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    a.contact__link:hover {
+      transform: none;
+    }
+  }
+</style>

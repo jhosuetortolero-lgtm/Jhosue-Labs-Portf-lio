@@ -1,0 +1,168 @@
+---
+import SectionHeader from '../common/SectionHeader.astro';
+import Icon from '../common/Icon.astro';
+import { services } from '../../data/services';
+import { useTranslations } from '../../i18n';
+import { DEFAULT_LANGUAGE } from '../../types/i18n';
+
+const t = useTranslations(DEFAULT_LANGUAGE);
+---
+
+<section id="services" class="section section--alt" aria-labelledby="services-title">
+  <div class="container">
+    <SectionHeader
+      headingId="services-title"
+      eyebrowKey="services.eyebrow"
+      titleKey="services.title"
+      subtitleKey="services.subtitle"
+      eyebrow={t('services.eyebrow')}
+      title={t('services.title')}
+      subtitle={t('services.subtitle')}
+    />
+
+    <ul class="services" role="list">
+      {
+        services.map((service, index) => (
+          <li
+            class="card service"
+            data-reveal
+            style={`--reveal-delay: ${Math.min(index, 5) * 70}ms`}
+          >
+            <span class="service__bar" aria-hidden="true" />
+
+            <div class="service__head">
+              <span class="service__icon">
+                <Icon name={service.icon} size={24} />
+              </span>
+              <span class="service__index" aria-hidden="true">
+                {String(index + 1).padStart(2, '0')}
+              </span>
+            </div>
+
+            <h3 class="service__title" data-i18n={`service.${service.id}.title`}>
+              {t(`service.${service.id}.title`)}
+            </h3>
+            <p class="muted" data-i18n={`service.${service.id}.description`}>
+              {t(`service.${service.id}.description`)}
+            </p>
+            <a class="service__link" href="#contact">
+              <span data-i18n="services.cta">{t('services.cta')}</span>
+              <Icon name="arrow-right" size={16} />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .services {
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 270px), 1fr));
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .service {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-5);
+    overflow: hidden;
+  }
+
+  /* Barra que corre no topo do cartão ao passar o mouse. */
+  .service__bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--duration-base) var(--ease-out);
+  }
+
+  .service:hover .service__bar,
+  .service:focus-within .service__bar {
+    transform: scaleX(1);
+  }
+
+  .service__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+
+  .service__icon {
+    display: grid;
+    place-items: center;
+    width: 50px;
+    height: 50px;
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-medium);
+    background-color: var(--color-primary-soft);
+    color: var(--color-primary-ink);
+    transition:
+      background-color var(--duration-base) var(--ease-out),
+      color var(--duration-base) var(--ease-out),
+      transform var(--duration-base) var(--ease-out);
+  }
+
+  .service__index {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    line-height: 1;
+    color: var(--color-border-soft);
+    transition: color var(--duration-base) var(--ease-out);
+  }
+
+  .service:hover .service__index {
+    color: var(--color-primary);
+  }
+
+  .service__title {
+    font-size: var(--text-lg);
+  }
+
+  .service__link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: auto;
+    padding-top: var(--space-2);
+    min-height: 44px;
+    font-size: var(--text-sm);
+    font-weight: 700;
+    text-decoration: none;
+    color: var(--color-primary-ink);
+  }
+
+  .service__link:hover {
+    text-decoration: underline;
+  }
+
+  .service:hover .service__icon {
+    background-color: var(--color-primary);
+    color: var(--color-on-primary);
+    transform: rotate(-4deg) scale(1.06);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .service__bar,
+    .service__icon {
+      transition: none;
+    }
+
+    .service:hover .service__icon {
+      transform: none;
+    }
+  }
+</style>

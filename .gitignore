@@ -1,0 +1,32 @@
+# build
+dist/
+.astro/
+.output/
+.vercel/
+.netlify/
+
+# dependências
+node_modules/
+.pnp/
+.pnp.js
+
+# ambiente — NUNCA versionar
+.env
+.env.local
+.env.*.local
+
+# testes
+coverage/
+playwright-report/
+test-results/
+blob-report/
+.playwright/
+
+# sistema / editores
+.DS_Store
+Thumbs.db
+*.log
+npm-debug.log*
+.idea/
+.vscode/*
+!.vscode/extensions.json

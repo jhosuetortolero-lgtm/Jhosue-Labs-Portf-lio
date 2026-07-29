@@ -1,0 +1,223 @@
+---
+import SectionHeader from '../common/SectionHeader.astro';
+import Icon from '../common/Icon.astro';
+import ProjectCard from '../projects/ProjectCard.astro';
+import ProjectFilters from '../projects/ProjectFilters.astro';
+import { projects } from '../../data/projects';
+import { features } from '../../config/features';
+import { useTranslations } from '../../i18n';
+import { DEFAULT_LANGUAGE } from '../../types/i18n';
+
+const t = useTranslations(DEFAULT_LANGUAGE);
+
+// Destaques primeiro, mas todos os projetos ficam no HTML inicial (SEO).
+const ordered = [...projects].sort((a, b) => Number(b.featured) - Number(a.featured));
+
+/**
+ * Com poucos projetos a grade é melhor: um carrossel precisaria repetir os
+ * mesmos cartões para preencher a faixa. A partir do quarto projeto o
+ * carrossel liga sozinho, com o mesmo motor dos certificados e depoimentos.
+ */
+const MIN_FOR_CAROUSEL = 4;
+const useCarousel = ordered.length >= MIN_FOR_CAROUSEL;
+---
+
+<section id="projects" class="section" aria-labelledby="projects-title">
+  <div class="container">
+    <SectionHeader
+      headingId="projects-title"
+      eyebrowKey="projects.eyebrow"
+      titleKey="projects.title"
+      subtitleKey="projects.subtitle"
+      eyebrow={t('projects.eyebrow')}
+      title={t('projects.title')}
+      subtitle={t('projects.subtitle')}
+    />
+
+    {features.projectFilters && <ProjectFilters />}
+
+    {
+      useCarousel ? (
+        <div
+          class="carousel"
+          data-carousel
+          data-carousel-speed="24"
+          data-carousel-pause-key="projects.pause"
+          data-carousel-play-key="projects.play"
+          role="group"
+          aria-roledescription="carousel"
+          aria-label={t('projects.carousel')}
+          data-i18n-attr="aria-label:projects.carousel"
+        >
+          <div class="carousel__viewport" data-carousel-viewport tabindex="0">
+            <ul class="carousel__track" role="list" data-carousel-track data-project-grid>
+              {ordered.map((project, index) => (
+                <ProjectCard project={project} index={index} />
+              ))}
+              {ordered.map((project, index) => (
+                <ProjectCard project={project} index={index} clone />
+              ))}
+            </ul>
+          </div>
+
+          <div class="carousel__controls">
+            <button
+              type="button"
+              class="carousel__button touch-target"
+              data-carousel-prev
+              aria-label={t('projects.previous')}
+              data-i18n-attr="aria-label:projects.previous"
+            >
+              <Icon name="arrow-right" size={18} />
+            </button>
+            <button
+              type="button"
+              class="carousel__button touch-target"
+              data-carousel-toggle
+              aria-pressed="false"
+              aria-label={t('projects.pause')}
+              data-i18n-attr="aria-label:projects.pause"
+            >
+              <span class="carousel__bars" aria-hidden="true" />
+            </button>
+            <button
+              type="button"
+              class="carousel__button touch-target"
+              data-carousel-next
+              aria-label={t('projects.next')}
+              data-i18n-attr="aria-label:projects.next"
+            >
+              <Icon name="arrow-right" size={18} />
+            </button>
+          </div>
+        </div>
+      ) : (
+        <ul class="projects" role="list" data-project-grid>
+          {ordered.map((project, index) => (
+            <ProjectCard project={project} index={index} />
+          ))}
+        </ul>
+      )
+    }
+
+    <p class="projects__empty" data-projects-empty hidden data-i18n="projects.empty">
+      {t('projects.empty')}
+    </p>
+
+    <p class="live-region" role="status" aria-live="polite" data-projects-status></p>
+  </div>
+</section>
+
+<style>
+  /* --- Modo grade --------------------------------------------------------- */
+
+  .projects {
+    display: grid;
+    gap: var(--space-5);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* --- Modo carrossel ----------------------------------------------------- */
+
+  .carousel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .carousel__viewport {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    padding-block: var(--space-2);
+    padding-inline: 5px;
+    margin-inline: -5px;
+  }
+
+  .carousel__viewport::-webkit-scrollbar {
+    display: none;
+  }
+
+  .carousel__viewport:focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 4px;
+    border-radius: var(--radius-medium);
+  }
+
+  .carousel__track {
+    display: flex;
+    align-items: stretch;
+    gap: var(--space-5);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    width: max-content;
+  }
+
+  /* No carrossel o cartão tem largura própria; na grade ele acompanha a coluna. */
+  .carousel__track :global(.project) {
+    flex: 0 0 auto;
+    width: clamp(290px, 84vw, 380px);
+  }
+
+  .carousel__controls {
+    display: flex;
+    gap: var(--space-2);
+  }
+
+  .carousel__button {
+    width: 44px;
+    height: 44px;
+    border: var(--border-width) solid var(--color-border-soft);
+    border-radius: var(--radius-medium);
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    transition:
+      border-color var(--duration-fast) var(--ease-out),
+      background-color var(--duration-fast) var(--ease-out);
+  }
+
+  .carousel__button:hover {
+    border-color: var(--color-border);
+    background-color: var(--color-surface-secondary);
+  }
+
+  [data-carousel-prev] :global(svg) {
+    transform: rotate(180deg);
+  }
+
+  .carousel__bars {
+    display: block;
+    width: 14px;
+    height: 14px;
+    border-left: 4px solid currentColor;
+    border-right: 4px solid currentColor;
+  }
+
+  [data-carousel-toggle][aria-pressed='true'] .carousel__bars {
+    width: 0;
+    height: 0;
+    border-left: 12px solid currentColor;
+    border-right: 0;
+    border-top: 7px solid transparent;
+    border-bottom: 7px solid transparent;
+  }
+
+  /* --- Estado vazio ------------------------------------------------------- */
+
+  .projects__empty {
+    margin-top: var(--space-5);
+    padding: var(--space-5);
+    text-align: center;
+    color: var(--color-text-muted);
+    border: 2px dashed var(--color-border-soft);
+    border-radius: var(--radius-medium);
+  }
+
+  .projects__empty[hidden] {
+    display: none;
+  }
+</style>

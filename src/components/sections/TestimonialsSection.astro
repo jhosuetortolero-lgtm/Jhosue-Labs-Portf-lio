@@ -1,0 +1,56 @@
+---
+import SectionHeader from '../common/SectionHeader.astro';
+import TestimonialCarousel from '../testimonials/TestimonialCarousel.astro';
+import Stars from '../testimonials/Stars.astro';
+import { testimonials, averageRating } from '../../data/testimonials';
+import { useTranslations } from '../../i18n';
+import { DEFAULT_LANGUAGE } from '../../types/i18n';
+
+const t = useTranslations(DEFAULT_LANGUAGE);
+const media = averageRating();
+const total = testimonials.length;
+---
+
+<section id="testimonials" class="section section--alt" aria-labelledby="testimonials-title">
+  <div class="container">
+    <SectionHeader
+      headingId="testimonials-title"
+      eyebrowKey="testimonials.eyebrow"
+      titleKey="testimonials.title"
+      subtitleKey="testimonials.subtitle"
+      eyebrow={t('testimonials.eyebrow')}
+      title={t('testimonials.title')}
+      subtitle={t('testimonials.subtitle')}
+    />
+
+    {
+      media !== null && (
+        <p class="testimonials__summary" data-reveal>
+          <Stars rating={media} label={t('testimonials.average')} size={18} />
+          <span class="muted">
+            <span data-i18n="testimonials.average">{t('testimonials.average')}</span>
+            {` · ${total} `}
+            <span data-i18n={total === 1 ? 'testimonials.countOne' : 'testimonials.countMany'}>
+              {t(total === 1 ? 'testimonials.countOne' : 'testimonials.countMany')}
+            </span>
+          </span>
+        </p>
+      )
+    }
+
+    <div data-reveal>
+      <TestimonialCarousel />
+    </div>
+  </div>
+</section>
+
+<style>
+  .testimonials__summary {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-5);
+    font-size: var(--text-sm);
+  }
+</style>

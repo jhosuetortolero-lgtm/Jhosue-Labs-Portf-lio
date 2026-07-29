@@ -1,0 +1,352 @@
+---
+import Icon from '../common/Icon.astro';
+import { certificates, isCertificatePending } from '../../data/certificates';
+import { useTranslations } from '../../i18n';
+import { DEFAULT_LANGUAGE } from '../../types/i18n';
+import { withBase } from '../../utils/paths';
+
+const t = useTranslations(DEFAULT_LANGUAGE);
+
+/**
+ * Todos os certificados já vão no HTML, um painel por item.
+ * Trocar de certificado é só alternar qual painel está visível — sem
+ * montar markup no navegador e sem innerHTML.
+ */
+const total = certificates.length;
+---
+
+<div class="lightbox" data-certificate-lightbox hidden>
+  <div class="lightbox__backdrop" data-lightbox-backdrop></div>
+
+  <div
+    class="lightbox__dialog"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="lightbox-title"
+    data-lightbox-dialog
+  >
+    {/* div, não header/footer: o diálogo não deve criar marcos de página. */}
+    <div class="lightbox__head">
+      <div class="lightbox__heading">
+        <h2 id="lightbox-title" class="lightbox__title" data-lightbox-title></h2>
+        <p class="lightbox__subtitle" data-lightbox-subtitle></p>
+      </div>
+
+      <p class="lightbox__counter" aria-live="polite">
+        <span data-lightbox-index>1</span>
+        <span data-i18n="certificates.of">{t('certificates.of')}</span>
+        <span>{total}</span>
+      </p>
+
+      <button
+        type="button"
+        class="lightbox__close touch-target"
+        data-lightbox-close
+        aria-label={t('certificates.close')}
+        data-i18n-attr="aria-label:certificates.close"
+      >
+        <Icon name="close" size={22} />
+      </button>
+    </div>
+
+    <div class="lightbox__stage">
+      <button
+        type="button"
+        class="lightbox__nav lightbox__nav--prev touch-target"
+        data-lightbox-prev
+        aria-label={t('certificates.previous')}
+        data-i18n-attr="aria-label:certificates.previous"
+      >
+        <Icon name="arrow-right" size={20} />
+      </button>
+
+      {
+        certificates.map((certificate, index) => (
+          <figure class="lightbox__panel" data-lightbox-panel={index} hidden>
+            {certificate.image ? (
+              <img
+                src={withBase(certificate.image)}
+                alt={`${t('certificates.altPrefix')} ${certificate.title} — ${certificate.issuer}`}
+                loading="lazy"
+                decoding="async"
+              />
+            ) : (
+              <div class="lightbox__pending">
+                <Icon name="award" size={44} />
+                <p data-i18n="certificates.pending">{t('certificates.pending')}</p>
+                <p class="lightbox__hint" data-i18n="certificates.pendingHint">
+                  {t('certificates.pendingHint')}
+                </p>
+              </div>
+            )}
+            <figcaption class="visually-hidden">
+              {certificate.title} — {certificate.issuer}, {certificate.year}
+              {isCertificatePending(certificate) ? ` (${t('certificates.pending')})` : ''}
+            </figcaption>
+          </figure>
+        ))
+      }
+
+      <button
+        type="button"
+        class="lightbox__nav lightbox__nav--next touch-target"
+        data-lightbox-next
+        aria-label={t('certificates.next')}
+        data-i18n-attr="aria-label:certificates.next"
+      >
+        <Icon name="arrow-right" size={20} />
+      </button>
+    </div>
+
+    <div class="lightbox__foot">
+      {/* Sem href até o script preencher: nada de link vazio no HTML. */}
+      <a class="lightbox__action" data-lightbox-full target="_blank" rel="noopener noreferrer" hidden>
+        <Icon name="external" size={16} />
+        <span data-i18n="certificates.openFull">{t('certificates.openFull')}</span>
+      </a>
+
+      <a
+        class="lightbox__action lightbox__action--primary"
+        data-lightbox-credential
+        target="_blank"
+        rel="noopener noreferrer"
+        hidden
+      >
+        <Icon name="check" size={16} />
+        <span data-i18n="certificates.credential">{t('certificates.credential')}</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-palette);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(0.75rem, 3vw, 2rem);
+  }
+
+  .lightbox[hidden] {
+    display: none;
+  }
+
+  .lightbox__backdrop {
+    position: absolute;
+    inset: 0;
+    background-color: rgb(0 0 0 / 78%);
+    backdrop-filter: blur(4px);
+  }
+
+  .lightbox__dialog {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: min(100%, 1100px);
+    max-height: 94svh;
+    background-color: var(--color-surface);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-medium);
+    box-shadow: var(--shadow-large);
+    overflow: hidden;
+    animation: fade-up 200ms var(--ease-out);
+  }
+
+  .lightbox__head {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    padding: var(--space-4);
+    border-bottom: 1px solid var(--color-border-soft);
+  }
+
+  .lightbox__heading {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .lightbox__title {
+    font-size: var(--text-lg);
+    line-height: 1.3;
+  }
+
+  .lightbox__subtitle {
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+
+  .lightbox__counter {
+    display: flex;
+    gap: 0.4ch;
+    flex-shrink: 0;
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wide);
+    color: var(--color-text-muted);
+    padding-top: 0.35rem;
+  }
+
+  .lightbox__close {
+    flex-shrink: 0;
+    border: var(--border-width) solid var(--color-border-soft);
+    border-radius: var(--radius-medium);
+    color: var(--color-text);
+  }
+
+  .lightbox__close:hover {
+    border-color: var(--color-border);
+    background-color: var(--color-surface-secondary);
+  }
+
+  .lightbox__stage {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    min-height: 0;
+    padding: var(--space-4);
+    background-color: var(--color-background-alt);
+  }
+
+  .lightbox__panel {
+    margin: 0;
+    max-width: 100%;
+    max-height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lightbox__panel[hidden] {
+    display: none;
+  }
+
+  /* A imagem cresce até o limite da tela: é para conseguir LER o certificado. */
+  .lightbox__panel img {
+    max-width: 100%;
+    max-height: 74svh;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-small);
+    background-color: #fff;
+  }
+
+  .lightbox__pending {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    padding: clamp(2rem, 8vw, 4rem);
+    text-align: center;
+    color: var(--color-text-muted);
+    border: 2px dashed var(--color-border-soft);
+    border-radius: var(--radius-medium);
+  }
+
+  .lightbox__hint {
+    font-size: var(--text-xs);
+    max-width: 42ch;
+  }
+
+  .lightbox__nav {
+    position: absolute;
+    top: 50%;
+    translate: 0 -50%;
+    z-index: 2;
+    width: 44px;
+    height: 44px;
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-pill);
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    box-shadow: var(--shadow-small);
+  }
+
+  .lightbox__nav:hover {
+    background-color: var(--color-primary);
+    color: var(--color-on-primary);
+  }
+
+  .lightbox__nav--prev {
+    left: var(--space-3);
+  }
+
+  .lightbox__nav--next {
+    right: var(--space-3);
+  }
+
+  /* :global porque o SVG vem de dentro do componente Icon. */
+  .lightbox__nav--prev :global(svg) {
+    transform: rotate(180deg);
+  }
+
+  .lightbox__foot {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    padding: var(--space-4);
+    border-top: 1px solid var(--color-border-soft);
+  }
+
+  .lightbox__foot:not(:has(a:not([hidden]))) {
+    display: none;
+  }
+
+  .lightbox__action {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: 44px;
+    padding-inline: 1rem;
+    font-size: var(--text-sm);
+    font-weight: 700;
+    text-decoration: none;
+    border: var(--border-width) solid var(--color-border-soft);
+    border-radius: var(--radius-medium);
+    color: var(--color-text);
+  }
+
+  .lightbox__action[hidden] {
+    display: none;
+  }
+
+  .lightbox__action:hover {
+    border-color: var(--color-border);
+    background-color: var(--color-surface-secondary);
+  }
+
+  .lightbox__action--primary {
+    background-color: var(--color-primary);
+    color: var(--color-on-primary);
+    border-color: var(--color-border);
+  }
+
+  @media (max-width: 640px) {
+    .lightbox__nav--prev {
+      left: 2px;
+    }
+
+    .lightbox__nav--next {
+      right: 2px;
+    }
+
+    .lightbox__stage {
+      padding-inline: 50px;
+    }
+
+    .lightbox__counter {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lightbox__dialog {
+      animation: none;
+    }
+  }
+</style>

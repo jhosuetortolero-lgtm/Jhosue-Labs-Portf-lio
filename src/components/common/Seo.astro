@@ -1,0 +1,94 @@
+---
+import { siteConfig } from '../../config/site';
+import { sameAsProfiles } from '../../config/social';
+import { technologies } from '../../data/technologies';
+import { absoluteUrl, withBase } from '../../utils/paths';
+import { OG_LOCALE } from '../../types/i18n';
+import { useTranslations } from '../../i18n';
+import { DEFAULT_LANGUAGE } from '../../types/i18n';
+
+export interface Props {
+  title?: string;
+  description?: string;
+  noindex?: boolean;
+}
+
+const t = useTranslations(DEFAULT_LANGUAGE);
+
+const {
+  title = t('meta.title'),
+  description = t('meta.description'),
+  noindex = false,
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site ?? siteConfig.siteUrl).href;
+const ogImage = absoluteUrl(siteConfig.seo.ogImage, siteConfig.siteUrl);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: siteConfig.brand.owner,
+  alternateName: siteConfig.brand.name,
+  jobTitle: siteConfig.brand.professionalTitle,
+  description: siteConfig.seo.description,
+  url: siteConfig.siteUrl,
+  image: ogImage,
+  address: {
+    '@type': 'PostalAddress',
+    addressCountry: 'BR',
+  },
+  worksFor: siteConfig.ventures.map((venture) => ({
+    '@type': 'Organization',
+    name: venture.name,
+    ...(venture.description ? { description: venture.description } : {}),
+    ...(venture.url ? { url: venture.url } : {}),
+  })),
+  ...(sameAsProfiles.length > 0 ? { sameAs: sameAsProfiles } : {}),
+  knowsAbout: [
+    'Desenvolvimento Web',
+    'SaaS',
+    'CRM',
+    'Inteligência Artificial',
+    'Automação de processos',
+    ...technologies.slice(0, 12).map((technology) => technology.name),
+  ],
+  knowsLanguage: ['pt-BR', 'es', 'en'],
+};
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+
+{noindex && <meta name="robots" content="noindex, nofollow" />}
+{!noindex && <meta name="robots" content="index, follow, max-image-preview:large" />}
+
+<meta name="author" content={siteConfig.brand.owner} />
+<meta name="generator" content={Astro.generator} />
+
+{/* Open Graph */}
+<meta property="og:type" content={siteConfig.seo.type} />
+<meta property="og:site_name" content={siteConfig.brand.name} />
+<meta property="og:title" content={siteConfig.seo.ogTitle} />
+<meta property="og:description" content={siteConfig.seo.ogDescription} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:image:alt" content={siteConfig.seo.ogImageAlt} />
+<meta property="og:locale" content={OG_LOCALE[DEFAULT_LANGUAGE]} />
+
+{/* Twitter / X */}
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={siteConfig.seo.ogTitle} />
+<meta name="twitter:description" content={siteConfig.seo.ogDescription} />
+<meta name="twitter:image" content={ogImage} />
+{siteConfig.seo.twitterHandle && (
+  <meta name="twitter:creator" content={`@${siteConfig.seo.twitterHandle}`} />
+)}
+
+{/* Ícones e manifesto */}
+<link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
+<link rel="apple-touch-icon" href={withBase('/icons/apple-touch-icon.png')} />
+<link rel="manifest" href={withBase('/manifest.webmanifest')} />
+<meta name="theme-color" content={siteConfig.seo.themeColorLight} />
+
+<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />

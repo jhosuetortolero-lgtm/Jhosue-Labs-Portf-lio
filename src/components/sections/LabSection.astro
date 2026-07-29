@@ -1,0 +1,118 @@
+---
+import SectionHeader from '../common/SectionHeader.astro';
+import Icon from '../common/Icon.astro';
+import AnimatedTerminal from '../terminal/AnimatedTerminal.astro';
+import { labCapabilities } from '../../data/lab';
+import { features } from '../../config/features';
+import { useTranslations } from '../../i18n';
+import { DEFAULT_LANGUAGE } from '../../types/i18n';
+
+const t = useTranslations(DEFAULT_LANGUAGE);
+---
+
+<section id="lab" class="section section--alt" aria-labelledby="lab-title">
+  <div class="container">
+    <SectionHeader
+      headingId="lab-title"
+      eyebrowKey="lab.eyebrow"
+      titleKey="lab.title"
+      subtitleKey="lab.subtitle"
+      eyebrow={t('lab.eyebrow')}
+      title={t('lab.title')}
+      subtitle={t('lab.subtitle')}
+    />
+
+    <div class="lab">
+      <ul class="lab__list" role="list">
+        {
+          labCapabilities.map((capability, index) => (
+            <li class="lab__item" data-reveal style={`--reveal-delay: ${Math.min(index, 5) * 60}ms`}>
+              <span class="lab__icon">
+                <Icon name={capability.icon} size={19} />
+              </span>
+              <div>
+                <h3 class="lab__title" data-i18n={`lab.capability.${capability.id}.title`}>
+                  {t(`lab.capability.${capability.id}.title`)}
+                </h3>
+                <p class="muted" data-i18n={`lab.capability.${capability.id}.description`}>
+                  {t(`lab.capability.${capability.id}.description`)}
+                </p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+
+      {
+        features.animatedTerminal && (
+          <div class="lab__terminal" data-reveal>
+            <AnimatedTerminal />
+          </div>
+        )
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .lab {
+    display: grid;
+    gap: var(--space-6);
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  .lab__list {
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .lab__item {
+    display: flex;
+    gap: var(--space-3);
+    padding: var(--space-4);
+    background-color: var(--color-surface);
+    border: var(--border-width) solid var(--color-border-soft);
+    border-radius: var(--radius-medium);
+    transition: border-color var(--duration-fast) var(--ease-out);
+  }
+
+  .lab__item:hover {
+    border-color: var(--color-border);
+  }
+
+  .lab__icon {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 38px;
+    height: 38px;
+    border-radius: var(--radius-small);
+    background-color: var(--color-primary-soft);
+    color: var(--color-primary-ink);
+  }
+
+  .lab__title {
+    font-size: var(--text-base);
+    margin-bottom: var(--space-1);
+  }
+
+  .lab__item p {
+    font-size: var(--text-sm);
+  }
+
+  @media (min-width: 1024px) {
+    .lab {
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: var(--space-7);
+    }
+
+    .lab__list {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>

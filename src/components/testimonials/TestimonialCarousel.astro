@@ -1,0 +1,208 @@
+---
+import Icon from '../common/Icon.astro';
+import TestimonialCard from './TestimonialCard.astro';
+import { testimonials } from '../../data/testimonials';
+import { useTranslations } from '../../i18n';
+import { DEFAULT_LANGUAGE } from '../../types/i18n';
+
+const t = useTranslations(DEFAULT_LANGUAGE);
+
+/**
+ * Com menos de 3 depoimentos, o carrossel teria de repetir o mesmo cartão
+ * várias vezes para preencher a faixa — o que fica evidente e passa má
+ * impressão. Nesse caso mostramos uma grade estática, sem rotação.
+ * O carrossel entra sozinho a partir do terceiro depoimento.
+ */
+const MIN_FOR_CAROUSEL = 3;
+const useCarousel = testimonials.length >= MIN_FOR_CAROUSEL;
+const passes = [0, 1];
+const hasItems = testimonials.length > 0;
+---
+
+{
+  hasItems && !useCarousel && (
+    <ul class="grid" role="list">
+      {testimonials.map((testimonial, index) => (
+        <TestimonialCard testimonial={testimonial} index={index} />
+      ))}
+    </ul>
+  )
+}
+
+{
+  hasItems && useCarousel ? (
+    <div
+      class="carousel"
+      data-carousel
+      data-carousel-speed="26"
+      data-carousel-pause-key="testimonials.pause"
+      data-carousel-play-key="testimonials.play"
+      role="group"
+      aria-roledescription="carousel"
+      aria-label={t('testimonials.carousel')}
+      data-i18n-attr="aria-label:testimonials.carousel"
+    >
+      <div class="carousel__viewport" data-carousel-viewport tabindex="0">
+        <ul class="carousel__track" data-carousel-track>
+          {passes.map((pass) =>
+            testimonials.map((testimonial, index) => (
+              <TestimonialCard
+                testimonial={testimonial}
+                index={index}
+                clone={pass > 0}
+              />
+            )),
+          )}
+        </ul>
+      </div>
+
+      <div class="carousel__controls">
+        <button
+          type="button"
+          class="carousel__button touch-target"
+          data-carousel-prev
+          aria-label={t('testimonials.previous')}
+          data-i18n-attr="aria-label:testimonials.previous"
+        >
+          <Icon name="arrow-right" size={18} />
+        </button>
+
+        <button
+          type="button"
+          class="carousel__button touch-target"
+          data-carousel-toggle
+          aria-pressed="false"
+          aria-label={t('testimonials.pause')}
+          data-i18n-attr="aria-label:testimonials.pause"
+        >
+          <span class="carousel__bars" aria-hidden="true" />
+        </button>
+
+        <button
+          type="button"
+          class="carousel__button touch-target"
+          data-carousel-next
+          aria-label={t('testimonials.next')}
+          data-i18n-attr="aria-label:testimonials.next"
+        >
+          <Icon name="arrow-right" size={18} />
+        </button>
+      </div>
+    </div>
+  ) : null
+}
+
+{
+  !hasItems && (
+    <p class="carousel__empty muted" data-i18n="testimonials.empty">
+      {t('testimonials.empty')}
+    </p>
+  )
+}
+
+<style>
+  /* Modo grade: usado enquanto há poucos depoimentos. */
+  .grid {
+    display: grid;
+    gap: var(--space-4);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Na grade o cartão acompanha a coluna, em vez da largura fixa do carrossel. */
+  .grid :global(.quote) {
+    width: auto;
+  }
+
+  /* Com um único depoimento, largura confortável de leitura. */
+  .grid :global(.quote:only-child) {
+    max-width: 46rem;
+  }
+
+  .carousel {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .carousel__viewport {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    padding-block: var(--space-2);
+    padding-inline: 4px;
+    margin-inline: -4px;
+  }
+
+  .carousel__viewport::-webkit-scrollbar {
+    display: none;
+  }
+
+  .carousel__viewport:focus-visible {
+    outline: 3px solid var(--color-focus);
+    outline-offset: 4px;
+    border-radius: var(--radius-medium);
+  }
+
+  .carousel__track {
+    display: flex;
+    align-items: stretch;
+    gap: var(--space-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    width: max-content;
+  }
+
+  .carousel__controls {
+    display: flex;
+    gap: var(--space-2);
+  }
+
+  .carousel__button {
+    width: 44px;
+    height: 44px;
+    border: var(--border-width) solid var(--color-border-soft);
+    border-radius: var(--radius-medium);
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    transition:
+      border-color var(--duration-fast) var(--ease-out),
+      background-color var(--duration-fast) var(--ease-out);
+  }
+
+  .carousel__button:hover {
+    border-color: var(--color-border);
+    background-color: var(--color-surface-secondary);
+  }
+
+  [data-carousel-prev] :global(svg) {
+    transform: rotate(180deg);
+  }
+
+  .carousel__bars {
+    display: block;
+    width: 14px;
+    height: 14px;
+    border-left: 4px solid currentColor;
+    border-right: 4px solid currentColor;
+  }
+
+  [data-carousel-toggle][aria-pressed='true'] .carousel__bars {
+    width: 0;
+    height: 0;
+    border-left: 12px solid currentColor;
+    border-right: 0;
+    border-top: 7px solid transparent;
+    border-bottom: 7px solid transparent;
+  }
+
+  .carousel__empty {
+    padding: var(--space-5);
+    text-align: center;
+    border: 2px dashed var(--color-border-soft);
+    border-radius: var(--radius-medium);
+  }
+</style>

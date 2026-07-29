@@ -1,0 +1,158 @@
+/* =============================================================================
+   TOKENS — identidade visual da Jhosue Labs
+   -----------------------------------------------------------------------------
+   Trocar a identidade do site = editar SOMENTE este arquivo.
+   O tema escuro sobrescreve apenas as cores, nunca a folha de estilo inteira.
+   ============================================================================= */
+
+:root {
+  color-scheme: light;
+
+  /* --- Cores: superfície e texto ----------------------------------------- */
+  --color-background: #f4f1ea;
+  --color-background-alt: #ece8dc;
+  --color-surface: #ffffff;
+  --color-surface-secondary: #e9e4d6;
+  --color-text: #0f1310;
+  --color-text-muted: #4f5750;
+  --color-border: #0f1310;
+  --color-border-soft: rgb(15 19 16 / 14%);
+
+  /* --- Cores: marca ------------------------------------------------------- */
+  /* primary       — usar como preenchimento (texto escuro por cima) */
+  /* primary-ink   — versão com contraste AA para texto sobre fundo claro */
+  --color-primary: #21c07a;
+  --color-primary-ink: #0c6b41;
+  --color-primary-soft: rgb(33 192 122 / 16%);
+  --color-secondary: #ff6a3d;
+  --color-secondary-ink: #b53a12;
+  --color-accent: #6b4bff;
+  --color-accent-ink: #4a2fd6;
+  --color-on-primary: #06130c;
+  --color-focus: #1d4ed8;
+
+  /* --- Estado ------------------------------------------------------------- */
+  --color-success: #0c6b41;
+  --color-danger: #b3261e;
+  --color-warning: #8a5a00;
+
+  /* --- Terminal ----------------------------------------------------------- */
+  --terminal-bg: #10161b;
+  --terminal-text: #d8e3dc;
+  --terminal-prompt: #21c07a;
+  --terminal-accent: #7fd0ff;
+  --terminal-border: #0f1310;
+
+  /* --- Tipografia --------------------------------------------------------- */
+  --font-display: 'Space Grotesk Variable', 'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
+  --font-body: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, 'Cascadia Mono',
+    'Courier New', monospace;
+
+  --text-xs: clamp(0.7rem, 0.68rem + 0.1vw, 0.75rem);
+  --text-sm: clamp(0.8rem, 0.77rem + 0.15vw, 0.875rem);
+  --text-base: clamp(0.925rem, 0.89rem + 0.2vw, 1rem);
+  --text-lg: clamp(1.05rem, 1rem + 0.3vw, 1.2rem);
+  --text-xl: clamp(1.25rem, 1.15rem + 0.5vw, 1.55rem);
+  --text-2xl: clamp(1.6rem, 1.35rem + 1.1vw, 2.4rem);
+  --text-3xl: clamp(2rem, 1.5rem + 2.2vw, 3.4rem);
+  --text-hero: clamp(2.2rem, 1.5rem + 3.4vw, 4.4rem);
+
+  --leading-tight: 1.08;
+  --leading-snug: 1.3;
+  --leading-normal: 1.65;
+  --tracking-wide: 0.08em;
+  --tracking-wider: 0.16em;
+
+  /* --- Espaçamento -------------------------------------------------------- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+  --space-9: 6rem;
+  --section-padding: clamp(3.5rem, 8vw, 7rem);
+
+  /* --- Layout ------------------------------------------------------------- */
+  --container-width: 1200px;
+  --container-padding: clamp(1rem, 4vw, 2.5rem);
+  --header-height: 68px;
+  /* Faixa de progresso ("código sendo escrito") logo abaixo do header. */
+  --progress-height: 18px;
+  /* Altura total ocupada pelo topo fixo: use isto para âncoras e recuos. */
+  --header-offset: calc(var(--header-height) + var(--progress-height));
+
+  /* --- Formas ------------------------------------------------------------- */
+  --radius-small: 4px;
+  --radius-medium: 10px;
+  --radius-large: 18px;
+  --radius-pill: 999px;
+  --border-width: 2px;
+
+  --shadow-small: 3px 3px 0 var(--color-border);
+  --shadow-medium: 6px 6px 0 var(--color-border);
+  --shadow-large: 10px 10px 0 var(--color-border);
+  --shadow-soft: 0 12px 32px rgb(15 19 16 / 10%);
+
+  /* --- Movimento ---------------------------------------------------------- */
+  --duration-fast: 140ms;
+  --duration-base: 240ms;
+  --duration-slow: 420ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* --- Camadas ------------------------------------------------------------ */
+  --z-particles: 0;
+  --z-content: 1;
+  --z-header: 50;
+  --z-mobile-menu: 60;
+  --z-palette: 70;
+  --z-boot: 90;
+}
+
+/* =============================================================================
+   TEMA ESCURO — só as cores mudam
+   ============================================================================= */
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --color-background: #0b0f14;
+  --color-background-alt: #0e141b;
+  --color-surface: #121a22;
+  --color-surface-secondary: #17212b;
+  --color-text: #e8efe9;
+  --color-text-muted: #9aa8a0;
+  --color-border: #2b3947;
+  --color-border-soft: rgb(232 239 233 / 14%);
+
+  --color-primary: #33d68c;
+  --color-primary-ink: #61e6a8;
+  --color-primary-soft: rgb(51 214 140 / 18%);
+  --color-secondary: #ff8963;
+  --color-secondary-ink: #ffa383;
+  --color-accent: #8f76ff;
+  --color-accent-ink: #ab98ff;
+  --color-on-primary: #04150c;
+  --color-focus: #7fb2ff;
+
+  --color-success: #61e6a8;
+  --color-danger: #ff8a80;
+  --color-warning: #f5c66b;
+
+  --terminal-bg: #070b0f;
+  --terminal-text: #d8e3dc;
+  --terminal-border: #2b3947;
+
+  --shadow-small: 3px 3px 0 rgb(0 0 0 / 55%);
+  --shadow-medium: 6px 6px 0 rgb(0 0 0 / 55%);
+  --shadow-large: 10px 10px 0 rgb(0 0 0 / 55%);
+  --shadow-soft: 0 16px 40px rgb(0 0 0 / 45%);
+}
+
+/* Em telas estreitas a faixa de código vira só um fio de 2px. */
+@media (max-width: 640px) {
+  :root {
+    --progress-height: 2px;
+  }
+}

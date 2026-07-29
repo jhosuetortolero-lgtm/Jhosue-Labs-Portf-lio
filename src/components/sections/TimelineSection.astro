@@ -1,0 +1,53 @@
+---
+import SectionHeader from '../common/SectionHeader.astro';
+import TimelineItemCard from '../timeline/TimelineItem.astro';
+import { timeline } from '../../data/timeline';
+import { useTranslations } from '../../i18n';
+import { DEFAULT_LANGUAGE } from '../../types/i18n';
+
+const t = useTranslations(DEFAULT_LANGUAGE);
+---
+
+<section id="journey" class="section section--alt" aria-labelledby="journey-title">
+  <div class="container">
+    <SectionHeader
+      headingId="journey-title"
+      eyebrowKey="journey.eyebrow"
+      titleKey="journey.title"
+      subtitleKey="journey.subtitle"
+      eyebrow={t('journey.eyebrow')}
+      title={t('journey.title')}
+      subtitle={t('journey.subtitle')}
+    />
+
+    <ol class="timeline" role="list">
+      {timeline.map((item, index) => <TimelineItemCard item={item} index={index} />)}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .timeline {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    max-width: 72ch;
+  }
+
+  /* Linha vertical ligando os marcadores. */
+  .timeline::before {
+    content: '';
+    position: absolute;
+    top: 18px;
+    bottom: 18px;
+    left: 17px;
+    width: 2px;
+    background: linear-gradient(
+      to bottom,
+      var(--color-primary),
+      var(--color-border-soft) 70%,
+      transparent
+    );
+  }
+</style>

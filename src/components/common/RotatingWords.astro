@@ -1,0 +1,135 @@
+---
+import { useTranslations } from '../../i18n';
+import { DEFAULT_LANGUAGE } from '../../types/i18n';
+
+/**
+ * Linha de especialidades que troca sozinha.
+ *
+ * Sem JavaScript (ou com movimento reduzido) todas as palavras aparecem
+ * juntas, separadas por "•" — a informação nunca depende da animação.
+ */
+export interface Props {
+  /** Chaves de tradução das palavras. */
+  keys: string[];
+}
+
+const { keys } = Astro.props;
+const t = useTranslations(DEFAULT_LANGUAGE);
+---
+
+<p class="rotator" data-rotator>
+  <span class="rotator__prefix" aria-hidden="true">&gt;</span>
+
+  <span class="rotator__list">
+    {
+      keys.map((key, index) => (
+        <span
+          class="rotator__item"
+          data-rotator-item={index}
+          data-i18n={key}
+          data-current={index === 0 ? 'true' : undefined}
+        >
+          {t(key)}
+        </span>
+      ))
+    }
+  </span>
+
+  <span class="rotator__cursor" aria-hidden="true"></span>
+</p>
+
+<style>
+  .rotator {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--color-primary-ink);
+    min-height: 1.6em;
+  }
+
+  .rotator__prefix {
+    color: var(--color-text-muted);
+    font-weight: 400;
+  }
+
+  /* Sem JS: lista horizontal com separadores. */
+  .rotator__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6ch;
+  }
+
+  .rotator__item:not(:last-child)::after {
+    content: '•';
+    margin-left: 0.6ch;
+    color: var(--color-text-muted);
+  }
+
+  .rotator__cursor {
+    display: none;
+    width: 0.55em;
+    height: 1.05em;
+    background-color: var(--color-primary);
+    animation: blink 1.1s steps(1) infinite;
+  }
+
+  /* Com JS ativo vira rotação: uma palavra por vez, empilhadas. */
+  :global(.js) .rotator__list {
+    position: relative;
+    display: grid;
+    min-width: 0;
+  }
+
+  :global(.js) .rotator__item {
+    grid-area: 1 / 1;
+    opacity: 0;
+    transform: translateY(0.5em);
+    transition:
+      opacity var(--duration-base) var(--ease-out),
+      transform var(--duration-base) var(--ease-out);
+    white-space: nowrap;
+  }
+
+  :global(.js) .rotator__item::after {
+    content: none;
+  }
+
+  :global(.js) .rotator__item[data-current] {
+    opacity: 1;
+    transform: none;
+  }
+
+  :global(.js) .rotator__cursor {
+    display: inline-block;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    /* Volta para a lista completa e estática. */
+    :global(.js) .rotator__list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6ch;
+    }
+
+    :global(.js) .rotator__item {
+      opacity: 1;
+      transform: none;
+      transition: none;
+      white-space: normal;
+    }
+
+    :global(.js) .rotator__item:not(:last-child)::after {
+      content: '•';
+      margin-left: 0.6ch;
+      color: var(--color-text-muted);
+    }
+
+    :global(.js) .rotator__cursor {
+      display: none;
+    }
+  }
+</style>

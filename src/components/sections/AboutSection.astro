@@ -1,0 +1,236 @@
+---
+import SectionHeader from '../common/SectionHeader.astro';
+import Icon from '../common/Icon.astro';
+import CodePanel from '../common/CodePanel.astro';
+import { owner, statistics } from '../../data/owner';
+import { isPlaceholder, siteConfig } from '../../config/site';
+import { useTranslations } from '../../i18n';
+import { DEFAULT_LANGUAGE } from '../../types/i18n';
+
+const t = useTranslations(DEFAULT_LANGUAGE);
+const hasPlaceholderStat = statistics.some((item) => item.placeholder);
+---
+
+<section id="about" class="section" aria-labelledby="about-title">
+  <div class="container">
+    <SectionHeader
+      headingId="about-title"
+      eyebrowKey="about.eyebrow"
+      titleKey="about.title"
+      subtitleKey="about.subtitle"
+      eyebrow={t('about.eyebrow')}
+      title={t('about.title')}
+      subtitle={t('about.subtitle')}
+    />
+
+    <div class="about">
+      <div class="about__bio" data-reveal>
+        {
+          owner.bio.map((_, index) => (
+            <p data-i18n={`owner.bio.${index}`}>{t(`owner.bio.${index}`)}</p>
+          ))
+        }
+
+        <div class="about__languages">
+          <h3 class="about__subtitle" data-i18n="about.languagesTitle">
+            {t('about.languagesTitle')}
+          </h3>
+          <ul role="list" class="about__language-list">
+            {
+              owner.languages.map((language, index) => (
+                <li>
+                  <strong>{language.name}</strong>
+                  <span class="muted" data-i18n={`owner.language.${index}.level`}>
+                    {t(`owner.language.${index}.level`)}
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+
+      <div class="about__side">
+        <div data-reveal>
+          <CodePanel />
+        </div>
+
+        <div class="card about__highlights" data-reveal style="--reveal-delay: 80ms">
+          <h3 class="about__subtitle" data-i18n="about.highlightsTitle">
+            {t('about.highlightsTitle')}
+          </h3>
+          <ul role="list" class="about__highlight-list">
+            {
+              owner.highlights.map((_, index) => (
+                <li>
+                  <Icon name="check" size={17} />
+                  <span data-i18n={`owner.highlight.${index}`}>{t(`owner.highlight.${index}`)}</span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+
+        <div class="card about__location" data-reveal style="--reveal-delay: 160ms">
+          <Icon name="globe" size={18} />
+          <div>
+            <p class="mono-label">{siteConfig.brand.name}</p>
+            <p><strong>{siteConfig.location}</strong></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ul class="about__stats" role="list">
+      {
+        statistics.map((stat, index) => {
+          const pending = stat.placeholder || isPlaceholder(stat.value);
+          const numeric = /^\d+/.test(stat.value);
+          return (
+            <li class="card about__stat" data-reveal style={`--reveal-delay: ${index * 70}ms`}>
+              <span
+                class:list={['about__stat-value', pending && 'about__stat-value--pending']}
+                data-counter={numeric && !pending ? stat.value : undefined}
+              >
+                {stat.value}
+              </span>
+              <span class="mono-label" data-i18n={`stat.${stat.id}.label`}>
+                {t(`stat.${stat.id}.label`)}
+              </span>
+            </li>
+          );
+        })
+      }
+    </ul>
+
+    {
+      hasPlaceholderStat && (
+        <p class="about__note muted" data-i18n="about.statsNote">
+          {t('about.statsNote')}
+        </p>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .about {
+    display: grid;
+    gap: var(--space-6);
+    grid-template-columns: 1fr;
+  }
+
+  .about__bio {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    max-width: 68ch;
+  }
+
+  .about__subtitle {
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-3);
+  }
+
+  .about__language-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: var(--text-sm);
+  }
+
+  .about__language-list li {
+    display: flex;
+    flex-direction: column;
+    padding-left: var(--space-3);
+    border-left: 2px solid var(--color-primary);
+  }
+
+  .about__side {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .about__highlights {
+    padding: var(--space-5);
+  }
+
+  .about__highlight-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: var(--text-sm);
+  }
+
+  .about__highlight-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+
+  .about__highlight-list :global(svg) {
+    flex-shrink: 0;
+    margin-top: 0.2rem;
+    color: var(--color-primary-ink);
+  }
+
+  .about__location {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-4);
+  }
+
+  .about__stats {
+    display: grid;
+    gap: var(--space-3);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
+    margin: var(--space-7) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .about__stat {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding: var(--space-4);
+  }
+
+  .about__stat-value {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    line-height: 1.1;
+  }
+
+  .about__stat-value--pending {
+    font-size: var(--text-lg);
+    color: var(--color-text-muted);
+    border-bottom: 2px dashed var(--color-secondary);
+    align-self: flex-start;
+  }
+
+  .about__note {
+    margin-top: var(--space-3);
+    font-size: var(--text-xs);
+  }
+
+  @media (min-width: 900px) {
+    .about {
+      grid-template-columns: 1.5fr 1fr;
+      gap: var(--space-7);
+    }
+  }
+</style>

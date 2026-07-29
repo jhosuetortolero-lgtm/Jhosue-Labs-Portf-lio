@@ -1,0 +1,132 @@
+---
+import Icon from './Icon.astro';
+
+export interface Props {
+  variant?: 'primary' | 'secondary' | 'ghost';
+  size?: 'md' | 'lg';
+  href?: string;
+  type?: 'button' | 'submit';
+  icon?: string;
+  iconPosition?: 'start' | 'end';
+  external?: boolean;
+  download?: boolean;
+  class?: string;
+  id?: string;
+  'data-i18n'?: string;
+  'aria-label'?: string;
+  disabled?: boolean;
+}
+
+const {
+  variant = 'primary',
+  size = 'md',
+  href,
+  type = 'button',
+  icon,
+  iconPosition = 'end',
+  external = false,
+  download = false,
+  class: className = '',
+  ...rest
+} = Astro.props;
+
+const classes = ['button', `button--${variant}`, `button--${size}`, className];
+const externalAttrs = external ? { target: '_blank', rel: 'noopener noreferrer' } : {};
+---
+
+{
+  href ? (
+    <a
+      href={href}
+      class:list={classes}
+      {...externalAttrs}
+      {...(download ? { download: '' } : {})}
+      {...rest}
+    >
+      {icon && iconPosition === 'start' && <Icon name={icon} size={18} />}
+      <span class="button__label"><slot /></span>
+      {icon && iconPosition === 'end' && <Icon name={icon} size={18} />}
+    </a>
+  ) : (
+    <button type={type} class:list={classes} {...rest}>
+      {icon && iconPosition === 'start' && <Icon name={icon} size={18} />}
+      <span class="button__label"><slot /></span>
+      {icon && iconPosition === 'end' && <Icon name={icon} size={18} />}
+    </button>
+  )
+}
+
+<style>
+  .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    min-height: 44px;
+    padding: 0.6rem 1.2rem;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    text-decoration: none;
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-medium);
+    cursor: pointer;
+    transition:
+      transform var(--duration-fast) var(--ease-out),
+      box-shadow var(--duration-fast) var(--ease-out),
+      background-color var(--duration-fast) var(--ease-out);
+  }
+
+  .button--lg {
+    min-height: 52px;
+    padding: 0.85rem 1.6rem;
+    font-size: var(--text-base);
+  }
+
+  .button--primary {
+    background-color: var(--color-primary);
+    color: var(--color-on-primary);
+    box-shadow: var(--shadow-small);
+  }
+
+  .button--secondary {
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    box-shadow: var(--shadow-small);
+  }
+
+  .button--ghost {
+    background-color: transparent;
+    color: var(--color-text);
+    border-color: var(--color-border-soft);
+    box-shadow: none;
+  }
+
+  .button:hover:not(:disabled) {
+    transform: translate(-2px, -2px);
+    box-shadow: var(--shadow-medium);
+  }
+
+  .button--ghost:hover:not(:disabled) {
+    background-color: var(--color-surface-secondary);
+    border-color: var(--color-border);
+  }
+
+  .button:active:not(:disabled) {
+    transform: translate(0, 0);
+    box-shadow: var(--shadow-small);
+  }
+
+  .button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .button:hover:not(:disabled) {
+      transform: none;
+    }
+  }
+</style>

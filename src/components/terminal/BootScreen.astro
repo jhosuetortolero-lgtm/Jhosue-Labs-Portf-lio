@@ -1,0 +1,137 @@
+---
+import { useTranslations } from '../../i18n';
+import { DEFAULT_LANGUAGE } from '../../types/i18n';
+
+const t = useTranslations(DEFAULT_LANGUAGE);
+const lines = ['boot.lines.l1', 'boot.lines.l2', 'boot.lines.l3', 'boot.lines.l4', 'boot.lines.l5'];
+---
+
+{/*
+  A tela de boot só é exibida se o JavaScript adicionar a classe `is-active`.
+  Sem JS, ou com erro no script, o site aparece normalmente — nada bloqueia.
+  aria-hidden garante que leitores de tela leiam direto o conteúdo real.
+*/}
+<div class="boot" data-boot-screen aria-hidden="true" hidden>
+  <div class="boot__inner">
+    <p class="boot__title">{t('boot.title')}</p>
+    <ul class="boot__lines" role="list">
+      {
+        lines.map((key) => (
+          <li class="boot__line" data-boot-line hidden>
+            <span class="boot__marker">&gt;</span>
+            <span data-i18n={key}>{t(key)}</span>
+          </li>
+        ))
+      }
+    </ul>
+    <div class="boot__bar">
+      <div class="boot__bar-fill" data-boot-bar></div>
+    </div>
+  </div>
+
+  <button type="button" class="boot__skip" data-boot-skip tabindex="-1">
+    <span data-i18n="boot.skip">{t('boot.skip')}</span>
+  </button>
+</div>
+
+<style>
+  .boot {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-boot);
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-5);
+    padding: var(--space-5);
+    background-color: var(--terminal-bg);
+    color: var(--terminal-text);
+    font-size: var(--text-sm);
+  }
+
+  .boot.is-active {
+    display: flex;
+  }
+
+  .boot.is-leaving {
+    opacity: 0;
+    transition: opacity 320ms var(--ease-out);
+  }
+
+  .boot__inner {
+    width: min(100%, 30rem);
+  }
+
+  .boot__title {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    font-weight: 700;
+    letter-spacing: var(--tracking-wide);
+    color: var(--terminal-prompt);
+    margin-bottom: var(--space-4);
+  }
+
+  .boot__lines {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin: 0 0 var(--space-5);
+    padding: 0;
+    list-style: none;
+    min-height: 8rem;
+  }
+
+  .boot__line {
+    display: flex;
+    gap: var(--space-2);
+    animation: fade-in 220ms var(--ease-out);
+  }
+
+  .boot__line[hidden] {
+    display: none;
+  }
+
+  .boot__marker {
+    color: var(--terminal-prompt);
+  }
+
+  .boot__bar {
+    height: 4px;
+    background-color: rgb(255 255 255 / 14%);
+    border-radius: var(--radius-pill);
+    overflow: hidden;
+  }
+
+  .boot__bar-fill {
+    height: 100%;
+    width: 0%;
+    background-color: var(--terminal-prompt);
+    transition: width 300ms linear;
+  }
+
+  .boot__skip {
+    padding: 0.6rem 1.2rem;
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: rgb(255 255 255 / 70%);
+    border: 1px solid rgb(255 255 255 / 25%);
+    border-radius: var(--radius-medium);
+    min-height: 44px;
+  }
+
+  .boot__skip:hover {
+    color: #fff;
+    border-color: rgb(255 255 255 / 60%);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .boot__line {
+      animation: none;
+    }
+    .boot__bar-fill {
+      transition: none;
+    }
+  }
+</style>

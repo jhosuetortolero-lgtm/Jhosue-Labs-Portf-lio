@@ -1,0 +1,226 @@
+---
+import Icon from '../common/Icon.astro';
+import Logo from './Logo.astro';
+import { navigation } from '../../config/navigation';
+import { activeSocialLinks } from '../../config/social';
+import { siteConfig } from '../../config/site';
+import { useTranslations } from '../../i18n';
+import { DEFAULT_LANGUAGE } from '../../types/i18n';
+
+const t = useTranslations(DEFAULT_LANGUAGE);
+const year = new Date().getFullYear();
+
+// Só afirmamos "marca registrada" quando o registro estiver confirmado.
+const trademarkKey = siteConfig.legal.registered
+  ? 'footer.trademarkPrefix'
+  : 'footer.trademarkPrefixUnregistered';
+---
+
+<footer class="footer">
+  <div class="container footer__inner">
+    <div class="footer__brand">
+      <Logo size="md" />
+      <p class="muted" data-i18n="footer.tagline">{t('footer.tagline')}</p>
+      {
+        activeSocialLinks.length > 0 && (
+          <div class="footer__social">
+            {activeSocialLinks.map((item) => (
+              <a
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="footer__social-link touch-target"
+                aria-label={t(item.labelKey)}
+                data-i18n-attr={`aria-label:${item.labelKey}`}
+              >
+                <Icon name={item.icon} size={19} />
+              </a>
+            ))}
+          </div>
+        )
+      }
+    </div>
+
+    <nav class="footer__nav" aria-label={t('footer.sections')}>
+      <h2 class="footer__title" data-i18n="footer.sections">{t('footer.sections')}</h2>
+      <ul role="list" class="footer__links">
+        {
+          navigation.map((item) => (
+            <li>
+              <a href={`#${item.id}`} data-i18n={item.labelKey}>
+                {t(item.labelKey)}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="footer__meta">
+      <h2 class="footer__title" data-i18n="footer.contactTitle">{t('footer.contactTitle')}</h2>
+      <p class="muted">{siteConfig.location}</p>
+      <p class="muted" data-i18n="footer.builtWith">{t('footer.builtWith')}</p>
+      <a href="#hero" class="footer__top">
+        <Icon name="arrow-up" size={16} />
+        <span data-i18n="a11y.backToTop">{t('a11y.backToTop')}</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="container footer__bottom">
+    {/* Linha legal: marca, detentora e direitos. */}
+    <p class="footer__legal">
+      <span class="footer__brand-name">{siteConfig.brand.name}</span>
+      <span data-i18n={trademarkKey}>{t(trademarkKey)}</span>
+      <strong class="footer__owner">{siteConfig.legal.trademarkOwner}</strong>
+      <span class="footer__sep" aria-hidden="true">·</span>
+      <span>© {year}</span>
+      <span data-i18n="footer.allRights">{t('footer.allRights')}</span>
+    </p>
+
+    {/* Crédito de autoria, mantido separado do aviso legal. */}
+    <p class="footer__credit muted" data-i18n="footer.rights">{t('footer.rights')}</p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    border-top: var(--border-width) solid var(--color-border-soft);
+    background-color: var(--color-background-alt);
+    padding-top: var(--space-7);
+  }
+
+  .footer__inner {
+    display: grid;
+    gap: var(--space-6);
+    grid-template-columns: 1fr;
+  }
+
+  .footer__brand {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    max-width: 34ch;
+  }
+
+  .footer__social {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .footer__social-link {
+    border: var(--border-width) solid var(--color-border-soft);
+    border-radius: var(--radius-medium);
+    color: var(--color-text);
+  }
+
+  .footer__social-link:hover {
+    border-color: var(--color-border);
+    background-color: var(--color-surface);
+  }
+
+  .footer__title {
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-3);
+  }
+
+  .footer__links {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: var(--text-sm);
+  }
+
+  .footer__links a {
+    text-decoration: none;
+    color: var(--color-text-muted);
+  }
+
+  .footer__links a:hover {
+    color: var(--color-text);
+    text-decoration: underline;
+  }
+
+  .footer__meta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    font-size: var(--text-sm);
+  }
+
+  .footer__top {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    align-self: flex-start;
+    min-height: 44px;
+    font-size: var(--text-sm);
+    text-decoration: none;
+    color: var(--color-primary-ink);
+    font-weight: 700;
+  }
+
+  .footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2) var(--space-5);
+    margin-top: var(--space-6);
+    padding-block: var(--space-4);
+    border-top: 1px solid var(--color-border-soft);
+    font-size: var(--text-xs);
+  }
+
+  .footer__legal {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.45ch;
+    color: var(--color-text-muted);
+    line-height: 1.7;
+  }
+
+  .footer__brand-name {
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  .footer__owner {
+    color: var(--color-primary-ink);
+    font-weight: 700;
+  }
+
+  .footer__sep {
+    color: var(--color-border-soft);
+    padding-inline: 0.2ch;
+  }
+
+  .footer__credit {
+    margin-left: auto;
+  }
+
+  @media (max-width: 720px) {
+    .footer__bottom {
+      justify-content: flex-start;
+    }
+
+    .footer__credit {
+      margin-left: 0;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .footer__inner {
+      grid-template-columns: 2fr 1fr 1.2fr;
+    }
+  }
+</style>

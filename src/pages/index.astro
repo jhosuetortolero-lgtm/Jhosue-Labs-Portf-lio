@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroSection from '../components/sections/HeroSection.astro';
+import AboutSection from '../components/sections/AboutSection.astro';
+import ServicesSection from '../components/sections/ServicesSection.astro';
+import ProjectsSection from '../components/sections/ProjectsSection.astro';
+import LabSection from '../components/sections/LabSection.astro';
+import StackSection from '../components/sections/StackSection.astro';
+import TimelineSection from '../components/sections/TimelineSection.astro';
+import CertificatesSection from '../components/sections/CertificatesSection.astro';
+import TestimonialsSection from '../components/sections/TestimonialsSection.astro';
+import ContactSection from '../components/sections/ContactSection.astro';
+import { features } from '../config/features';
+---
+
+<BaseLayout>
+  <HeroSection />
+  <AboutSection />
+  <ServicesSection />
+  <ProjectsSection />
+  <LabSection />
+  <StackSection />
+  <TimelineSection />
+  {features.certificates && <CertificatesSection />}
+  {features.testimonials && <TestimonialsSection />}
+  <ContactSection />
+</BaseLayout>

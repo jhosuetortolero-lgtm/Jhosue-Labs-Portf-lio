@@ -1,0 +1,212 @@
+---
+import Icon from '../common/Icon.astro';
+import { useTranslations } from '../../i18n';
+import { DEFAULT_LANGUAGE } from '../../types/i18n';
+import { withBase } from '../../utils/paths';
+import { isCertificatePending } from '../../data/certificates';
+import type { Certificate } from '../../types/certificate';
+
+export interface Props {
+  certificate: Certificate;
+  index: number;
+  /** true nas cópias usadas para o loop infinito (escondidas de leitores de tela). */
+  clone?: boolean;
+}
+
+const { certificate, index, clone = false } = Astro.props;
+const t = useTranslations(DEFAULT_LANGUAGE);
+
+const pending = isCertificatePending(certificate);
+const alt = `${t('certificates.altPrefix')} ${certificate.title} — ${certificate.issuer}`;
+---
+
+<li
+  class="cert"
+  data-carousel-item
+  role={clone ? 'presentation' : undefined}
+  aria-hidden={clone ? 'true' : undefined}
+>
+  <button
+    type="button"
+    class="cert__button"
+    data-certificate-open={index}
+    tabindex={clone ? -1 : 0}
+    aria-label={`${t('certificates.viewCertificate')}: ${certificate.title}`}
+  >
+    <span class="cert__media">
+      {
+        certificate.image ? (
+          <img
+            src={withBase(certificate.image)}
+            alt={alt}
+            width="480"
+            height="340"
+            loading="lazy"
+            decoding="async"
+          />
+        ) : (
+          <span class="cert__placeholder">
+            <Icon name="award" size={34} />
+            <span class="cert__placeholder-text" data-i18n="certificates.pending">
+              {t('certificates.pending')}
+            </span>
+          </span>
+        )
+      }
+      <span class="cert__zoom" aria-hidden="true">
+        <Icon name="search" size={18} />
+      </span>
+    </span>
+
+    <span class="cert__body">
+      <span class:list={['cert__title', pending && 'cert__title--pending']}>
+        {certificate.title}
+      </span>
+      <span class="cert__meta">
+        <span>{certificate.issuer}</span>
+        <span aria-hidden="true">·</span>
+        <span>{certificate.year}</span>
+        {certificate.workload && <span aria-hidden="true">·</span>}
+        {certificate.workload && <span>{certificate.workload}</span>}
+      </span>
+    </span>
+  </button>
+</li>
+
+<style>
+  .cert {
+    flex: 0 0 auto;
+    width: clamp(230px, 68vw, 300px);
+    scroll-snap-align: start;
+  }
+
+  .cert__button {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    text-align: left;
+    background-color: var(--color-surface);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-medium);
+    box-shadow: var(--shadow-small);
+    overflow: hidden;
+    transition:
+      transform var(--duration-base) var(--ease-out),
+      box-shadow var(--duration-base) var(--ease-out);
+  }
+
+  .cert__button:hover,
+  .cert__button:focus-visible {
+    transform: translate(-3px, -3px);
+    box-shadow: var(--shadow-medium);
+  }
+
+  .cert__media {
+    position: relative;
+    display: block;
+    aspect-ratio: 4 / 3;
+    background-color: var(--color-surface-secondary);
+    border-bottom: var(--border-width) solid var(--color-border);
+    overflow: hidden;
+  }
+
+  .cert__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+  }
+
+  .cert__placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    width: 100%;
+    height: 100%;
+    padding: var(--space-4);
+    text-align: center;
+    color: var(--color-text-muted);
+    background:
+      repeating-linear-gradient(
+        135deg,
+        transparent,
+        transparent 12px,
+        var(--color-border-soft) 12px,
+        var(--color-border-soft) 13px
+      ),
+      var(--color-surface-secondary);
+  }
+
+  .cert__placeholder-text {
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+  }
+
+  /* Lupa: indica que dá para ampliar. */
+  .cert__zoom {
+    position: absolute;
+    right: var(--space-2);
+    bottom: var(--space-2);
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: var(--radius-small);
+    background-color: var(--color-primary);
+    color: var(--color-on-primary);
+    border: 2px solid var(--color-border);
+    opacity: 0;
+    transform: translateY(6px);
+    transition:
+      opacity var(--duration-fast) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out);
+  }
+
+  .cert__button:hover .cert__zoom,
+  .cert__button:focus-visible .cert__zoom {
+    opacity: 1;
+    transform: none;
+  }
+
+  .cert__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding: var(--space-3) var(--space-4) var(--space-4);
+  }
+
+  .cert__title {
+    font-weight: 700;
+    font-size: var(--text-sm);
+    line-height: 1.4;
+  }
+
+  .cert__title--pending {
+    color: var(--color-text-muted);
+  }
+
+  .cert__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4ch;
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cert__button:hover,
+    .cert__button:focus-visible {
+      transform: none;
+    }
+
+    .cert__zoom {
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>

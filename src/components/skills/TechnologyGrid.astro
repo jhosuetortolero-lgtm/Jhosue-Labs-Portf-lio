@@ -1,0 +1,188 @@
+---
+import TechIcon from './TechIcon.astro';
+import { hasTechIcon } from './techIcons';
+import { technologies } from '../../data/technologies';
+import { TECHNOLOGY_CATEGORIES } from '../../types/skill';
+import { useTranslations } from '../../i18n';
+import { DEFAULT_LANGUAGE } from '../../types/i18n';
+
+const t = useTranslations(DEFAULT_LANGUAGE);
+
+const groups = TECHNOLOGY_CATEGORIES.map((category) => ({
+  category,
+  items: technologies.filter((technology) => technology.category === category),
+})).filter((group) => group.items.length > 0);
+---
+
+<div class="tech">
+  {
+    groups.map((group) => (
+      <section class="tech__group" data-reveal data-category={group.category}>
+        <h4 class="tech__category" data-i18n={`techCategory.${group.category}`}>
+          {t(`techCategory.${group.category}`)}
+        </h4>
+        <ul class="tech__list" role="list">
+          {group.items.map((technology) => (
+            <li class="tech__item">
+              <span class="tech__badge" aria-hidden="true">
+                {hasTechIcon(technology.id) ? (
+                  <TechIcon id={technology.id} size={24} />
+                ) : (
+                  technology.badge
+                )}
+              </span>
+              <span class="tech__name">{technology.name}</span>
+              <span class="tech__tooltip" aria-hidden="true" data-i18n={`tech.${technology.id}.note`}>
+                {t(`tech.${technology.id}.note`)}
+              </span>
+              <span class="visually-hidden" data-i18n={`tech.${technology.id}.note`}>
+                {t(`tech.${technology.id}.note`)}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  }
+</div>
+
+<style>
+  .tech {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  /* Cada categoria tem sua cor, aplicada nos selos. */
+  .tech__group {
+    --cat: var(--color-primary);
+    --cat-ink: var(--color-primary-ink);
+  }
+
+  .tech__group[data-category='backend'],
+  .tech__group[data-category='data'] {
+    --cat: var(--color-accent);
+    --cat-ink: var(--color-accent-ink);
+  }
+
+  .tech__group[data-category='ai'] {
+    --cat: var(--color-secondary);
+    --cat-ink: var(--color-secondary-ink);
+  }
+
+  .tech__category {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    margin-bottom: var(--space-3);
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--color-border-soft);
+  }
+
+  .tech__category::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    background-color: var(--cat);
+    flex-shrink: 0;
+  }
+
+  .tech__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .tech__item {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: 44px;
+    padding: 0.35rem 0.85rem 0.35rem 0.35rem;
+    background-color: var(--color-surface);
+    border: var(--border-width) solid var(--color-border-soft);
+    border-radius: var(--radius-medium);
+    font-size: var(--text-sm);
+    transition:
+      border-color var(--duration-fast) var(--ease-out),
+      transform var(--duration-fast) var(--ease-out);
+  }
+
+  .tech__item:hover,
+  .tech__item:focus-within {
+    border-color: var(--color-border);
+    transform: translateY(-2px);
+  }
+
+  .tech__badge {
+    display: grid;
+    place-items: center;
+    min-width: 38px;
+    height: 38px;
+    padding-inline: 0.2rem;
+    font-size: var(--text-xs);
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    background-color: color-mix(in srgb, var(--cat) 16%, transparent);
+    color: var(--cat-ink);
+    border-radius: var(--radius-small);
+    transition:
+      background-color var(--duration-fast) var(--ease-out),
+      color var(--duration-fast) var(--ease-out);
+  }
+
+  .tech__item:hover .tech__badge,
+  .tech__item:focus-within .tech__badge {
+    background-color: var(--cat);
+    color: var(--color-on-primary);
+  }
+
+  .tech__tooltip {
+    position: absolute;
+    bottom: calc(100% + 0.4rem);
+    left: 50%;
+    translate: -50% 0;
+    z-index: 5;
+    width: max-content;
+    max-width: 15rem;
+    padding: 0.4rem 0.6rem;
+    font-size: var(--text-xs);
+    line-height: 1.4;
+    background-color: var(--color-text);
+    color: var(--color-background);
+    border-radius: var(--radius-small);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+      opacity var(--duration-fast) var(--ease-out),
+      visibility var(--duration-fast) var(--ease-out);
+  }
+
+  .tech__item:hover .tech__tooltip,
+  .tech__item:focus-within .tech__tooltip {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  @media (max-width: 640px) {
+    .tech__tooltip {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tech__item:hover {
+      transform: none;
+    }
+  }
+</style>

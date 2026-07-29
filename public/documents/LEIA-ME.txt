@@ -1,0 +1,9 @@
+Coloque aqui o arquivo do currículo com o nome exato:
+
+    curriculo-jhosue.pdf
+
+O caminho é definido em src/config/site.ts -> siteConfig.cvUrl
+Se você mudar o nome do arquivo, ajuste lá também.
+
+Enquanto o PDF não existir, o botão "Baixar currículo" e o comando
+"curriculo" da paleta vão apontar para um arquivo inexistente (erro 404).

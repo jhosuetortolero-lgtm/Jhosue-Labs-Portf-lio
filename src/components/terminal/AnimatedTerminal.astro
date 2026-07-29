@@ -1,0 +1,159 @@
+---
+import Icon from '../common/Icon.astro';
+import { terminalScript } from '../../data/lab';
+import { useTranslations } from '../../i18n';
+import { DEFAULT_LANGUAGE } from '../../types/i18n';
+
+const t = useTranslations(DEFAULT_LANGUAGE);
+
+/**
+ * O conteúdo é renderizado por completo no HTML.
+ * A animação apenas revela o que já está lá — sem JavaScript, ou com
+ * `prefers-reduced-motion`, o texto continua legível e acessível.
+ */
+const lines = terminalScript.map((entry, index) => ({
+  kind: entry.type,
+  key: typeof entry.text === 'string' ? null : `lab.terminal.${index}`,
+  text: typeof entry.text === 'string' ? entry.text : t(`lab.terminal.${index}`),
+}));
+---
+
+<div class="terminal" data-terminal>
+  <div class="terminal__bar">
+    <span class="terminal__dot terminal__dot--red"></span>
+    <span class="terminal__dot terminal__dot--yellow"></span>
+    <span class="terminal__dot terminal__dot--green"></span>
+    <span class="terminal__title" data-i18n="lab.terminalTitle">{t('lab.terminalTitle')}</span>
+    <button
+      type="button"
+      class="terminal__replay"
+      data-terminal-replay
+      aria-label={t('lab.replay')}
+      data-i18n-attr="aria-label:lab.replay"
+      hidden
+    >
+      <Icon name="arrow-right" size={15} />
+    </button>
+  </div>
+
+  <div class="terminal__body" data-terminal-body>
+    <p class="visually-hidden" data-i18n="lab.terminalNote">{t('lab.terminalNote')}</p>
+    {
+      lines.map((line) => (
+        <div class:list={['terminal__line', `terminal__line--${line.kind}`]} data-terminal-line>
+          {line.kind === 'command' && (
+            <span class="terminal__prompt" aria-hidden="true">
+              $
+            </span>
+          )}
+          <span class="terminal__text" data-terminal-text data-i18n={line.key ?? undefined}>
+            {line.text}
+          </span>
+        </div>
+      ))
+    }
+    <div class="terminal__line terminal__line--command" data-terminal-caret hidden>
+      <span class="terminal__prompt" aria-hidden="true">$</span>
+      <span class="cursor" aria-hidden="true">_</span>
+    </div>
+  </div>
+</div>
+
+<style>
+  .terminal {
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-medium);
+    background-color: var(--terminal-bg);
+    box-shadow: var(--shadow-medium);
+    overflow: hidden;
+  }
+
+  .terminal__bar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 0.6rem 0.8rem;
+    background-color: color-mix(in srgb, var(--terminal-bg) 70%, #ffffff 12%);
+    border-bottom: 1px solid rgb(255 255 255 / 12%);
+  }
+
+  .terminal__dot {
+    width: 0.65rem;
+    height: 0.65rem;
+    border-radius: 50%;
+  }
+
+  .terminal__dot--red {
+    background-color: #ff5f57;
+  }
+  .terminal__dot--yellow {
+    background-color: #febc2e;
+  }
+  .terminal__dot--green {
+    background-color: #28c840;
+  }
+
+  .terminal__title {
+    margin-left: auto;
+    font-size: var(--text-xs);
+    color: rgb(255 255 255 / 65%);
+  }
+
+  .terminal__replay {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: var(--radius-small);
+    color: rgb(255 255 255 / 70%);
+  }
+
+  .terminal__replay[hidden] {
+    display: none;
+  }
+
+  .terminal__replay:hover {
+    background-color: rgb(255 255 255 / 12%);
+    color: #fff;
+  }
+
+  .terminal__body {
+    padding: var(--space-4);
+    max-height: 22rem;
+    overflow-y: auto;
+    font-size: clamp(0.74rem, 0.68rem + 0.3vw, 0.86rem);
+    line-height: 1.75;
+    color: var(--terminal-text);
+  }
+
+  .terminal__line {
+    display: flex;
+    gap: var(--space-2);
+    min-height: 1.5em;
+  }
+
+  .terminal__line--output {
+    padding-left: 1.2rem;
+    margin-bottom: var(--space-3);
+    color: color-mix(in srgb, var(--terminal-text) 82%, transparent);
+  }
+
+  .terminal__line[hidden] {
+    display: none;
+  }
+
+  .terminal__prompt {
+    color: var(--terminal-prompt);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .terminal__text {
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .terminal__line--command .terminal__text {
+    color: var(--terminal-accent);
+  }
+</style>

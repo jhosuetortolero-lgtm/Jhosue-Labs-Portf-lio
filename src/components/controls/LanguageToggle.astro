@@ -1,0 +1,132 @@
+---
+import Icon from '../common/Icon.astro';
+import { useTranslations } from '../../i18n';
+import { DEFAULT_LANGUAGE, LANGUAGE_LABEL, LANGUAGE_NAME } from '../../types/i18n';
+import { siteConfig } from '../../config/site';
+
+const t = useTranslations(DEFAULT_LANGUAGE);
+const languages = siteConfig.supportedLanguages;
+---
+
+<div class="language-toggle">
+  <button
+    type="button"
+    class="language-toggle__button touch-target"
+    data-language-button
+    aria-label={t('a11y.changeLanguage')}
+    data-i18n-attr="aria-label:a11y.changeLanguage"
+    aria-expanded="false"
+    aria-controls="language-menu"
+    aria-haspopup="true"
+  >
+    <Icon name="globe" size={18} />
+    <span data-language-current>{LANGUAGE_LABEL[DEFAULT_LANGUAGE]}</span>
+  </button>
+
+  <ul class="language-toggle__menu" id="language-menu" role="menu" hidden data-language-menu>
+    {
+      languages.map((language) => (
+        <li role="none">
+          <button
+            type="button"
+            role="menuitemradio"
+            aria-checked={language === DEFAULT_LANGUAGE ? 'true' : 'false'}
+            class="language-toggle__option"
+            data-language-option={language}
+            lang={language}
+          >
+            <span class="language-toggle__code">{LANGUAGE_LABEL[language]}</span>
+            <span>{LANGUAGE_NAME[language]}</span>
+          </button>
+        </li>
+      ))
+    }
+  </ul>
+</div>
+
+<style>
+  .language-toggle {
+    position: relative;
+  }
+
+  .language-toggle__button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: 44px;
+    padding-inline: 0.7rem;
+    border: var(--border-width) solid var(--color-border-soft);
+    border-radius: var(--radius-medium);
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    letter-spacing: var(--tracking-wide);
+    transition:
+      border-color var(--duration-fast) var(--ease-out),
+      background-color var(--duration-fast) var(--ease-out);
+  }
+
+  .language-toggle__button:hover {
+    border-color: var(--color-border);
+    background-color: var(--color-surface-secondary);
+  }
+
+  .language-toggle__menu {
+    position: absolute;
+    top: calc(100% + 0.4rem);
+    right: 0;
+    z-index: 10;
+    min-width: 11rem;
+    margin: 0;
+    padding: 0.3rem;
+    list-style: none;
+    background-color: var(--color-surface);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-medium);
+    box-shadow: var(--shadow-soft);
+  }
+
+  .language-toggle__menu[hidden] {
+    display: none;
+  }
+
+  .language-toggle__option {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    width: 100%;
+    min-height: 40px;
+    padding: 0.4rem 0.6rem;
+    border-radius: var(--radius-small);
+    font-size: var(--text-sm);
+    text-align: left;
+  }
+
+  .language-toggle__option:hover {
+    background-color: var(--color-surface-secondary);
+  }
+
+  .language-toggle__option[aria-checked='true'] {
+    background-color: var(--color-primary-soft);
+    font-weight: 700;
+  }
+
+  .language-toggle__code {
+    display: inline-grid;
+    place-items: center;
+    min-width: 2rem;
+    padding: 0.1rem 0.3rem;
+    font-size: var(--text-xs);
+    font-weight: 700;
+    border: 1px solid var(--color-border-soft);
+    border-radius: var(--radius-small);
+  }
+
+  @media (max-width: 480px) {
+    .language-toggle__menu {
+      right: auto;
+      left: 0;
+    }
+  }
+</style>

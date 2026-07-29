@@ -1,0 +1,104 @@
+---
+/**
+ * Quebra um texto em letras para animar a entrada em cascata.
+ *
+ * O texto continua legível para leitores de tela e para o Google: o conteúdo
+ * real fica em um `.visually-hidden`, e as letras animadas ficam com
+ * `aria-hidden`. Sem isso, um leitor de tela leria letra por letra.
+ *
+ * As palavras não quebram no meio: cada palavra é um bloco `inline-block`.
+ */
+export interface Props {
+  text: string;
+  /** Chave de tradução: permite refazer a divisão ao trocar de idioma. */
+  i18nKey?: string;
+  /** Atraso entre uma letra e a próxima, em milissegundos. */
+  step?: number;
+  /** Atraso inicial antes da primeira letra. */
+  offset?: number;
+  class?: string;
+}
+
+const { text, i18nKey, step = 26, offset = 120, class: className = '' } = Astro.props;
+
+const words = text.split(' ').filter(Boolean);
+
+// Índice contínuo entre palavras: a cascata não reinicia a cada palavra.
+let index = 0;
+const rendered = words.map((word) => {
+  const letters = [...word].map((letter) => ({ letter, order: index++ }));
+  index += 1; // conta o espaço, para dar um respiro entre palavras
+  return letters;
+});
+---
+
+<span
+  class:list={['split', className]}
+  data-split-text
+  data-split-key={i18nKey}
+  style={`--split-step: ${step}ms; --split-offset: ${offset}ms`}
+>
+  <span class="visually-hidden">{text}</span>
+  <span class="split__visual" aria-hidden="true">
+    {
+      rendered.map((letters, wordIndex) => (
+        <>
+          <span class="split__word">
+            {letters.map(({ letter, order }) => (
+              <span class="split__letter" style={`--i: ${order}`}>
+                {letter}
+              </span>
+            ))}
+          </span>
+          {/* Espaço como texto real: o script remonta este bloco ao trocar de
+              idioma, e um `::after` com escopo de componente não valeria para
+              os elementos criados depois. */}
+          {wordIndex < rendered.length - 1 && ' '}
+        </>
+      ))
+    }
+  </span>
+</span>
+
+<style>
+  .split {
+    display: block;
+  }
+
+  .split__visual {
+    display: block;
+  }
+
+  .split__word {
+    display: inline-block;
+    white-space: nowrap;
+  }
+
+  .split__letter {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(0.4em);
+    filter: blur(6px);
+    animation: split-in 620ms var(--ease-out) forwards;
+    animation-delay: calc(var(--split-offset) + var(--i) * var(--split-step));
+    will-change: opacity, transform, filter;
+  }
+
+  @keyframes split-in {
+    to {
+      opacity: 1;
+      transform: none;
+      filter: none;
+    }
+  }
+
+  /* Sem JavaScript o CSS ainda roda; com movimento reduzido, tudo aparece. */
+  @media (prefers-reduced-motion: reduce) {
+    .split__letter {
+      opacity: 1;
+      transform: none;
+      filter: none;
+      animation: none;
+    }
+  }
+</style>
