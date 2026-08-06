@@ -20,25 +20,25 @@ export const projects: Project[] = [
     technologies: ['Astro', 'TypeScript', 'CSS', 'Cloudflare'],
     projectUrl: 'https://inovarsertao.com.br/',
     repositoryUrl: null,
-    image: null,
+    image: '/images/projects/inovar-sertao-640.webp',
     shortDescription: {
       'pt-BR':
-        'Projeto web institucional com foco em experiência, performance e apresentação da marca.',
+        'Marketplace regional de materiais de construção que conecta clientes a depósitos parceiros e facilita pedidos pelo WhatsApp.',
       'en-US':
-        'Institutional web project focused on experience, performance and brand presentation.',
-      es: 'Proyecto web institucional enfocado en experiencia, rendimiento y presentación de marca.',
+        'Regional building materials marketplace that connects customers with partner stores and streamlines orders through WhatsApp.',
+      es: 'Marketplace regional de materiales de construcción que conecta clientes con tiendas asociadas y facilita pedidos por WhatsApp.',
     },
     fullDescription: {
       'pt-BR':
-        'Site institucional construído para carregar rápido em conexões instáveis, com conteúdo estruturado, SEO técnico e navegação simples em qualquer tamanho de tela.',
+        'Marketplace de materiais de construção criado para exibir preços da região, localizar depósitos parceiros, calcular materiais e acompanhar pedidos até a entrega na obra.',
       'en-US':
-        'Institutional website built to load fast on unstable connections, with structured content, technical SEO and simple navigation on any screen size.',
-      es: 'Sitio institucional construido para cargar rápido en conexiones inestables, con contenido estructurado, SEO técnico y navegación simple en cualquier tamaño de pantalla.',
+        'Building materials marketplace designed to show regional prices, locate partner stores, calculate materials and track orders through delivery to the job site.',
+      es: 'Marketplace de materiales de construcción diseñado para mostrar precios regionales, localizar tiendas asociadas, calcular materiales y seguir pedidos hasta la entrega en la obra.',
     },
     imageAlt: {
-      'pt-BR': 'Página inicial do projeto Inovar Sertão',
-      'en-US': 'Home page of the Inovar Sertão project',
-      es: 'Página de inicio del proyecto Inovar Sertão',
+      'pt-BR': 'Página inicial do marketplace de materiais de construção Inovar Sertão',
+      'en-US': 'Inovar Sertão building materials marketplace home page',
+      es: 'Página de inicio del marketplace de materiales de construcción Inovar Sertão',
     },
   },
   {
@@ -51,24 +51,64 @@ export const projects: Project[] = [
     technologies: ['Golang', 'Fiber', 'PostgreSQL', 'Redis', 'React', 'Docker'],
     projectUrl: 'https://www.visiumsystem.com.br/',
     repositoryUrl: null,
-    image: null,
+    image: '/images/projects/visium-system-640.webp',
     shortDescription: {
       'pt-BR':
-        'Sistema para gestão, automação e otimização de processos operacionais.',
-      'en-US': 'System for managing, automating and optimizing operational processes.',
-      es: 'Sistema para gestión, automatización y optimización de procesos operativos.',
+        'Sistema de gestão para óticas que integra vendas, estoque, ordens de serviço, laboratório, CRM e financeiro.',
+      'en-US':
+        'Optical store management system integrating sales, inventory, work orders, laboratory, CRM and finance.',
+      es: 'Sistema de gestión para ópticas que integra ventas, inventario, órdenes de servicio, laboratorio, CRM y finanzas.',
     },
     fullDescription: {
       'pt-BR':
-        'Plataforma de gestão com backend em Golang, banco PostgreSQL, cache em Redis e interface web. Cobre cadastro, acompanhamento de processos e automação das rotinas repetitivas da operação.',
+        'Plataforma SaaS criada para centralizar a operação de óticas, do balcão ao caixa, com vendas, clientes, estoque, laboratório, ordens de serviço e gestão financeira em tempo real.',
       'en-US':
-        'Management platform with a Golang backend, PostgreSQL database, Redis cache and a web interface. It covers records, process tracking and automation of repetitive operational routines.',
-      es: 'Plataforma de gestión con backend en Golang, base PostgreSQL, caché en Redis e interfaz web. Cubre registros, seguimiento de procesos y automatización de rutinas repetitivas.',
+        'SaaS platform designed to centralize optical store operations from the counter to checkout, with real-time sales, customers, inventory, laboratory, work orders and financial management.',
+      es: 'Plataforma SaaS creada para centralizar la operación de ópticas, desde el mostrador hasta la caja, con ventas, clientes, inventario, laboratorio, órdenes de servicio y gestión financiera en tiempo real.',
     },
     imageAlt: {
-      'pt-BR': 'Painel do sistema Visium System',
-      'en-US': 'Visium System dashboard',
-      es: 'Panel del sistema Visium System',
+      'pt-BR': 'Página do Visium System com painel de gestão para óticas',
+      'en-US': 'Visium System page featuring an optical store management dashboard',
+      es: 'Página de Visium System con panel de gestión para ópticas',
+    },
+  },
+  {
+    id: 'hub-rmc-engenharia',
+    title: 'Hub RMC',
+    category: 'SAAS',
+    year: '2026',
+    featured: true,
+    status: 'online',
+    technologies: [
+      'Next.js',
+      'TypeScript',
+      'NestJS',
+      'PostgreSQL',
+      'Redis',
+      'Prisma',
+      'Docker',
+    ],
+    projectUrl: 'https://rmcconstrucoes.com/',
+    repositoryUrl: 'https://github.com/jhosuetortolero-lgtm/hub-rmc-engenharia',
+    image: '/images/projects/hub-rmc-engenharia-640.webp',
+    shortDescription: {
+      'pt-BR':
+        'Plataforma SaaS que centraliza finanças, obras, orçamentos, CRM e automações para empresas de engenharia e construção.',
+      'en-US':
+        'SaaS platform that centralizes finance, projects, budgets, CRM and automation for engineering and construction companies.',
+      es: 'Plataforma SaaS que centraliza finanzas, obras, presupuestos, CRM y automatizaciones para empresas de ingeniería y construcción.',
+    },
+    fullDescription: {
+      'pt-BR':
+        'O Hub RMC reúne gestão financeira, planejamento e execução de obras, compras, propostas, CRM, portais e automações em uma arquitetura multi-tenant, com integrações de WhatsApp, OCR e inteligência artificial.',
+      'en-US':
+        'Hub RMC brings together financial management, construction planning and execution, procurement, proposals, CRM, portals and automation in a multi-tenant architecture with WhatsApp, OCR and artificial intelligence integrations.',
+      es: 'Hub RMC reúne gestión financiera, planificación y ejecución de obras, compras, propuestas, CRM, portales y automatizaciones en una arquitectura multi-tenant con integraciones de WhatsApp, OCR e inteligencia artificial.',
+    },
+    imageAlt: {
+      'pt-BR': 'Painel de orçamento analítico do Hub RMC',
+      'en-US': 'Hub RMC analytical budgeting dashboard',
+      es: 'Panel de presupuesto analítico de Hub RMC',
     },
   },
 ];
