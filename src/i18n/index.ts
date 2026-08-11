@@ -12,6 +12,7 @@ import { technologies, technologyCategoryLabels } from '../data/technologies';
 import { timeline } from '../data/timeline';
 import { labCapabilities, terminalScript } from '../data/lab';
 import { owner, statistics } from '../data/owner';
+import { countries } from '../data/countries';
 
 const uiDictionaries: Record<Language, unknown> = {
   'pt-BR': ptBR,
@@ -92,6 +93,11 @@ function buildDictionaries(): Dictionaries {
 
   for (const statistic of statistics) {
     put(dicts, `stat.${statistic.id}.label`, statistic.label);
+  }
+
+  // Nome do país no seletor de DDI. A bandeira e o "+55" são exibidos à parte.
+  for (const country of countries) {
+    put(dicts, `country.${country.iso}`, country.name);
   }
 
   owner.bio.forEach((paragraph, index) => put(dicts, `owner.bio.${index}`, paragraph));

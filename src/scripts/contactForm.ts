@@ -14,11 +14,18 @@ function readForm(form: HTMLFormElement): ContactFormData {
     name: value('name'),
     email: value('email'),
     company: value('company'),
+    country: value('country'),
+    whatsapp: value('whatsapp'),
     projectType: value('projectType'),
     budget: value('budget'),
     message: value('message'),
     consent: data.get('consent') !== null,
     website: value('website'),
+    // Rótulos como o visitante os viu na tela, no idioma dele.
+    labels: {
+      projectType: value('projectType') ? translate(`form.types.${value('projectType')}`) : '',
+      budget: value('budget') ? translate(`form.budgets.${value('budget')}`) : '',
+    },
   };
 }
 

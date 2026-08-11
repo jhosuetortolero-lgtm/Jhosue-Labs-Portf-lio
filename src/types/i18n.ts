@@ -35,6 +35,16 @@ export const LANGUAGE_LABEL: Record<Language, string> = {
   es: 'ES',
 };
 
+/**
+ * Bandeira que representa cada idioma no seletor.
+ * O arquivo vem de public/images/flags/ (mesmas bandeiras do seletor de país).
+ */
+export const LANGUAGE_FLAG: Record<Language, string> = {
+  'pt-BR': 'br',
+  'en-US': 'us',
+  es: 'es',
+};
+
 export const LANGUAGE_NAME: Record<Language, string> = {
   'pt-BR': 'Português',
   'en-US': 'English',

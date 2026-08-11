@@ -1,0 +1,243 @@
+---
+/**
+ * Seletor de país com bandeira e DDI, com busca.
+ *
+ * Não é um <select> nativo porque o navegador não desenha imagem dentro de
+ * <option>. O valor real fica em um input escondido, então o formulário
+ * continua lendo `country` normalmente.
+ */
+import Icon from '../common/Icon.astro';
+import { countries, DEFAULT_COUNTRY } from '../../data/countries';
+import { useTranslations } from '../../i18n';
+import { DEFAULT_LANGUAGE } from '../../types/i18n';
+import { withBase } from '../../utils/paths';
+
+const t = useTranslations(DEFAULT_LANGUAGE);
+const selected = countries.find((country) => country.iso === DEFAULT_COUNTRY) ?? countries[0]!;
+
+const flagSrc = (iso: string): string => withBase(`/images/flags/${iso.toLowerCase()}.svg`);
+---
+
+<div class="country" data-country>
+  <input type="hidden" name="country" value={selected.iso} data-country-value />
+
+  <button
+    type="button"
+    class="country__trigger"
+    data-country-trigger
+    aria-haspopup="listbox"
+    aria-expanded="false"
+    aria-label={t('form.country')}
+    data-i18n-attr="aria-label:form.country"
+  >
+    <img
+      class="country__flag"
+      data-country-flag
+      src={flagSrc(selected.iso)}
+      alt=""
+      width="21"
+      height="16"
+    />
+    <span class="country__name" data-country-name data-i18n={`country.${selected.iso}`}>
+      {t(`country.${selected.iso}`)}
+    </span>
+    <span class="country__dial" data-country-dial>+{selected.dial}</span>
+    <span class="country__caret" aria-hidden="true"></span>
+  </button>
+
+  <div class="country__popup" data-country-popup hidden>
+    <div class="country__search">
+      <Icon name="search" size={15} />
+      <input
+        type="text"
+        role="combobox"
+        aria-expanded="true"
+        aria-controls="country-list"
+        aria-autocomplete="list"
+        autocomplete="off"
+        data-country-search
+        placeholder={t('form.countrySearch')}
+        data-i18n-attr={`placeholder:form.countrySearch;aria-label:form.country`}
+        aria-label={t('form.country')}
+      />
+    </div>
+
+    <ul class="country__list" id="country-list" role="listbox" data-country-list>
+      {
+        countries.map((country) => (
+          <li
+            id={`country-option-${country.iso}`}
+            class="country__option"
+            role="option"
+            aria-selected={country.iso === selected.iso ? 'true' : 'false'}
+            data-country-option={country.iso}
+            data-dial={country.dial}
+            data-example={country.example}
+          >
+            <img src={flagSrc(country.iso)} alt="" width="21" height="16" loading="lazy" />
+            <span class="country__option-name" data-i18n={`country.${country.iso}`}>
+              {t(`country.${country.iso}`)}
+            </span>
+            <span class="country__dial">+{country.dial}</span>
+          </li>
+        ))
+      }
+    </ul>
+
+    <p class="country__empty" data-country-empty hidden data-i18n="form.countryEmpty">
+      {t('form.countryEmpty')}
+    </p>
+  </div>
+</div>
+
+<style>
+  .country {
+    position: relative;
+    min-width: 0;
+  }
+
+  .country__trigger {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    width: 100%;
+    min-height: 46px;
+    padding: 0.6rem 0.8rem;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    text-align: left;
+    color: var(--color-text);
+    background-color: var(--color-background);
+    border: var(--border-width) solid var(--color-border-soft);
+    border-radius: var(--radius-small);
+    cursor: pointer;
+    transition: border-color var(--duration-fast) var(--ease-out);
+  }
+
+  .country__trigger:focus-visible,
+  .country[data-open] .country__trigger {
+    border-color: var(--color-primary);
+  }
+
+  .country__flag,
+  .country__option img {
+    flex-shrink: 0;
+    width: 21px;
+    height: 16px;
+    object-fit: cover;
+    border-radius: 2px;
+    border: 1px solid var(--color-border-soft);
+  }
+
+  .country__name,
+  .country__option-name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .country__dial {
+    flex-shrink: 0;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+
+  /* Setinha do menu fechado/aberto. */
+  .country__caret {
+    flex-shrink: 0;
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 5px solid var(--color-text-muted);
+  }
+
+  .country[data-open] .country__caret {
+    transform: rotate(180deg);
+  }
+
+  .country__popup {
+    position: absolute;
+    z-index: var(--z-dropdown, 40);
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    max-height: 320px;
+    background-color: var(--color-surface);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-small);
+    box-shadow: var(--shadow-medium);
+    overflow: hidden;
+  }
+
+  .country__popup[hidden] {
+    display: none;
+  }
+
+  .country__search {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 0.5rem 0.7rem;
+    color: var(--color-text-muted);
+    border-bottom: var(--border-width) solid var(--color-border-soft);
+  }
+
+  .country__search input {
+    width: 100%;
+    min-height: 32px;
+    padding: 0;
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    color: var(--color-text);
+    background: none;
+    border: none;
+    outline: none;
+  }
+
+  .country__list {
+    margin: 0;
+    padding: 0;
+    overflow-y: auto;
+    list-style: none;
+    overscroll-behavior: contain;
+  }
+
+  .country__option {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    min-height: 40px;
+    padding: 0.4rem 0.7rem;
+    font-size: var(--text-sm);
+    cursor: pointer;
+  }
+
+  .country__option[hidden] {
+    display: none;
+  }
+
+  .country__option:hover,
+  .country__option.is-active {
+    background-color: var(--color-primary-soft);
+  }
+
+  .country__option[aria-selected='true'] {
+    font-weight: 700;
+  }
+
+  .country__empty {
+    padding: var(--space-3);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+  }
+
+  .country__empty[hidden] {
+    display: none;
+  }
+</style>

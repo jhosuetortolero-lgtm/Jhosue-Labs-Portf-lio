@@ -13,10 +13,14 @@ import {
 import { socialHref } from '../../config/social';
 import { features } from '../../config/features';
 import { FIELD_LIMITS, MESSAGE_MIN_LENGTH } from '../../services/contact/contact.types';
+import CountrySelect from '../controls/CountrySelect.astro';
+import { DEFAULT_COUNTRY, findCountry } from '../../data/countries';
 import { useTranslations } from '../../i18n';
 import { DEFAULT_LANGUAGE } from '../../types/i18n';
 
 const t = useTranslations(DEFAULT_LANGUAGE);
+/** A dica do campo de número acompanha o país escolhido (o script troca depois). */
+const defaultCountry = findCountry(DEFAULT_COUNTRY);
 const available = siteConfig.availability.open;
 const statusKey = available ? 'contact.availableNow' : 'contact.unavailable';
 
@@ -66,7 +70,17 @@ const channels: Channel[] = [
   },
 ];
 
-const projectTypes = ['web', 'saas', 'crm', 'ai', 'automation', 'whatsapp', 'api', 'other'];
+const projectTypes = [
+  'web',
+  'saas',
+  'crm',
+  'ai',
+  'automation',
+  'whatsapp',
+  'api',
+  'security',
+  'other',
+];
 const budgets = ['undefined', 'upTo5k', 'from5to15k', 'from15to40k', 'above40k'];
 ---
 
@@ -191,6 +205,29 @@ const budgets = ['undefined', 'upTo5k', 'from5to15k', 'from15to40k', 'above40k']
                   />
                   <p class="form__error" id="error-email" data-error-for="email" role="alert" />
                 </div>
+              </div>
+
+              <div class="form__field">
+                <label for="contact-whatsapp">
+                  <span data-i18n="form.whatsapp">{t('form.whatsapp')}</span>
+                  <span class="form__optional" data-i18n="form.companyOptional">
+                    {t('form.companyOptional')}
+                  </span>
+                </label>
+                <div class="form__phone">
+                  <CountrySelect />
+                  <input
+                    type="tel"
+                    id="contact-whatsapp"
+                    name="whatsapp"
+                    inputmode="tel"
+                    maxlength={FIELD_LIMITS.whatsapp}
+                    autocomplete="tel-national"
+                    placeholder={defaultCountry?.example}
+                    aria-describedby="error-whatsapp"
+                  />
+                </div>
+                <p class="form__error" id="error-whatsapp" data-error-for="whatsapp" role="alert" />
               </div>
 
               <div class="form__row">
@@ -412,6 +449,23 @@ const budgets = ['undefined', 'upTo5k', 'from5to15k', 'from15to40k', 'above40k']
     grid-template-columns: 1fr;
   }
 
+  /* País + número: o seletor encolhe, o número ocupa o resto. */
+  .form__phone {
+    display: grid;
+    gap: var(--space-2);
+    grid-template-columns: 1fr;
+  }
+
+  .form__country {
+    min-width: 0;
+  }
+
+  @media (min-width: 480px) {
+    .form__phone {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+  }
+
   .form__field {
     display: flex;
     flex-direction: column;
@@ -438,6 +492,7 @@ const budgets = ['undefined', 'upTo5k', 'from5to15k', 'from15to40k', 'above40k']
 
   .form input[type='text'],
   .form input[type='email'],
+  .form input[type='tel'],
   .form select,
   .form textarea {
     width: 100%;

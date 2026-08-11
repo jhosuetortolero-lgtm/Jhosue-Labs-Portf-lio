@@ -1,11 +1,14 @@
 ---
-import Icon from '../common/Icon.astro';
 import { useTranslations } from '../../i18n';
-import { DEFAULT_LANGUAGE, LANGUAGE_LABEL, LANGUAGE_NAME } from '../../types/i18n';
+import { DEFAULT_LANGUAGE, LANGUAGE_FLAG, LANGUAGE_LABEL, LANGUAGE_NAME } from '../../types/i18n';
 import { siteConfig } from '../../config/site';
+import { withBase } from '../../utils/paths';
 
 const t = useTranslations(DEFAULT_LANGUAGE);
 const languages = siteConfig.supportedLanguages;
+
+const flagSrc = (language: (typeof languages)[number]): string =>
+  withBase(`/images/flags/${LANGUAGE_FLAG[language]}.svg`);
 ---
 
 <div class="language-toggle">
@@ -19,7 +22,14 @@ const languages = siteConfig.supportedLanguages;
     aria-controls="language-menu"
     aria-haspopup="true"
   >
-    <Icon name="globe" size={18} />
+    <img
+      class="language-toggle__flag"
+      data-language-flag
+      src={flagSrc(DEFAULT_LANGUAGE)}
+      alt=""
+      width="21"
+      height="16"
+    />
     <span data-language-current>{LANGUAGE_LABEL[DEFAULT_LANGUAGE]}</span>
   </button>
 
@@ -35,6 +45,7 @@ const languages = siteConfig.supportedLanguages;
             data-language-option={language}
             lang={language}
           >
+            <img class="language-toggle__flag" src={flagSrc(language)} alt="" width="21" height="16" />
             <span class="language-toggle__code">{LANGUAGE_LABEL[language]}</span>
             <span>{LANGUAGE_NAME[language]}</span>
           </button>
@@ -110,6 +121,15 @@ const languages = siteConfig.supportedLanguages;
   .language-toggle__option[aria-checked='true'] {
     background-color: var(--color-primary-soft);
     font-weight: 700;
+  }
+
+  .language-toggle__flag {
+    flex-shrink: 0;
+    width: 21px;
+    height: 16px;
+    object-fit: cover;
+    border-radius: 2px;
+    border: 1px solid var(--color-border-soft);
   }
 
   .language-toggle__code {

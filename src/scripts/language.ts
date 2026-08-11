@@ -1,11 +1,15 @@
 /** Liga o menu de idioma ao estado de i18n. */
 import { qs, qsa, on } from '../utils/dom';
-import { LANGUAGE_LABEL, isLanguage, type Language } from '../types/i18n';
+import { LANGUAGE_FLAG, LANGUAGE_LABEL, isLanguage, type Language } from '../types/i18n';
+import { withBase } from '../utils/paths';
 import { getLanguage, initLanguage, nextLanguage, setLanguage } from './i18nRuntime';
 
 function updateButtons(language: Language): void {
   const current = qs<HTMLElement>('[data-language-current]');
   if (current) current.textContent = LANGUAGE_LABEL[language];
+
+  const flag = qs<HTMLImageElement>('[data-language-flag]');
+  if (flag) flag.src = withBase(`/images/flags/${LANGUAGE_FLAG[language]}.svg`);
 
   for (const option of qsa<HTMLButtonElement>('[data-language-option]')) {
     const value = option.dataset.languageOption;

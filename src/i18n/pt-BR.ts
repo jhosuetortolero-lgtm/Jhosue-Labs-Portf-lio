@@ -108,7 +108,7 @@ export const ptBR = {
     title: 'Construo sistemas que transformam ideias em resultados.',
     description:
       'Programador Fullstack e especialista em inteligência artificial, desenvolvimento de sistemas SaaS, CRM, automações e integrações para empresas que desejam crescer utilizando tecnologia.',
-    role: 'Programador Fullstack e Expert em IA',
+    role: 'Programador Fullstack, Expert em IA, Cibersegurança e Engenharia de Software',
     availableNow: 'Disponível para novos projetos',
     unavailable: 'Agenda fechada no momento',
     projectsButton: 'Conheça meus projetos',
@@ -231,6 +231,10 @@ export const ptBR = {
     company: 'Empresa',
     companyOptional: 'opcional',
     companyPlaceholder: 'Nome da empresa',
+    whatsapp: 'WhatsApp',
+    country: 'País do número',
+    countrySearch: 'Buscar país ou DDI',
+    countryEmpty: 'Nenhum país encontrado.',
     projectType: 'Tipo de projeto',
     projectTypePlaceholder: 'Selecione uma opção',
     budget: 'Orçamento aproximado',
@@ -250,6 +254,7 @@ export const ptBR = {
       automation: 'Automação',
       whatsapp: 'WhatsApp',
       api: 'API ou integração',
+      security: 'Cibersegurança',
       other: 'Outro',
     },
     budgets: {
@@ -262,6 +267,7 @@ export const ptBR = {
     errors: {
       name: 'Informe seu nome (mínimo 2 caracteres).',
       email: 'Informe um e-mail válido.',
+      whatsapp: 'Confira o número: informe só o DDD e o número, sem o código do país.',
       projectType: 'Escolha o tipo de projeto.',
       message: 'Escreva pelo menos 20 caracteres.',
       messageTooLong: 'A mensagem passou do limite de caracteres.',
@@ -278,7 +284,7 @@ export const ptBR = {
     rights: 'Desenvolvido por Jhosue — Programador Fullstack e Expert em IA.',
     sections: 'Seções',
     contactTitle: 'Contato',
-    builtWith: 'Feito com Astro, TypeScript e muito café.',
+    builtWith: 'Feito com Astro, TypeScript e muito energético ⚡',
     /* Partes do aviso legal. Ficam separadas para o nome da empresa não
        precisar ser repetido em cada idioma. */
     trademarkPrefix: 'é uma marca registrada de',

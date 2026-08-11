@@ -14,6 +14,7 @@ import { initTerminal } from './terminal';
 import { initParticles } from './particles';
 import { initShaderBackground } from './shaderBackground';
 import { initContactForm } from './contactForm';
+import { initCountrySelect } from './countrySelect';
 import { initCarousels } from './carousel';
 import { initCertificates } from './certificates';
 import { initTestimonials } from './testimonials';
@@ -48,7 +49,10 @@ function boot(): void {
   initCarousels();
   if (features.certificates) initCertificates();
   if (features.testimonials) initTestimonials();
-  if (features.contactForm) initContactForm();
+  if (features.contactForm) {
+    initContactForm();
+    initCountrySelect();
+  }
 }
 
 if (document.readyState === 'loading') {

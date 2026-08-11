@@ -2,10 +2,13 @@ import {
   FIELD_LIMITS,
   MESSAGE_MIN_LENGTH,
   NAME_MIN_LENGTH,
+  PHONE_MAX_DIGITS,
+  PHONE_MIN_DIGITS,
   type ContactFormData,
   type ContactProvider,
   type ContactResponse,
 } from './contact.types';
+import { DEFAULT_COUNTRY, findCountry } from '../../data/countries';
 import { demoProvider } from './providers/demo.provider';
 import { formspreeProvider } from './providers/formspree.provider';
 import { emailjsProvider } from './providers/emailjs.provider';
@@ -28,6 +31,22 @@ export function getProvider(): ContactProvider {
   return demoProvider;
 }
 
+/** Só os dígitos: o visitante pode digitar (81) 9 9440-1675. */
+function onlyDigits(value: string): string {
+  return value.replace(/\D/g, '');
+}
+
+/**
+ * Número pronto para o WhatsApp: DDI do país escolhido + número digitado.
+ * Devolve string vazia quando não há número.
+ */
+export function whatsappNumber(data: ContactFormData): string {
+  const phone = onlyDigits(data.whatsapp ?? '');
+  if (!phone) return '';
+  const country = findCountry(data.country ?? DEFAULT_COUNTRY);
+  return `${country?.dial ?? ''}${phone}`;
+}
+
 export type ContactFieldError = {
   field: keyof ContactFormData;
   messageKey: string;
@@ -43,6 +62,12 @@ export function validateContactForm(data: ContactFormData): ContactFieldError[] 
 
   if (!isValidEmail(data.email)) {
     errors.push({ field: 'email', messageKey: 'form.errors.email' });
+  }
+
+  // WhatsApp é opcional: só é validado quando a pessoa digita algo.
+  const phone = onlyDigits(data.whatsapp ?? '');
+  if (phone.length > 0 && (phone.length < PHONE_MIN_DIGITS || phone.length > PHONE_MAX_DIGITS)) {
+    errors.push({ field: 'whatsapp', messageKey: 'form.errors.whatsapp' });
   }
 
   if (!data.projectType) {
@@ -69,10 +94,16 @@ export function normalizeContactForm(data: ContactFormData): ContactFormData {
     name: sanitizeSingleLine(data.name, FIELD_LIMITS.name),
     email: sanitizeSingleLine(data.email, FIELD_LIMITS.email),
     company: sanitizeSingleLine(data.company ?? '', FIELD_LIMITS.company),
+    country: sanitizeSingleLine(data.country ?? DEFAULT_COUNTRY, 2),
+    whatsapp: onlyDigits(data.whatsapp ?? '').slice(0, PHONE_MAX_DIGITS),
     projectType: sanitizeSingleLine(data.projectType, 40),
     budget: sanitizeSingleLine(data.budget ?? '', 40),
     message: sanitizeText(data.message, FIELD_LIMITS.message),
     consent: Boolean(data.consent),
+    labels: {
+      projectType: sanitizeSingleLine(data.labels?.projectType ?? '', 60),
+      budget: sanitizeSingleLine(data.labels?.budget ?? '', 60),
+    },
   };
 }
 

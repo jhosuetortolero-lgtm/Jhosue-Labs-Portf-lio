@@ -21,10 +21,27 @@ export const timeline: TimelineItem[] = [
     organization: 'Jhosue Labs',
     description: {
       'pt-BR':
-        'Desenvolvimento de sistemas SaaS, CRMs, APIs, automações e soluções com inteligência artificial para empresas.',
+        'Engenharia de software aplicada a sistemas SaaS, CRMs, APIs e automações, com inteligência artificial integrada ao processo e cibersegurança na proteção de sistemas e redes.',
       'en-US':
-        'Development of SaaS systems, CRMs, APIs, automations and artificial intelligence solutions for companies.',
-      es: 'Desarrollo de sistemas SaaS, CRMs, APIs, automatizaciones y soluciones con inteligencia artificial para empresas.',
+        'Software engineering applied to SaaS systems, CRMs, APIs and automations, with artificial intelligence embedded in the process and cybersecurity protecting systems and networks.',
+      es: 'Ingeniería de software aplicada a sistemas SaaS, CRMs, APIs y automatizaciones, con inteligencia artificial integrada al proceso y ciberseguridad en la protección de sistemas y redes.',
+    },
+  },
+  {
+    id: 'hub-rmc-engenharia',
+    type: 'project',
+    period: { 'pt-BR': '2026', 'en-US': '2026', es: '2026' },
+    title: {
+      'pt-BR': 'Hub RMC',
+      'en-US': 'Hub RMC',
+      es: 'Hub RMC',
+    },
+    description: {
+      'pt-BR':
+        'Plataforma SaaS multi-tenant para engenharia e construção: finanças, obras, orçamentos, CRM e automações com WhatsApp, OCR e IA.',
+      'en-US':
+        'Multi-tenant SaaS platform for engineering and construction: finance, projects, budgets, CRM and automations with WhatsApp, OCR and AI.',
+      es: 'Plataforma SaaS multi-tenant para ingeniería y construcción: finanzas, obras, presupuestos, CRM y automatizaciones con WhatsApp, OCR e IA.',
     },
   },
   {
@@ -88,9 +105,11 @@ export const timeline: TimelineItem[] = [
       es: 'Inicio en la programación',
     },
     description: {
-      'pt-BR': 'Primeiros projetos web e fundamentos de engenharia de software.',
-      'en-US': 'First web projects and software engineering fundamentals.',
-      es: 'Primeros proyectos web y fundamentos de ingeniería de software.',
+      'pt-BR':
+        'Base em lógica de programação, primeiras automações com n8n e integrações que resolviam tarefas repetitivas do dia a dia.',
+      'en-US':
+        'Foundation in programming logic, first automations with n8n and integrations that solved everyday repetitive tasks.',
+      es: 'Base en lógica de programación, primeras automatizaciones con n8n e integraciones que resolvían tareas repetitivas del día a día.',
     },
   },
 ];

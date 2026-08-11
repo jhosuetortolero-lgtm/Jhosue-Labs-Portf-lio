@@ -32,7 +32,7 @@ export const siteConfig = {
     logoTop: 'JHOSUE',
     logoBottom: 'LABS',
     owner: 'Jhosue',
-    professionalTitle: 'Programador Fullstack e Expert em IA',
+    professionalTitle: 'Programador Fullstack, Expert em IA, Cibersegurança e Engenharia de Software',
     slogan: 'Transformando ideias em sistemas inteligentes.',
     secondarySlogan: 'Software, automação e inteligência artificial.',
   },
