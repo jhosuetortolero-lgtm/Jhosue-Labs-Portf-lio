@@ -39,6 +39,15 @@ export const skills: Skill[] = [
     name: { 'pt-BR': 'Automação', 'en-US': 'Automation', es: 'Automatización' },
   },
   {
+    id: 'security',
+    percentage: 75,
+    name: {
+      'pt-BR': 'Cibersegurança',
+      'en-US': 'Cybersecurity',
+      es: 'Ciberseguridad',
+    },
+  },
+  {
     id: 'databases',
     percentage: 85,
     name: { 'pt-BR': 'Bancos de dados', 'en-US': 'Databases', es: 'Bases de datos' },

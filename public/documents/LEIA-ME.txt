@@ -1,9 +1,11 @@
-Coloque aqui o arquivo do currículo com o nome exato:
+Currículo em três idiomas. Nomes exatos dos arquivos:
 
-    curriculo-jhosue.pdf
+    curriculo-jhosue-pt-BR.pdf   (português)
+    curriculo-jhosue-en-US.pdf   (inglês)
+    curriculo-jhosue-es.pdf      (espanhol)
 
-O caminho é definido em src/config/site.ts -> siteConfig.cvUrl
-Se você mudar o nome do arquivo, ajuste lá também.
+Os caminhos são definidos em src/config/site.ts -> siteConfig.cvUrls
+Se você mudar algum nome de arquivo, ajuste lá também.
 
-Enquanto o PDF não existir, o botão "Baixar currículo" e o comando
-"curriculo" da paleta vão apontar para um arquivo inexistente (erro 404).
+O botão "Baixar currículo" e o comando "curriculo" da paleta escolhem o
+arquivo conforme o idioma selecionado no site.

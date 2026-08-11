@@ -218,6 +218,8 @@ export const es: DictionaryShape = {
     availableNow: 'Disponible para nuevos proyectos',
     unavailable: 'Agenda cerrada por ahora',
     notConfigured: 'Canal aún no configurado.',
+    whatsappMessage:
+      '¡Hola Jhosue! Vengo desde el sitio de Jhosue Labs y quiero hablar sobre un proyecto.',
   },
 
   form: {

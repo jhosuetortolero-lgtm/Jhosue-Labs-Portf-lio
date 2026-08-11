@@ -220,6 +220,7 @@ export const ptBR = {
     availableNow: 'Disponível para novos projetos',
     unavailable: 'Agenda fechada no momento',
     notConfigured: 'Canal ainda não configurado.',
+    whatsappMessage: 'Olá Jhosue! Vim pelo site da Jhosue Labs e quero falar sobre um projeto.',
   },
 
   form: {

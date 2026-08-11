@@ -18,6 +18,8 @@ import { initCarousels } from './carousel';
 import { initCertificates } from './certificates';
 import { initTestimonials } from './testimonials';
 import { initBootScreen } from './boot';
+import { initWhatsappLinks } from './whatsapp';
+import { initCvLinks } from './cv';
 
 function boot(): void {
   const root = document.documentElement;
@@ -28,6 +30,9 @@ function boot(): void {
 
   // Idioma primeiro: os demais módulos leem rótulos traduzidos.
   if (features.languageToggle) initLanguageToggle();
+  // Depois do idioma: WhatsApp e currículo seguem a língua ativa.
+  initWhatsappLinks();
+  initCvLinks();
   if (features.themeToggle) initTheme();
 
   initNavigation();

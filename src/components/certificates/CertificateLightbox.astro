@@ -67,6 +67,8 @@ const total = certificates.length;
               <img
                 src={withBase(certificate.image)}
                 alt={`${t('certificates.altPrefix')} ${certificate.title} — ${certificate.issuer}`}
+                data-i18n-attr="alt:certificates.altPrefix"
+                data-i18n-append={` ${certificate.title} — ${certificate.issuer}`}
                 loading="lazy"
                 decoding="async"
               />

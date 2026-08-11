@@ -30,6 +30,15 @@ export const certificates: Certificate[] = [
     credentialUrl: 'https://ude.my/UC-968e3a5e-e1d7-4045-a1c5-f601b1ecae62',
   },
   {
+    id: 'analista-ciberseguranca-kali-linux',
+    title: 'Analista de Cibersegurança: Do 0 ao Kali Linux (ethical hacker)',
+    issuer: 'Jupiter Cyber Space',
+    year: '2025',
+    workload: null,
+    image: '/images/certificates/analista-ciberseguranca-kali-linux.webp',
+    credentialUrl: null,
+  },
+  {
     id: 'bootcamp-self-checkout',
     title: 'Bootcamp Self Checkout',
     issuer: 'Full Stack Club',

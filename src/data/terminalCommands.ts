@@ -1,7 +1,5 @@
 import type { CommandDefinition } from '../types/site';
-import { siteConfig } from '../config/site';
 import { socialHref } from '../config/social';
-import { withBase } from '../utils/paths';
 
 /**
  * Comandos da Command Palette / terminal interativo.
@@ -78,7 +76,7 @@ function build(): CommandDefinition[] {
       name: 'curriculo',
       aliases: ['cv', 'currículo', 'resume'],
       descriptionKey: 'palette.commands.cv',
-      action: { kind: 'external', url: withBase(siteConfig.cvUrl) },
+      action: { kind: 'download-cv' },
       listed: true,
     },
   ];

@@ -1,5 +1,6 @@
 import type { Statistic } from '../types/site';
 import { siteConfig } from '../config/site';
+import { projects } from './projects';
 
 /**
  * Perfil profissional. Textos longos ficam aqui, traduzidos nos 3 idiomas.
@@ -20,10 +21,10 @@ export const owner = {
     },
     {
       'pt-BR':
-        'No frontend uso Astro, React, Vite e TypeScript com foco em performance e acessibilidade. No backend, Golang com Fiber, PostgreSQL e Redis, expostos por APIs REST e WebSockets. Para automação e IA, combino N8N, WhatsApp Business API e APIs da OpenAI em fluxos que rodam sem supervisão.',
+        'No frontend uso Astro, React, Vite e TypeScript com foco em performance e acessibilidade. No backend, Golang com Fiber, PostgreSQL e Redis, expostos por APIs REST e WebSockets. Para automação e IA, combino N8N, WhatsApp Business API e APIs da OpenAI em fluxos que rodam sem supervisão. Também tenho formação em cibersegurança, com prática em defesa cibernética, proteção de sistemas e redes e mitigação de vulnerabilidades.',
       'en-US':
-        'On the frontend I use Astro, React, Vite and TypeScript with a focus on performance and accessibility. On the backend, Golang with Fiber, PostgreSQL and Redis, exposed through REST APIs and WebSockets. For automation and AI, I combine N8N, the WhatsApp Business API and OpenAI APIs into flows that run unattended.',
-      es: 'En el frontend uso Astro, React, Vite y TypeScript con foco en rendimiento y accesibilidad. En el backend, Golang con Fiber, PostgreSQL y Redis, expuestos mediante APIs REST y WebSockets. Para automatización e IA, combino N8N, la API de WhatsApp Business y las APIs de OpenAI en flujos que funcionan sin supervisión.',
+        'On the frontend I use Astro, React, Vite and TypeScript with a focus on performance and accessibility. On the backend, Golang with Fiber, PostgreSQL and Redis, exposed through REST APIs and WebSockets. For automation and AI, I combine N8N, the WhatsApp Business API and OpenAI APIs into flows that run unattended. I am also trained in cybersecurity, with hands-on practice in cyber defence, system and network protection and vulnerability mitigation.',
+      es: 'En el frontend uso Astro, React, Vite y TypeScript con foco en rendimiento y accesibilidad. En el backend, Golang con Fiber, PostgreSQL y Redis, expuestos mediante APIs REST y WebSockets. Para automatización e IA, combino N8N, la API de WhatsApp Business y las APIs de OpenAI en flujos que funcionan sin supervisión. También tengo formación en ciberseguridad, con práctica en defensa cibernética, protección de sistemas y redes y mitigación de vulnerabilidades.',
     },
     {
       'pt-BR':
@@ -56,6 +57,11 @@ export const owner = {
       'en-US': 'Documented delivery, ready for the team to take over.',
       es: 'Entrega documentada y lista para que el equipo la asuma.',
     },
+    {
+      'pt-BR': 'Cibersegurança aplicada: sistemas e redes protegidos desde o projeto.',
+      'en-US': 'Applied cybersecurity: systems and networks protected from the design stage.',
+      es: 'Ciberseguridad aplicada: sistemas y redes protegidos desde el diseño.',
+    },
   ],
 
   languages: [
@@ -72,9 +78,10 @@ export const owner = {
  */
 export const statistics: Statistic[] = [
   {
+    // Conta os projetos publicados no site: aumenta sozinho quando você
+    // adiciona um bloco novo em src/data/projects.ts.
     id: 'projects',
-    value: '[QUANTIDADE]',
-    placeholder: true,
+    value: String(projects.length),
     label: {
       'pt-BR': 'Projetos desenvolvidos',
       'en-US': 'Projects delivered',

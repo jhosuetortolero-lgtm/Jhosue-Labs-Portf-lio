@@ -10,6 +10,7 @@ import { commands, filterCommands, listedCommands, resolveCommand } from '../dat
 import { translate, LANGUAGE_EVENT } from './i18nRuntime';
 import { toggleTheme } from './theme';
 import { toggleLanguage } from './language';
+import { cvHref } from './cv';
 import type { CommandDefinition } from '../types/site';
 
 let isOpen = false;
@@ -84,6 +85,11 @@ function runCommand(command: CommandDefinition): void {
     case 'external':
       print(`${translate('palette.output.opening')} ${command.name}`);
       openExternal(action.url);
+      break;
+
+    case 'download-cv':
+      print(`${translate('palette.output.opening')} ${command.name}`);
+      openExternal(cvHref());
       break;
 
     case 'toggle-theme':

@@ -17,7 +17,14 @@ const { certificate, index, clone = false } = Astro.props;
 const t = useTranslations(DEFAULT_LANGUAGE);
 
 const pending = isCertificatePending(certificate);
-const alt = `${t('certificates.altPrefix')} ${certificate.title} — ${certificate.issuer}`;
+/**
+ * O nome do certificado nunca é traduzido; só o rótulo à frente dele.
+ * `data-i18n-append` guarda essa parte fixa para o runtime recompor o texto
+ * quando o idioma muda.
+ */
+const altSuffix = ` ${certificate.title} — ${certificate.issuer}`;
+const alt = `${t('certificates.altPrefix')}${altSuffix}`;
+const buttonSuffix = `: ${certificate.title}`;
 ---
 
 <li
@@ -31,7 +38,9 @@ const alt = `${t('certificates.altPrefix')} ${certificate.title} — ${certifica
     class="cert__button"
     data-certificate-open={index}
     tabindex={clone ? -1 : 0}
-    aria-label={`${t('certificates.viewCertificate')}: ${certificate.title}`}
+    aria-label={`${t('certificates.viewCertificate')}${buttonSuffix}`}
+    data-i18n-attr="aria-label:certificates.viewCertificate"
+    data-i18n-append={buttonSuffix}
   >
     <span class="cert__media">
       {
@@ -39,6 +48,8 @@ const alt = `${t('certificates.altPrefix')} ${certificate.title} — ${certifica
           <img
             src={withBase(certificate.image)}
             alt={alt}
+            data-i18n-attr="alt:certificates.altPrefix"
+            data-i18n-append={altSuffix}
             width="480"
             height="340"
             loading="lazy"

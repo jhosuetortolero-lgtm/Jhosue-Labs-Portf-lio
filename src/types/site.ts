@@ -55,6 +55,8 @@ export interface CommandDefinition {
   action:
     | { kind: 'navigate'; target: string }
     | { kind: 'external'; url: string }
+    /** Currículo: o arquivo é escolhido pelo idioma ativo, em tempo de execução. */
+    | { kind: 'download-cv' }
     | { kind: 'toggle-theme' }
     | { kind: 'toggle-language' }
     | { kind: 'print'; outputKey: string }

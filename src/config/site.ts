@@ -106,8 +106,16 @@ export const siteConfig = {
 
   location: 'Brasil',
 
-  /** Currículo em `public/documents/`. */
-  cvUrl: '/documents/curriculo-jhosue.pdf',
+  /**
+   * Currículo em `public/documents/`, uma versão por idioma.
+   * `cvUrl` é o padrão (usado antes do JavaScript trocar pelo idioma ativo).
+   */
+  cvUrl: '/documents/curriculo-jhosue-pt-BR.pdf',
+  cvUrls: {
+    'pt-BR': '/documents/curriculo-jhosue-pt-BR.pdf',
+    'en-US': '/documents/curriculo-jhosue-en-US.pdf',
+    es: '/documents/curriculo-jhosue-es.pdf',
+  },
 
   /**
    * Foto de destaque do Hero.

@@ -5,7 +5,7 @@ import ProfilePhoto from '../common/ProfilePhoto.astro';
 import SplitText from '../common/SplitText.astro';
 import RotatingWords from '../common/RotatingWords.astro';
 import { heroRotator } from '../../config/site';
-import { siteConfig, mailtoUrl } from '../../config/site';
+import { siteConfig, mailtoUrl, whatsappUrl } from '../../config/site';
 import { activeSocialLinks } from '../../config/social';
 import { useTranslations } from '../../i18n';
 import { DEFAULT_LANGUAGE } from '../../types/i18n';
@@ -14,7 +14,14 @@ import { withBase } from '../../utils/paths';
 const t = useTranslations(DEFAULT_LANGUAGE);
 const available = siteConfig.availability.open;
 const statusKey = available ? 'hero.availableNow' : 'hero.unavailable';
-const contactHref = mailtoUrl(`Contato via ${siteConfig.brand.name}`) ?? '#contact';
+/**
+ * O CTA principal vai direto para o WhatsApp com a mensagem no idioma ativo
+ * (o script `whatsapp.ts` reescreve o href a cada troca de idioma).
+ * Sem WhatsApp configurado, cai no e-mail e depois na seção de contato.
+ */
+const whatsappHref = whatsappUrl(t('contact.whatsappMessage'));
+const contactHref =
+  whatsappHref ?? mailtoUrl(`Contato via ${siteConfig.brand.name}`) ?? '#contact';
 ---
 
 <section id="hero" class="hero" aria-labelledby="hero-title">
@@ -39,7 +46,15 @@ const contactHref = mailtoUrl(`Contato via ${siteConfig.brand.name}`) ?? '#conta
         <Button href="#projects" variant="primary" size="lg" icon="arrow-right" data-i18n="hero.projectsButton">
           {t('hero.projectsButton')}
         </Button>
-        <Button href={contactHref} variant="secondary" size="lg" icon="mail" data-i18n="hero.contactButton">
+        <Button
+          href={contactHref}
+          variant="secondary"
+          size="lg"
+          icon={whatsappHref ? 'whatsapp' : 'mail'}
+          external={Boolean(whatsappHref)}
+          data-i18n="hero.contactButton"
+          data-whatsapp-message={whatsappHref ? 'contact.whatsappMessage' : undefined}
+        >
           {t('hero.contactButton')}
         </Button>
         <Button
@@ -49,6 +64,7 @@ const contactHref = mailtoUrl(`Contato via ${siteConfig.brand.name}`) ?? '#conta
           icon="download"
           download
           data-i18n="hero.cvButton"
+          data-cv-link
         >
           {t('hero.cvButton')}
         </Button>

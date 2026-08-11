@@ -50,10 +50,12 @@ export function applyTranslations(root: ParentNode = document): void {
   for (const element of qsa<HTMLElement>('[data-i18n-attr]', root)) {
     const spec = element.dataset.i18nAttr;
     if (!spec) continue;
+    // Trecho fixo colado depois da tradução (ex.: o nome do certificado).
+    const append = element.dataset.i18nAppend ?? '';
     for (const pair of spec.split(';')) {
       const [attribute, key] = pair.split(':').map((part) => part.trim());
       if (!attribute || !key) continue;
-      element.setAttribute(attribute, translate(key));
+      element.setAttribute(attribute, `${translate(key)}${append}`);
     }
   }
 }

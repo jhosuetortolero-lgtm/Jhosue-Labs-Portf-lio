@@ -24,7 +24,17 @@ const githubHref = socialHref('github');
 const linkedinHref = socialHref('linkedin');
 
 /** Cada canal mostra um valor legível; os não configurados viram aviso. */
-const channels = [
+type Channel = {
+  id: string;
+  icon: string;
+  labelKey: string;
+  href: string | null;
+  value: string | null;
+  /** Chave de tradução da mensagem pré-preenchida (só no WhatsApp). */
+  whatsappMessageKey?: string;
+};
+
+const channels: Channel[] = [
   {
     id: 'email',
     icon: 'mail',
@@ -36,8 +46,9 @@ const channels = [
     id: 'whatsapp',
     icon: 'whatsapp',
     labelKey: 'social.whatsapp',
-    href: whatsappUrl('Olá Jhosue! Vim pelo site da Jhosue Labs.'),
+    href: whatsappUrl(t('contact.whatsappMessage')),
     value: whatsappDisplay(),
+    whatsappMessageKey: 'contact.whatsappMessage',
   },
   {
     id: 'github',
@@ -92,6 +103,9 @@ const budgets = ['undefined', 'upTo5k', 'from5to15k', 'from15to40k', 'above40k']
                     class="contact__link"
                     {...(channel.href.startsWith('http')
                       ? { target: '_blank', rel: 'noopener noreferrer' }
+                      : {})}
+                    {...(channel.whatsappMessageKey
+                      ? { 'data-whatsapp-message': channel.whatsappMessageKey }
                       : {})}
                   >
                     <span class="contact__icon">
