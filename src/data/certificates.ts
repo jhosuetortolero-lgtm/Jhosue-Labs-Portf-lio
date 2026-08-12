@@ -30,6 +30,15 @@ export const certificates: Certificate[] = [
     credentialUrl: 'https://ude.my/UC-968e3a5e-e1d7-4045-a1c5-f601b1ecae62',
   },
   {
+    id: 'engenharia-de-software-2026',
+    title: 'Engenharia de Software (2026)',
+    issuer: 'Udemy',
+    year: '2026',
+    workload: '7,5h',
+    image: '/images/certificates/uc-8c455061-3aa4-444d-96a5-b2289901a948.webp',
+    credentialUrl: 'https://ude.my/UC-8c455061-3aa4-444d-96a5-b2289901a948',
+  },
+  {
     id: 'analista-ciberseguranca-kali-linux',
     title: 'Analista de Cibersegurança: Do 0 ao Kali Linux (ethical hacker)',
     issuer: 'Jupiter Cyber Space',
