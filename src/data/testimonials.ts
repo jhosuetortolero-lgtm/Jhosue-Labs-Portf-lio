@@ -32,6 +32,19 @@ export const testimonials: Testimonial[] = [
     proofImage: '/images/testimonials/rodrigo-99freelas-998.webp',
     sourceUrl: null,
   },
+  {
+    id: 'juliana-whatsapp',
+    author: 'Juliana B.',
+    company: null,
+    source: 'WhatsApp',
+    project: 'Projeto digital',
+    period: 'ago. 2026',
+    rating: null,
+    quote:
+      'Você foi extremamente rápido e atencioso. Amei o resultado, ficou exatamente como eu queria. E chegou bem antes do prazo.',
+    proofImage: '/images/testimonials/whatsapp-cliente-720.webp',
+    sourceUrl: null,
+  },
 ];
 
 /** Média das notas informadas. `null` quando ninguém deu nota. */
