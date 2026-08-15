@@ -30,6 +30,15 @@ export const certificates: Certificate[] = [
     credentialUrl: 'https://ude.my/UC-968e3a5e-e1d7-4045-a1c5-f601b1ecae62',
   },
   {
+    id: 'do-zero-ao-mvp-com-ia',
+    title: 'Do zero ao MVP: Como transformar sua ideia em produto real com IA',
+    issuer: 'Skills & Go · Alura · FIAP · PM3',
+    year: '2026',
+    workload: '1h',
+    image: '/images/certificates/certificado-building-ia-products.webp',
+    credentialUrl: null,
+  },
+  {
     id: 'engenharia-de-software-2026',
     title: 'Engenharia de Software (2026)',
     issuer: 'Udemy',
