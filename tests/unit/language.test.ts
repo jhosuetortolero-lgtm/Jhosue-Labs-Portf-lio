@@ -16,6 +16,7 @@ beforeEach(() => {
   localStorage.clear();
   document.body.innerHTML = '';
   document.head.innerHTML = '<meta name="description" content="" />';
+  window.history.replaceState(null, '', '/');
   setLanguage('pt-BR', false);
 });
 
@@ -31,9 +32,47 @@ describe('persistência de idioma', () => {
     expect(getLanguage()).toBe('pt-BR');
   });
 
+  it('prioriza idioma válido na URL sobre idioma salvo', () => {
+    localStorage.setItem(KEY, 'pt-BR');
+    window.history.replaceState(null, '', '/?lang=es');
+    expect(detectLanguage()).toBe('es');
+  });
+
+  it('aceita atalhos de idioma na URL', () => {
+    window.history.replaceState(null, '', '/?lang=en');
+    expect(detectLanguage()).toBe('en-US');
+
+    window.history.replaceState(null, '', '/?lang=pt');
+    expect(detectLanguage()).toBe('pt-BR');
+  });
+
+  it('ignora idioma inválido na URL e lê o idioma salvo', () => {
+    localStorage.setItem(KEY, 'es');
+    window.history.replaceState(null, '', '/?lang=invalid');
+    expect(detectLanguage()).toBe('es');
+  });
+
   it('lê o idioma salvo', () => {
     localStorage.setItem(KEY, 'es');
     expect(detectLanguage()).toBe('es');
+  });
+
+  it('atualiza URL preservando parâmetros e âncora', () => {
+    window.history.replaceState(null, '', '/?utm_source=share#contact');
+    setLanguage('en-US');
+    expect(window.location.search).toBe('?utm_source=share&lang=en-US');
+    expect(window.location.hash).toBe('#contact');
+  });
+
+  it('não atualiza URL durante inicialização', () => {
+    window.history.replaceState(null, '', '/?utm_source=share');
+    setLanguage('es', false);
+    expect(window.location.search).toBe('?utm_source=share');
+  });
+
+  it('normaliza idioma completo sem diferenciar maiúsculas', () => {
+    window.history.replaceState(null, '', '/?lang=EN-us');
+    expect(detectLanguage()).toBe('en-US');
   });
 
   it('cai no idioma do navegador quando não há nada salvo', () => {

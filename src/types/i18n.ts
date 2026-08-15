@@ -15,6 +15,18 @@ export function isLanguage(value: unknown): value is Language {
   return typeof value === 'string' && (LANGUAGES as readonly string[]).includes(value);
 }
 
+/** Normaliza códigos completos e atalhos usados em URLs compartilháveis. */
+export function normalizeLanguage(value: unknown): Language | null {
+  if (typeof value !== 'string') return null;
+
+  const normalized = value.trim().toLowerCase();
+  if (normalized === 'pt' || normalized === 'pt-br' || normalized === 'pt-pt') return 'pt-BR';
+  if (normalized === 'en' || normalized === 'en-us' || normalized === 'en-gb') return 'en-US';
+  if (normalized === 'es' || normalized === 'es-es') return 'es';
+
+  return null;
+}
+
 /** Códigos usados no atributo `lang` do HTML e no Open Graph. */
 export const HTML_LANG: Record<Language, string> = {
   'pt-BR': 'pt-BR',

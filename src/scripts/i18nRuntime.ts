@@ -5,7 +5,7 @@
  * (nunca innerHTML) e os mesmos dicionários usados na renderização estática.
  */
 import { dictionaries } from '../i18n';
-import { DEFAULT_LANGUAGE, HTML_LANG, isLanguage, type Language } from '../types/i18n';
+import { DEFAULT_LANGUAGE, HTML_LANG, isLanguage, normalizeLanguage, type Language } from '../types/i18n';
 import { siteConfig } from '../config/site';
 import { readStorage, writeStorage } from '../utils/storage';
 import { qsa } from '../utils/dom';
@@ -22,8 +22,17 @@ export function translate(key: string): string {
   return dictionaries[current][key] ?? dictionaries[DEFAULT_LANGUAGE][key] ?? key;
 }
 
-/** Idioma salvo, ou o mais próximo do navegador, ou o padrão. */
+/** Idioma explícito no link compartilhado, quando for suportado. */
+export function languageFromUrl(): Language | null {
+  if (typeof window === 'undefined') return null;
+  return normalizeLanguage(new URLSearchParams(window.location.search).get('lang'));
+}
+
+/** Idioma da URL, salvo, do navegador ou o padrão, nesta ordem. */
 export function detectLanguage(): Language {
+  const fromUrl = languageFromUrl();
+  if (fromUrl) return fromUrl;
+
   const saved = readStorage(siteConfig.storageKeys.language);
   if (isLanguage(saved)) return saved;
 
@@ -37,6 +46,14 @@ export function detectLanguage(): Language {
   }
 
   return DEFAULT_LANGUAGE;
+}
+
+function updateLanguageUrl(language: Language): void {
+  if (typeof window === 'undefined') return;
+
+  const url = new URL(window.location.href);
+  url.searchParams.set('lang', language);
+  window.history.replaceState(null, '', `${url.pathname}${url.search}${url.hash}`);
 }
 
 /** Aplica as traduções em todo o documento (ou em um trecho). */
@@ -78,7 +95,10 @@ export function setLanguage(language: Language, persist = true): void {
   if (!isLanguage(language)) return;
   current = language;
 
-  if (persist) writeStorage(siteConfig.storageKeys.language, language);
+  if (persist) {
+    writeStorage(siteConfig.storageKeys.language, language);
+    updateLanguageUrl(language);
+  }
 
   applyTranslations();
   updateDocumentMeta(language);
@@ -96,10 +116,11 @@ export function nextLanguage(): Language {
 }
 
 export function initLanguage(): void {
+  const fromUrl = languageFromUrl();
   const detected = detectLanguage();
   // Aplica sempre: garante que atributos traduzidos fiquem coerentes.
   setLanguage(detected, false);
-  if (readStorage(siteConfig.storageKeys.language)) {
+  if (fromUrl || readStorage(siteConfig.storageKeys.language)) {
     writeStorage(siteConfig.storageKeys.language, detected);
   }
 }

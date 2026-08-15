@@ -72,4 +72,9 @@ export function initLanguageToggle(): void {
       closeMenu();
     }
   });
+
+  on(window, 'popstate', () => {
+    initLanguage();
+    updateButtons(getLanguage());
+  });
 }
