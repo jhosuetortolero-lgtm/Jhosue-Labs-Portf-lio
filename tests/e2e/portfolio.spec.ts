@@ -267,6 +267,16 @@ test('formulário valida campos obrigatórios', async ({ page }) => {
 });
 
 test('formulário aceita envio válido e responde em modo demonstração', async ({ page }) => {
+  /*
+    Só faz sentido quando o build NAO tem provedor configurado. Com um
+    provedor real (`PUBLIC_CONTACT_PROVIDER` no .env ou nas vars do CI) este
+    envio sairia de verdade e encheria a caixa de entrada a cada execução.
+  */
+  const provider = await page
+    .locator('[data-contact-form]')
+    .getAttribute('data-provider');
+  test.skip(provider !== 'demo', `build usa o provedor "${provider}", não o modo demonstração`);
+
   await page.locator('#contact').scrollIntoViewIfNeeded();
   await page.locator('#contact-name').fill('Maria Souza');
   await page.locator('#contact-email').fill('maria@empresa.com.br');
@@ -281,7 +291,7 @@ test('formulário aceita envio válido e responde em modo demonstração', async
 });
 
 test('carrossel de certificados anda sozinho e pausa no botão', async ({ page }) => {
-  const viewport = page.locator('[data-carousel-viewport]');
+  const viewport = page.locator('#certificates [data-carousel-viewport]');
   await page.locator('#certificates').scrollIntoViewIfNeeded();
   await page.waitForTimeout(400);
 
@@ -291,8 +301,11 @@ test('carrossel de certificados anda sozinho e pausa no botão', async ({ page }
   expect(depois).toBeGreaterThan(antes);
 
   // Botão de pausa congela a rotação.
-  await page.locator('[data-carousel-toggle]').click();
-  await expect(page.locator('[data-carousel-toggle]')).toHaveAttribute('aria-pressed', 'true');
+  await page.locator('#certificates [data-carousel-toggle]').click();
+  await expect(page.locator('#certificates [data-carousel-toggle]')).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  );
   const pausado = await viewport.evaluate((el) => el.scrollLeft);
   await page.waitForTimeout(1000);
   expect(await viewport.evaluate((el) => el.scrollLeft)).toBe(pausado);
@@ -307,7 +320,7 @@ test('carrossel para com movimento reduzido', async ({ browser }) => {
   await reduced.goto('/#certificates', { waitUntil: 'domcontentloaded' });
   await reduced.waitForTimeout(1200);
 
-  const viewport = reduced.locator('[data-carousel-viewport]');
+  const viewport = reduced.locator('#certificates [data-carousel-viewport]');
   const antes = await viewport.evaluate((el) => el.scrollLeft);
   await reduced.waitForTimeout(1200);
   expect(await viewport.evaluate((el) => el.scrollLeft)).toBe(antes);
@@ -464,9 +477,23 @@ test('não há link vazio href="#"', async ({ page }) => {
   await expect(page.locator('a[href="#"]')).toHaveCount(0);
 });
 
-test('o botão do currículo aponta para o PDF configurado', async ({ page }) => {
-  const link = page.locator('a[download]').first();
-  await expect(link).toHaveAttribute('href', /curriculo-jhosue\.pdf$/);
+test('o botão do currículo aponta para o PDF do idioma ativo', async ({ page }) => {
+  // Há um PDF por idioma; `cv.ts` troca o href e o nome do download sem
+  // recarregar a página. O teste antigo esperava um arquivo único e ficou
+  // para trás quando o currículo passou a ser por idioma.
+  const link = page.locator('a[data-cv-link]').first();
+  await expect(link).toHaveAttribute('href', /curriculo-jhosue-pt-BR\.pdf$/);
+  await expect(link).toHaveAttribute('download', /-PT\.pdf$/);
+
+  await page.locator('[data-language-button]').click();
+  await page.locator('[data-language-option="en-US"]').click();
+  await expect(link).toHaveAttribute('href', /curriculo-jhosue-en-US\.pdf$/);
+  await expect(link).toHaveAttribute('download', /-EN\.pdf$/);
+
+  await page.locator('[data-language-button]').click();
+  await page.locator('[data-language-option="es"]').click();
+  await expect(link).toHaveAttribute('href', /curriculo-jhosue-es\.pdf$/);
+  await expect(link).toHaveAttribute('download', /-ES\.pdf$/);
 });
 
 test('skip link leva ao conteúdo principal', async ({ page }) => {
