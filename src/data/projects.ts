@@ -111,6 +111,38 @@ export const projects: Project[] = [
       es: 'Panel de presupuesto analítico de Hub RMC',
     },
   },
+  {
+    id: 'landing-gta-vi',
+    title: 'Landing Page Clone Site GTA VI',
+    category: 'WEB',
+    year: '2026',
+    featured: false,
+    status: 'online',
+    technologies: ['HTML', 'CSS', 'JavaScript', 'GSAP'],
+    projectUrl: 'https://jhosuetortolero-lgtm.github.io/curso-clone-site-gta-vi-dev-em-dobro/',
+    repositoryUrl: 'https://github.com/jhosuetortolero-lgtm/curso-clone-site-gta-vi-dev-em-dobro',
+    image: '/images/projects/landing-gta-vi-640.webp',
+    shortDescription: {
+      'pt-BR':
+        'Recriação da página de divulgação de GTA VI, feita como exercício de curso, com animações amarradas à rolagem.',
+      'en-US':
+        'Recreation of the GTA VI promo page, built as a course exercise, with scroll-driven animations.',
+      es: 'Recreación de la página promocional de GTA VI, hecha como ejercicio de curso, con animaciones ligadas al scroll.',
+    },
+    fullDescription: {
+      'pt-BR':
+        'Clone da landing page oficial de GTA VI escrito em HTML, CSS e JavaScript puro, sem framework. Reproduz o mosaico da arte promocional, a seção de história, o trailer e o rodapé, com as animações presas à rolagem pelo GSAP ScrollTrigger. Exercício do curso Dev em Dobro, publicado no GitHub Pages.',
+      'en-US':
+        'Clone of the official GTA VI landing page written in plain HTML, CSS and JavaScript, with no framework. It reproduces the promo art mosaic, the story section, the trailer and the footer, with animations tied to scrolling through GSAP ScrollTrigger. A Dev em Dobro course exercise, published on GitHub Pages.',
+      es: 'Clon de la landing page oficial de GTA VI escrito en HTML, CSS y JavaScript puro, sin framework. Reproduce el mosaico del arte promocional, la sección de historia, el trailer y el pie de página, con animaciones ligadas al scroll mediante GSAP ScrollTrigger. Ejercicio del curso Dev em Dobro, publicado en GitHub Pages.',
+    },
+    imageAlt: {
+      'pt-BR':
+        'Topo da landing page de GTA VI com o mosaico da arte promocional e a data de lançamento',
+      'en-US': 'Top of the GTA VI landing page with the promo art mosaic and the release date',
+      es: 'Parte superior de la landing page de GTA VI con el mosaico del arte promocional y la fecha de lanzamiento',
+    },
+  },
 ];
 
 
