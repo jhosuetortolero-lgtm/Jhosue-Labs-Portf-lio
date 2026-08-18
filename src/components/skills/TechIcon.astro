@@ -1,9 +1,13 @@
 ---
-import { techIconPaths } from './techIcons';
+import { getTechIcon } from './techIcons';
 
 /**
- * Ícone de uma tecnologia. Se não houver desenho para o id, não renderiza
- * nada — a grade cai no selo com as iniciais.
+ * Icone de uma tecnologia. Marcas reais saem preenchidas (logotipo oficial);
+ * desenhos proprios saem em traco. A cor vem do `currentColor`, definido pelo
+ * selo em TechnologyGrid a partir de `--brand`.
+ *
+ * Se nao houver desenho para o id, nao renderiza nada — a grade cai no selo
+ * com as iniciais.
  */
 export interface Props {
   id: string;
@@ -12,26 +16,27 @@ export interface Props {
 }
 
 const { id, size = 22, strokeWidth = 1.6 } = Astro.props;
-const paths = techIconPaths[id] ?? null;
+const icon = getTechIcon(id);
+const isBrand = icon?.kind === 'brand';
 ---
 
 {
-  paths && (
+  icon && (
     <svg
       class="tech-icon"
       width={size}
       height={size}
       viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width={strokeWidth}
-      stroke-linecap="round"
-      stroke-linejoin="round"
+      fill={isBrand ? 'currentColor' : 'none'}
+      stroke={isBrand ? 'none' : 'currentColor'}
+      stroke-width={isBrand ? undefined : strokeWidth}
+      stroke-linecap={isBrand ? undefined : 'round'}
+      stroke-linejoin={isBrand ? undefined : 'round'}
       role="presentation"
       aria-hidden="true"
       focusable="false"
     >
-      {paths.map((d) => (
+      {icon.paths.map((d) => (
         <path d={d} />
       ))}
     </svg>

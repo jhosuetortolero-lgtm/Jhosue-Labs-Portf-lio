@@ -3,11 +3,12 @@ import type { Technology, TechnologyCategory } from '../types/skill';
 /**
  * TECNOLOGIAS.
  *
- * Os selos são gerados localmente a partir do campo `badge` (sem baixar
- * logotipos de terceiros e sem requisições externas). Se quiser usar o
- * logotipo oficial de alguma tecnologia, coloque o SVG em
- * `public/icons/technologies/<id>.svg` — o componente usa o arquivo
- * automaticamente quando ele existir.
+ * O ícone de cada item vem de `src/components/skills/techIcons.ts`, casado pelo
+ * `id`: marcas reais usam o logotipo e a cor oficiais (pacote `simple-icons`,
+ * embutido no HTML durante o build) e o resto usa desenho próprio.
+ *
+ * O campo `badge` é a reserva: aparece como iniciais quando o `id` não tem
+ * ícone registrado. Ao adicionar uma tecnologia, registre também o ícone.
  */
 export const technologies: Technology[] = [
   // frontend
