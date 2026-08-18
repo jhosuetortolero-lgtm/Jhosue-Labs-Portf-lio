@@ -52,6 +52,18 @@ Para gerar uma captura para este README, tire um print da home em 1280×800 e sa
 
 ## Tecnologias
 
+<p align="center">
+  <img src="https://skillicons.dev/icons?i=astro,ts,js,html,css,nodejs,git,github,githubactions" alt="Astro, TypeScript, JavaScript, HTML, CSS, Node.js, Git, GitHub e GitHub Actions" />
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Zod-3E67B1?style=flat&logo=zod&logoColor=white" alt="Zod" />
+  <img src="https://img.shields.io/badge/Vitest-6E9F18?style=flat&logo=vitest&logoColor=white" alt="Vitest" />
+  <img src="https://img.shields.io/badge/Playwright-2EAD33?style=flat&logoColor=white" alt="Playwright" />
+  <img src="https://img.shields.io/badge/ESLint-4B32C3?style=flat&logo=eslint&logoColor=white" alt="ESLint" />
+  <img src="https://img.shields.io/badge/Prettier-F7B93E?style=flat&logo=prettier&logoColor=black" alt="Prettier" />
+</p>
+
 | Camada        | O que é usado                                            |
 | ------------- | -------------------------------------------------------- |
 | Framework     | Astro 5 (saída 100% estática, zero JS por padrão)         |
@@ -60,12 +72,13 @@ Para gerar uma captura para este README, tire um print da home em 1280×800 e sa
 | Interações    | TypeScript nativo — sem React, jQuery ou libs de animação |
 | Validação     | Zod (só em tempo de build)                                |
 | Fontes        | Space Grotesk + JetBrains Mono, self-hosted via Fontsource |
-| Ícones        | SVG locais escritos no próprio projeto                    |
+| Ícones        | SVG inline: desenhos próprios + logotipos oficiais (simple-icons) |
 | Testes        | Vitest (unitários) + Playwright (navegador)               |
 | Qualidade     | ESLint 9 (flat config) + Prettier                         |
 
-**Não usamos:** jQuery, Bootstrap, bibliotecas pesadas de animação, ícones remotos,
-dependências apontando para branches sem versão.
+**Não usamos no site:** jQuery, Bootstrap, bibliotecas pesadas de animação, ícones
+remotos, dependências apontando para branches sem versão. Os selos acima são imagens
+externas do próprio README — a página publicada continua sem requisições a terceiros.
 
 ---
 
