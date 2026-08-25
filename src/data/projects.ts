@@ -151,7 +151,7 @@ export const projects: Project[] = [
   },
   {
     id: 'saas-ecommerce-bewear',
-    title: 'BEWEAR',
+    title: 'Saas de E-commerce Bewear',
     category: 'SAAS',
     year: '2025',
     featured: true,
