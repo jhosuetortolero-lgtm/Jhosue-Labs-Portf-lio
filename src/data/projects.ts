@@ -150,6 +150,46 @@ export const projects: Project[] = [
     },
   },
   {
+    id: 'saas-ecommerce-bewear',
+    title: 'BEWEAR',
+    category: 'SAAS',
+    year: '2025',
+    featured: true,
+    status: 'online',
+    technologies: [
+      'Next.js',
+      'React',
+      'TypeScript',
+      'PostgreSQL',
+      'Drizzle ORM',
+      'Better Auth',
+      'Stripe',
+      'Tailwind CSS',
+    ],
+    projectUrl: 'https://jhosuetortolero-lgtm.github.io/Saas-ecomerce-bewear/',
+    repositoryUrl: 'https://github.com/jhosuetortolero-lgtm/Saas-ecomerce-bewear',
+    image: '/images/projects/saas-ecommerce-bewear-640.webp',
+    shortDescription: {
+      'pt-BR':
+        'E-commerce de moda full stack com catálogo por variantes, carrinho, endereços de entrega, checkout no Stripe e histórico de pedidos.',
+      'en-US':
+        'Full-stack fashion e-commerce with variant-based catalog, cart, shipping addresses, Stripe checkout and order history.',
+      es: 'E-commerce de moda full stack con catálogo por variantes, carrito, direcciones de entrega, checkout con Stripe e historial de pedidos.',
+    },
+    fullDescription: {
+      'pt-BR':
+        'Loja de roupas e acessórios construída com o App Router do Next.js 15 e React 19. A escrita de dados passa por Server Actions, o estado de servidor no cliente é sincronizado com TanStack Query, a autenticação usa Better Auth com sessão em banco e o pagamento acontece no Stripe Checkout, confirmado por webhook.',
+      'en-US':
+        'Clothing and accessories store built with the Next.js 15 App Router and React 19. Data writes go through Server Actions, client-side server state is synchronized with TanStack Query, authentication runs on Better Auth with database-backed sessions and payment happens in Stripe Checkout, confirmed by webhook.',
+      es: 'Tienda de ropa y accesorios construida con el App Router de Next.js 15 y React 19. La escritura de datos pasa por Server Actions, el estado de servidor en el cliente se sincroniza con TanStack Query, la autenticación usa Better Auth con sesión en base de datos y el pago ocurre en Stripe Checkout, confirmado por webhook.',
+    },
+    imageAlt: {
+      'pt-BR': 'Página inicial do e-commerce BEWEAR com o banner “Leve uma vida com estilo”',
+      'en-US': 'BEWEAR e-commerce home page with the “Leve uma vida com estilo” banner',
+      es: 'Página de inicio del e-commerce BEWEAR con el banner “Leve uma vida com estilo”',
+    },
+  },
+  {
     id: 'landing-gta-vi',
     title: 'Landing Page Clone Site GTA VI',
     category: 'WEB',
