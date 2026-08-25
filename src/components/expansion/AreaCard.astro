@@ -1,0 +1,176 @@
+---
+import Icon from '../common/Icon.astro';
+import type { ExpansionArea } from '../../data/professionalExpansion';
+import { useTranslations } from '../../i18n';
+import { DEFAULT_LANGUAGE } from '../../types/i18n';
+
+export interface Props {
+  area: ExpansionArea;
+  index: number;
+  idPrefix: string;
+}
+
+const { area, index, idPrefix } = Astro.props;
+const t = useTranslations(DEFAULT_LANGUAGE);
+const headingId = `${idPrefix}-${area.id}-title`;
+---
+
+<li
+  class="card expansion-card"
+  data-reveal
+  style={`--reveal-delay: ${Math.min(index, 5) * 70}ms`}
+  aria-labelledby={headingId}
+>
+  <span class="expansion-card__bar" aria-hidden="true"></span>
+
+  <div class="expansion-card__head">
+    <span class="expansion-card__icon" aria-hidden="true">
+      <Icon name={area.icon} size={23} />
+    </span>
+    <span class="expansion-card__index" aria-hidden="true">
+      {String(index + 1).padStart(2, '0')}
+    </span>
+  </div>
+
+  <div class="expansion-card__identity">
+    <h3 id={headingId} class="expansion-card__title" data-i18n={area.nameKey}>
+      {t(area.nameKey)}
+    </h3>
+    <p class="expansion-card__focus" data-i18n={area.focusKey}>{t(area.focusKey)}</p>
+  </div>
+
+  <ul class="expansion-card__items" role="list">
+    {
+      area.items.map((item) => (
+        <li>
+          <span class="expansion-card__marker" aria-hidden="true">
+            /
+          </span>
+          <span data-i18n={item.labelKey}>{t(item.labelKey)}</span>
+        </li>
+      ))
+    }
+  </ul>
+</li>
+
+<style>
+  .expansion-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    min-width: 0;
+    padding: var(--space-5);
+    overflow: hidden;
+  }
+
+  .expansion-card__bar {
+    position: absolute;
+    inset: 0 0 auto;
+    height: 4px;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--duration-base) var(--ease-out);
+  }
+
+  .expansion-card:hover .expansion-card__bar,
+  .expansion-card:focus-within .expansion-card__bar {
+    transform: scaleX(1);
+  }
+
+  .expansion-card__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+
+  .expansion-card__icon {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    color: var(--color-primary-ink);
+    background-color: var(--color-primary-soft);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-medium);
+    transition:
+      color var(--duration-base) var(--ease-out),
+      background-color var(--duration-base) var(--ease-out),
+      transform var(--duration-base) var(--ease-out);
+  }
+
+  .expansion-card__index {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    line-height: 1;
+    color: var(--color-border-soft);
+    transition: color var(--duration-base) var(--ease-out);
+  }
+
+  .expansion-card:hover .expansion-card__icon {
+    color: var(--color-on-primary);
+    background-color: var(--color-primary);
+    transform: rotate(-4deg) scale(1.05);
+  }
+
+  .expansion-card:hover .expansion-card__index {
+    color: var(--color-primary);
+  }
+
+  .expansion-card__identity {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .expansion-card__title {
+    font-size: var(--text-lg);
+  }
+
+  .expansion-card__focus {
+    min-height: 2.6em;
+    font-size: var(--text-xs);
+    line-height: var(--leading-snug);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-primary-ink);
+  }
+
+  .expansion-card__items {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    margin: 0;
+    padding: var(--space-3) 0 0;
+    list-style: none;
+    border-top: 1px solid var(--color-border-soft);
+    font-size: var(--text-sm);
+  }
+
+  .expansion-card__items li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+
+  .expansion-card__marker {
+    flex-shrink: 0;
+    color: var(--color-primary-ink);
+    font-weight: 700;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .expansion-card__bar,
+    .expansion-card__icon,
+    .expansion-card__index {
+      transition: none;
+    }
+
+    .expansion-card:hover .expansion-card__icon {
+      transform: none;
+    }
+  }
+</style>

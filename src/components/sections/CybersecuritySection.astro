@@ -1,0 +1,52 @@
+---
+import SectionHeader from '../common/SectionHeader.astro';
+import AreaCard from '../expansion/AreaCard.astro';
+import { cybersecurityAreas } from '../../data/professionalExpansion';
+import { useTranslations } from '../../i18n';
+import { DEFAULT_LANGUAGE } from '../../types/i18n';
+
+const t = useTranslations(DEFAULT_LANGUAGE);
+---
+
+<section
+  id="cybersecurity"
+  class="section section--alt"
+  aria-labelledby="cybersecurity-title"
+  data-expansion-section
+>
+  <div class="container">
+    <SectionHeader
+      headingId="cybersecurity-title"
+      eyebrowKey="expansion.cybersecurity.eyebrow"
+      titleKey="expansion.cybersecurity.title"
+      subtitleKey="expansion.cybersecurity.subtitle"
+      eyebrow={t('expansion.cybersecurity.eyebrow')}
+      title={t('expansion.cybersecurity.title')}
+      subtitle={t('expansion.cybersecurity.subtitle')}
+    />
+
+    <ul
+      class="cybersecurity__areas"
+      role="list"
+      aria-label={t('expansion.cybersecurity.areasLabel')}
+      data-i18n-attr="aria-label:expansion.cybersecurity.areasLabel"
+    >
+      {
+        cybersecurityAreas.map((area, index) => (
+          <AreaCard area={area} index={index} idPrefix="cybersecurity" />
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .cybersecurity__areas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: var(--space-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+</style>

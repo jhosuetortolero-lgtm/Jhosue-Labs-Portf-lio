@@ -1,0 +1,140 @@
+---
+import SectionHeader from '../common/SectionHeader.astro';
+import Icon from '../common/Icon.astro';
+import Tag from '../common/Tag.astro';
+import { professionalFocus } from '../../data/professionalExpansion';
+import { useTranslations } from '../../i18n';
+import { DEFAULT_LANGUAGE } from '../../types/i18n';
+
+const t = useTranslations(DEFAULT_LANGUAGE);
+---
+
+<section
+  id="professional-positioning"
+  class="section section--alt"
+  aria-labelledby="professional-positioning-title"
+  data-expansion-section
+>
+  <div class="container">
+    <SectionHeader
+      headingId="professional-positioning-title"
+      eyebrowKey="expansion.profile.eyebrow"
+      titleKey="expansion.profile.name"
+      subtitleKey="expansion.profile.role"
+      eyebrow={t('expansion.profile.eyebrow')}
+      title={t('expansion.profile.name')}
+      subtitle={t('expansion.profile.role')}
+    />
+
+    <article class="card positioning" data-reveal>
+      <div class="positioning__icon" aria-hidden="true">
+        <Icon name="branch" size={27} />
+      </div>
+
+      <div class="positioning__content">
+        <h3 class="positioning__founder" data-i18n="expansion.profile.founder">
+          {t('expansion.profile.founder')}
+        </h3>
+        <p class="positioning__statement" data-i18n="expansion.profile.description">
+          {t('expansion.profile.description')}
+        </p>
+      </div>
+
+      <div class="positioning__focus">
+        <p class="mono-label" data-i18n="expansion.profile.focusLabel">
+          {t('expansion.profile.focusLabel')}
+        </p>
+        <ul class="positioning__tags" role="list">
+          {
+            professionalFocus.map((item) => (
+              <li>
+                <Tag data-i18n={item.labelKey}>{t(item.labelKey)}</Tag>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </article>
+  </div>
+</section>
+
+<style>
+  .positioning {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--space-4);
+    align-items: start;
+    padding: var(--space-5);
+  }
+
+  .positioning__icon {
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    color: var(--color-primary-ink);
+    background-color: var(--color-primary-soft);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-medium);
+  }
+
+  .positioning__content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .positioning__founder {
+    font-size: var(--text-xl);
+  }
+
+  .positioning__statement {
+    max-width: 68ch;
+    color: var(--color-text-muted);
+    line-height: var(--leading-normal);
+  }
+
+  .positioning__focus {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    grid-column: 1 / -1;
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border-soft);
+  }
+
+  .positioning__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  @media (max-width: 520px) {
+    .positioning {
+      grid-template-columns: 1fr;
+    }
+
+    .positioning__focus {
+      grid-column: auto;
+    }
+  }
+
+  @media (min-width: 900px) {
+    .positioning {
+      grid-template-columns: auto minmax(0, 1.4fr) minmax(240px, 0.6fr);
+      align-items: center;
+      padding: var(--space-6);
+    }
+
+    .positioning__focus {
+      grid-column: auto;
+      padding-top: 0;
+      padding-left: var(--space-5);
+      border-top: 0;
+      border-left: 1px solid var(--color-border-soft);
+    }
+  }
+</style>

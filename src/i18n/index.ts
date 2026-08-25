@@ -1,6 +1,7 @@
 import { ptBR } from './pt-BR';
 import { enUS } from './en-US';
 import { es } from './es';
+import { professionalExpansionTranslations } from './professionalExpansion';
 import { DEFAULT_LANGUAGE, LANGUAGES, type Language } from '../types/i18n';
 import type { Dictionaries, Dictionary } from '../types/site';
 import type { LocalizedText } from '../types/localized';
@@ -48,6 +49,10 @@ function buildDictionaries(): Dictionaries {
   const dicts = Object.fromEntries(
     LANGUAGES.map((language) => [language, flatten(uiDictionaries[language])]),
   ) as Dictionaries;
+
+  for (const language of LANGUAGES) {
+    Object.assign(dicts[language], professionalExpansionTranslations[language]);
+  }
 
   for (const project of projects) {
     put(dicts, `project.${project.id}.short`, project.shortDescription);

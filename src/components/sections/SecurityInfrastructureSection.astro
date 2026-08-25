@@ -1,0 +1,65 @@
+---
+import SectionHeader from '../common/SectionHeader.astro';
+import AreaCard from '../expansion/AreaCard.astro';
+import { securityKnowledgeAreas } from '../../data/professionalExpansion';
+import { useTranslations } from '../../i18n';
+import { DEFAULT_LANGUAGE } from '../../types/i18n';
+
+const t = useTranslations(DEFAULT_LANGUAGE);
+---
+
+<section
+  id="security-infrastructure"
+  class="section section--alt"
+  aria-labelledby="security-infrastructure-title"
+  data-expansion-section
+>
+  <div class="container">
+    <SectionHeader
+      headingId="security-infrastructure-title"
+      eyebrowKey="expansion.securityStack.eyebrow"
+      titleKey="expansion.securityStack.title"
+      subtitleKey="expansion.securityStack.subtitle"
+      eyebrow={t('expansion.securityStack.eyebrow')}
+      title={t('expansion.securityStack.title')}
+      subtitle={t('expansion.securityStack.subtitle')}
+    />
+
+    <p class="security-stack__note muted" data-i18n="expansion.securityStack.note" data-reveal>
+      {t('expansion.securityStack.note')}
+    </p>
+
+    <ul
+      class="security-stack__areas"
+      role="list"
+      aria-label={t('expansion.securityStack.areasLabel')}
+      data-i18n-attr="aria-label:expansion.securityStack.areasLabel"
+    >
+      {
+        securityKnowledgeAreas.map((area, index) => (
+          <AreaCard area={area} index={index} idPrefix="security-stack" />
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .security-stack__note {
+    max-width: 72ch;
+    margin: calc(var(--space-7) * -0.45) 0 var(--space-6);
+    padding-left: var(--space-3);
+    border-left: 3px solid var(--color-primary);
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+  }
+
+  .security-stack__areas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr));
+    gap: var(--space-5);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+</style>

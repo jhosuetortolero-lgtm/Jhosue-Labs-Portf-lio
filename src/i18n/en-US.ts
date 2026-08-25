@@ -280,12 +280,13 @@ export const enUS: DictionaryShape = {
 
   footer: {
     tagline: 'Code, intelligence and innovation.',
-    rights: 'Built by Jhosue — Fullstack Developer and AI Expert.',
+    rights: 'Built by Jhosue — Fullstack Developer, AI Expert and Ethical Hacker.',
     sections: 'Sections',
     contactTitle: 'Contact',
     builtWith: 'Made with Astro, TypeScript and plenty of energy drink ⚡',
     trademarkPrefix: 'is a registered trademark of',
     trademarkPrefixUnregistered: 'is a trademark of',
+    trademarkScope: 'and Cybersecurity',
     allRights: 'All rights reserved.',
   },
 

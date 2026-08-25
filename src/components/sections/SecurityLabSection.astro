@@ -1,0 +1,191 @@
+---
+import SectionHeader from '../common/SectionHeader.astro';
+import Tag from '../common/Tag.astro';
+import { securityLabTracks } from '../../data/professionalExpansion';
+import { useTranslations } from '../../i18n';
+import { DEFAULT_LANGUAGE } from '../../types/i18n';
+
+const t = useTranslations(DEFAULT_LANGUAGE);
+---
+
+<section
+  id="security-lab"
+  class="section"
+  aria-labelledby="security-lab-title"
+  data-expansion-section
+>
+  <div class="container">
+    <SectionHeader
+      headingId="security-lab-title"
+      eyebrowKey="expansion.securityLab.eyebrow"
+      titleKey="expansion.securityLab.title"
+      subtitleKey="expansion.securityLab.subtitle"
+      eyebrow={t('expansion.securityLab.eyebrow')}
+      title={t('expansion.securityLab.title')}
+      subtitle={t('expansion.securityLab.subtitle')}
+    />
+
+    <article class="card security-lab" data-reveal>
+      <div class="security-lab__bar" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span class="security-lab__file">security-lab.md</span>
+      </div>
+
+      <div class="security-lab__body">
+        <div class="security-lab__intro">
+          <Tag class="security-lab__status" data-i18n="expansion.securityLab.status">
+            {t('expansion.securityLab.status')}
+          </Tag>
+          <p class="security-lab__description" data-i18n="expansion.securityLab.description">
+            {t('expansion.securityLab.description')}
+          </p>
+        </div>
+
+        <div class="security-lab__tracks">
+          <h3 data-i18n="expansion.securityLab.tracksTitle">
+            {t('expansion.securityLab.tracksTitle')}
+          </h3>
+          <ul role="list">
+            {
+              securityLabTracks.map((track) => (
+                <li>
+                  <span aria-hidden="true">$</span>
+                  <span data-i18n={track.labelKey}>{t(track.labelKey)}</span>
+                </li>
+              ))
+            }
+          </ul>
+          <p class="security-lab__note" data-i18n="expansion.securityLab.futureNote">
+            {t('expansion.securityLab.futureNote')}
+          </p>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<style>
+  .security-lab {
+    overflow: hidden;
+    background-color: var(--terminal-bg);
+    color: var(--terminal-text);
+  }
+
+  .security-lab:hover {
+    transform: none;
+    box-shadow: var(--shadow-small);
+  }
+
+  .security-lab__bar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 0.65rem 0.85rem;
+    border-bottom: 1px solid rgb(255 255 255 / 12%);
+    background-color: color-mix(in srgb, var(--terminal-bg) 70%, #ffffff 12%);
+  }
+
+  .security-lab__bar > span:not(.security-lab__file) {
+    width: 0.65rem;
+    height: 0.65rem;
+    border-radius: 50%;
+  }
+
+  .security-lab__bar > span:nth-child(1) {
+    background-color: #ff5f57;
+  }
+
+  .security-lab__bar > span:nth-child(2) {
+    background-color: #febc2e;
+  }
+
+  .security-lab__bar > span:nth-child(3) {
+    background-color: #28c840;
+  }
+
+  .security-lab__file {
+    margin-left: auto;
+    font-size: var(--text-xs);
+    color: rgb(255 255 255 / 60%);
+  }
+
+  .security-lab__body {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+    padding: var(--space-5);
+  }
+
+  .security-lab__intro {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-4);
+  }
+
+  .security-lab__status {
+    color: var(--terminal-prompt);
+    background-color: rgb(255 255 255 / 7%);
+    border-color: rgb(255 255 255 / 16%);
+  }
+
+  .security-lab__description {
+    max-width: 62ch;
+    line-height: var(--leading-normal);
+  }
+
+  .security-lab__tracks {
+    padding: var(--space-4);
+    border: 1px solid rgb(255 255 255 / 14%);
+    border-radius: var(--radius-medium);
+    background-color: rgb(255 255 255 / 4%);
+  }
+
+  .security-lab__tracks h3 {
+    margin-bottom: var(--space-4);
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--terminal-accent);
+  }
+
+  .security-lab__tracks ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr));
+    gap: var(--space-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: var(--text-sm);
+  }
+
+  .security-lab__tracks li {
+    display: flex;
+    gap: var(--space-2);
+  }
+
+  .security-lab__tracks li > span:first-child {
+    color: var(--terminal-prompt);
+    font-weight: 700;
+  }
+
+  .security-lab__note {
+    margin-top: var(--space-4);
+    padding-top: var(--space-3);
+    border-top: 1px solid rgb(255 255 255 / 12%);
+    color: rgb(255 255 255 / 62%);
+    font-size: var(--text-xs);
+    line-height: var(--leading-normal);
+  }
+
+  @media (min-width: 900px) {
+    .security-lab__body {
+      grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+      align-items: start;
+      padding: var(--space-6);
+    }
+  }
+</style>

@@ -20,6 +20,7 @@ export const technologies: Technology[] = [
 
   // backend
   { id: 'golang', name: 'Golang', category: 'backend', badge: 'GO', note: n('Serviços de alta performance', 'High performance services', 'Servicios de alto rendimiento') },
+  { id: 'python', name: 'Python', category: 'backend', badge: 'PY', note: n('Backend, automação e inteligência artificial', 'Backend, automation and artificial intelligence', 'Backend, automatización e inteligencia artificial') },
   { id: 'fiber', name: 'Fiber', category: 'backend', badge: 'FB', note: n('Framework HTTP em Go', 'HTTP framework for Go', 'Framework HTTP en Go') },
   { id: 'rest', name: 'APIs REST', category: 'backend', badge: 'API', note: n('Contratos previsíveis e versionados', 'Predictable, versioned contracts', 'Contratos predecibles y versionados') },
   { id: 'websockets', name: 'WebSockets', category: 'backend', badge: 'WS', note: n('Comunicação em tempo real', 'Real time communication', 'Comunicación en tiempo real') },

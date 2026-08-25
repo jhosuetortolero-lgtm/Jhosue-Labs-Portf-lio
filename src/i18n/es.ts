@@ -266,7 +266,8 @@ export const es: DictionaryShape = {
     errors: {
       name: 'Escribe tu nombre (mínimo 2 caracteres).',
       email: 'Escribe un correo válido.',
-      whatsapp: 'Revisa el número: indica solo el código de área y el número, sin el código de país.',
+      whatsapp:
+        'Revisa el número: indica solo el código de área y el número, sin el código de país.',
       projectType: 'Elige el tipo de proyecto.',
       message: 'Escribe al menos 20 caracteres.',
       messageTooLong: 'El mensaje superó el límite de caracteres.',
@@ -280,12 +281,13 @@ export const es: DictionaryShape = {
 
   footer: {
     tagline: 'Código, inteligencia e innovación.',
-    rights: 'Desarrollado por Jhosue — Programador Fullstack y Experto en IA.',
+    rights: 'Desarrollado por Jhosue — Programador Fullstack, Experto en IA y Hacker Ético.',
     sections: 'Secciones',
     contactTitle: 'Contacto',
     builtWith: 'Hecho con Astro, TypeScript y mucha bebida energética ⚡',
     trademarkPrefix: 'es una marca registrada de',
     trademarkPrefixUnregistered: 'es una marca de',
+    trademarkScope: 'y Ciberseguridad',
     allRights: 'Todos los derechos reservados.',
   },
 

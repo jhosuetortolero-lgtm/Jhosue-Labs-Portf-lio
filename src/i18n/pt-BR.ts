@@ -281,7 +281,7 @@ export const ptBR = {
 
   footer: {
     tagline: 'Código, inteligência e inovação.',
-    rights: 'Desenvolvido por Jhosue — Programador Fullstack e Expert em IA.',
+    rights: 'Desenvolvido por Jhosue — Programador Fullstack, Expert em IA e Hacker Ético.',
     sections: 'Seções',
     contactTitle: 'Contato',
     builtWith: 'Feito com Astro, TypeScript e muito energético ⚡',
@@ -289,6 +289,7 @@ export const ptBR = {
        precisar ser repetido em cada idioma. */
     trademarkPrefix: 'é uma marca registrada de',
     trademarkPrefixUnregistered: 'é uma marca de',
+    trademarkScope: 'e Cibersegurança',
     allRights: 'Todos os direitos reservados.',
   },
 

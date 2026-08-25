@@ -1,0 +1,55 @@
+---
+import SectionHeader from '../common/SectionHeader.astro';
+import AreaCard from '../expansion/AreaCard.astro';
+import { leadsparkAreas } from '../../data/professionalExpansion';
+import { useTranslations } from '../../i18n';
+import { DEFAULT_LANGUAGE } from '../../types/i18n';
+
+const t = useTranslations(DEFAULT_LANGUAGE);
+---
+
+<section id="leadspark" class="section" aria-labelledby="leadspark-title" data-expansion-section>
+  <div class="container">
+    <SectionHeader
+      headingId="leadspark-title"
+      eyebrowKey="expansion.leadspark.eyebrow"
+      titleKey="expansion.leadspark.title"
+      subtitleKey="expansion.leadspark.subtitle"
+      eyebrow={t('expansion.leadspark.eyebrow')}
+      title={t('expansion.leadspark.title')}
+      subtitle={t('expansion.leadspark.subtitle')}
+    />
+
+    <p class="leadspark__statement lead" data-i18n="expansion.leadspark.description" data-reveal>
+      {t('expansion.leadspark.description')}
+    </p>
+
+    <ul
+      class="leadspark__areas"
+      role="list"
+      aria-label={t('expansion.leadspark.areasLabel')}
+      data-i18n-attr="aria-label:expansion.leadspark.areasLabel"
+    >
+      {
+        leadsparkAreas.map((area, index) => (
+          <AreaCard area={area} index={index} idPrefix="leadspark" />
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .leadspark__statement {
+    margin: calc(var(--space-7) * -0.45) 0 var(--space-6);
+  }
+
+  .leadspark__areas {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+    gap: var(--space-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+</style>

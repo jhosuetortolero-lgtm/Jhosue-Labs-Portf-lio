@@ -57,6 +57,15 @@ export const certificates: Certificate[] = [
     credentialUrl: null,
   },
   {
+    id: 'introducao-pentest-pratica',
+    title: 'Introdução ao Pentest na Prática',
+    issuer: 'DESEC Information Security',
+    year: '2026',
+    workload: '2h',
+    image: '/images/certificates/certificado-introducao-pentest.webp',
+    credentialUrl: 'https://desecsecurity.com/',
+  },
+  {
     id: 'bootcamp-self-checkout',
     title: 'Bootcamp Self Checkout',
     issuer: 'Full Stack Club',

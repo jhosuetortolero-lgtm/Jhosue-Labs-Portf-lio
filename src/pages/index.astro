@@ -10,6 +10,7 @@ import TimelineSection from '../components/sections/TimelineSection.astro';
 import CertificatesSection from '../components/sections/CertificatesSection.astro';
 import TestimonialsSection from '../components/sections/TestimonialsSection.astro';
 import ContactSection from '../components/sections/ContactSection.astro';
+import ProfessionalExpansion from '../components/sections/ProfessionalExpansion.astro';
 import { features } from '../config/features';
 ---
 
@@ -24,4 +25,5 @@ import { features } from '../config/features';
   {features.certificates && <CertificatesSection />}
   {features.testimonials && <TestimonialsSection />}
   <ContactSection />
+  <ProfessionalExpansion />
 </BaseLayout>

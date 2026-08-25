@@ -9,6 +9,7 @@ import {
   siLinux,
   siN8n,
   siPostgresql,
+  siPython,
   siReact,
   siRedis,
   siTypescript,
@@ -66,6 +67,7 @@ export const techIcons: Record<string, TechIconDef> = {
 
   // --- Backend ----------------------------------------------------------
   golang: brand(siGo),
+  python: brand(siPython),
   fiber: outline(
     ['M3 8.4c4.2 0 6.2 7.4 10.2 7.4 3 0 4.4-3.4 7.8-3.4', 'M3 13.4c3.2 0 5 4.2 8.2 4.2'],
     '#7fd0ff',
