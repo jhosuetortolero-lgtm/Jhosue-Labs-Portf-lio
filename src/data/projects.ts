@@ -112,6 +112,44 @@ export const projects: Project[] = [
     },
   },
   {
+    id: 'saas-barbearia',
+    title: 'SaaS para Barbearia',
+    category: 'SAAS',
+    year: '2025',
+    featured: true,
+    status: 'online',
+    technologies: [
+      'Next.js',
+      'TypeScript',
+      'PostgreSQL',
+      'Prisma',
+      'Stripe',
+      'OpenAI',
+    ],
+    projectUrl: 'https://jhosuetortolero-lgtm.github.io/Saas-para-Barbearia/',
+    repositoryUrl: 'https://github.com/jhosuetortolero-lgtm/Saas-para-Barbearia',
+    image: '/images/projects/saas-barbearia-640.webp',
+    shortDescription: {
+      'pt-BR':
+        'Plataforma de agendamentos para barbearias com busca de serviços, reservas, pagamentos e assistente virtual com IA.',
+      'en-US':
+        'Barbershop booking platform with service discovery, reservations, payments and an AI-powered virtual assistant.',
+      es: 'Plataforma de reservas para barberías con búsqueda de servicios, pagos y asistente virtual con IA.',
+    },
+    fullDescription: {
+      'pt-BR':
+        'SaaS full stack criado para conectar clientes e barbearias, reunindo catálogo de serviços, horários disponíveis, gestão de reservas, pagamentos via Stripe e um assistente de IA para apoiar o agendamento.',
+      'en-US':
+        'Full-stack SaaS built to connect customers and barbershops through a service catalog, available time slots, booking management, Stripe payments and an AI assistant that helps schedule appointments.',
+      es: 'SaaS full stack creado para conectar clientes y barberías mediante un catálogo de servicios, horarios disponibles, gestión de reservas, pagos con Stripe y un asistente de IA para facilitar las citas.',
+    },
+    imageAlt: {
+      'pt-BR': 'Tela inicial do SaaS para Barbearia com busca, categorias e agendamento',
+      'en-US': 'SaaS for Barbershops home screen with search, categories and booking',
+      es: 'Pantalla inicial del SaaS para Barberías con búsqueda, categorías y reservas',
+    },
+  },
+  {
     id: 'landing-gta-vi',
     title: 'Landing Page Clone Site GTA VI',
     category: 'WEB',
