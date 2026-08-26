@@ -190,6 +190,68 @@ export const projects: Project[] = [
     },
   },
   {
+    id: 'saas-doutor-agenda',
+    title: 'SaaS Doutor Agenda',
+    category: 'SAAS',
+    year: '2025',
+    featured: true,
+    status: 'online',
+    technologies: ['Next.js', 'TypeScript', 'Drizzle ORM', 'PostgreSQL', 'Better Auth', 'Stripe'],
+    projectUrl: 'https://jhosuetortolero-lgtm.github.io/Saas-Doutor-agenda/',
+    repositoryUrl: 'https://github.com/jhosuetortolero-lgtm/Saas-Doutor-agenda',
+    image: '/images/projects/saas-doutor-agenda-640.webp',
+    shortDescription: {
+      'pt-BR':
+        'SaaS de gestão para clínicas com médicos, pacientes, agendamentos, dashboard de faturamento e assinaturas.',
+      'en-US':
+        'Clinic management SaaS with doctors, patients, appointments, revenue dashboard and subscriptions.',
+      es: 'SaaS de gestión para clínicas con médicos, pacientes, citas, panel de facturación y suscripciones.',
+    },
+    fullDescription: {
+      'pt-BR':
+        'Plataforma SaaS que centraliza a operação de clínicas e consultórios: cadastro de médicos com especialidade, horários e valor da consulta, gestão de pacientes, agendamentos com validação de disponibilidade, dashboard de faturamento e métricas, autenticação com Better Auth e planos de assinatura via Stripe.',
+      'en-US':
+        'SaaS platform that centralizes clinic and practice operations: doctor profiles with specialty, working hours and consultation fee, patient management, appointments with availability validation, a revenue and metrics dashboard, Better Auth authentication and Stripe subscription plans.',
+      es: 'Plataforma SaaS que centraliza la operación de clínicas y consultorios: registro de médicos con especialidad, horarios y valor de la consulta, gestión de pacientes, citas con validación de disponibilidad, panel de facturación y métricas, autenticación con Better Auth y planes de suscripción vía Stripe.',
+    },
+    imageAlt: {
+      'pt-BR': 'Página do SaaS Doutor Agenda com o painel de gestão da clínica',
+      'en-US': 'SaaS Doutor Agenda page showing the clinic management dashboard',
+      es: 'Página del SaaS Doutor Agenda con el panel de gestión de la clínica',
+    },
+  },
+  {
+    id: 'totem-self-checkout-mcdonalds',
+    title: 'Totem Self-Checkout McDonald’s',
+    category: 'WEB',
+    year: '2025',
+    featured: false,
+    status: 'online',
+    technologies: ['Next.js', 'TypeScript', 'Prisma', 'PostgreSQL', 'Stripe', 'Tailwind CSS'],
+    projectUrl: 'https://jhosuetortolero-lgtm.github.io/self-checkout-toten-clone-mcdonalds/',
+    repositoryUrl: 'https://github.com/jhosuetortolero-lgtm/self-checkout-toten-clone-mcdonalds',
+    image: '/images/projects/totem-self-checkout-mcdonalds-640.webp',
+    shortDescription: {
+      'pt-BR':
+        'Clone do totem de autoatendimento do McDonald’s: cardápio por categorias, carrinho em tempo real e pedido finalizado com pagamento.',
+      'en-US':
+        'Clone of the McDonald’s self-checkout kiosk: category-based menu, real-time cart and order checkout with payment.',
+      es: 'Clon del tótem de autoservicio de McDonald’s: menú por categorías, carrito en tiempo real y pedido finalizado con pago.',
+    },
+    fullDescription: {
+      'pt-BR':
+        'Aplicação full stack que reproduz o fluxo dos totens de autoatendimento das lojas físicas: escolha entre comer no local ou levar, cardápio por categorias com foto, preço e ingredientes, carrinho com total em tempo real, finalização do pedido com nome e CPF, pagamento via Stripe e consulta do histórico de pedidos.',
+      'en-US':
+        'Full-stack application that reproduces the in-store self-checkout kiosk flow: dine-in or takeaway selection, a category-based menu with photos, prices and ingredients, a real-time cart total, order checkout with customer details, Stripe payment and order history lookup.',
+      es: 'Aplicación full stack que reproduce el flujo de los tótems de autoservicio de las tiendas físicas: elección entre comer en el local o llevar, menú por categorías con foto, precio e ingredientes, carrito con total en tiempo real, finalización del pedido con los datos del cliente, pago vía Stripe y consulta del historial de pedidos.',
+    },
+    imageAlt: {
+      'pt-BR': 'Página do totem de autoatendimento clone do McDonald’s',
+      'en-US': 'McDonald’s self-checkout kiosk clone project page',
+      es: 'Página del tótem de autoservicio clon de McDonald’s',
+    },
+  },
+  {
     id: 'landing-gta-vi',
     title: 'Landing Page Clone Site GTA VI',
     category: 'WEB',
