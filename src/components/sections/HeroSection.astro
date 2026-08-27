@@ -2,6 +2,7 @@
 import Button from '../common/Button.astro';
 import Icon from '../common/Icon.astro';
 import ProfilePhoto from '../common/ProfilePhoto.astro';
+import VerifiedBadge from '../common/VerifiedBadge.astro';
 import SplitText from '../common/SplitText.astro';
 import RotatingWords from '../common/RotatingWords.astro';
 import { heroRotator } from '../../config/site';
@@ -89,6 +90,8 @@ const contactHref = '#contact';
 
     <aside class="hero__panel" aria-label={siteConfig.brand.name}>
       <ProfilePhoto />
+
+      <VerifiedBadge />
 
       <div class="hero__badges" aria-hidden="true">
         <span class="hero__badge">SaaS</span>

@@ -117,6 +117,10 @@ export const enUS: DictionaryShape = {
     photoAlt:
       'Jhosue, founder of Jhosue Labs, in a portrait with a technological aesthetic and tactical gear.',
     photoBadge: 'Founder',
+    credentialLabel:
+      'Verified credential: Ethical Hacker from Cisco Networking Academy. See all certificates.',
+    credentialCaption: 'Verified badge',
+    credentialCourse: 'Ethical Hacker',
     photoTag: 'Jhosue Labs',
     rotate: {
       saas: 'SaaS Systems',

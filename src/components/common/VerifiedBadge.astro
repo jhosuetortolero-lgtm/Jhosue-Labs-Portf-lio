@@ -1,0 +1,207 @@
+---
+import { useTranslations } from '../../i18n';
+import { DEFAULT_LANGUAGE } from '../../types/i18n';
+import { withBase } from '../../utils/paths';
+
+/**
+ * Selo de credencial verificada (Cisco Networking Academy — Ethical Hacker).
+ *
+ * Cartão fechado, com o selo em cima e o texto embaixo, para o selo nunca
+ * disputar espaço com a foto nem com o topo fixo. Segue a linguagem do site:
+ * borda de 2px, sombra dura e o mesmo movimento de levantar no hover.
+ *
+ * É um link real para #certificates — o selo afirma, o carrossel prova.
+ *
+ * "Cisco Networking Academy" é nome próprio: não passa pelo dicionário.
+ */
+const t = useTranslations(DEFAULT_LANGUAGE);
+
+const sizes = [128, 192, 256];
+const srcset = sizes
+  .map((width) => `${withBase(`/images/badges/cisco-ethical-hacker-${width}.webp`)} ${width}w`)
+  .join(', ');
+---
+
+<a
+  class="credential"
+  href="#certificates"
+  aria-label={t('hero.credentialLabel')}
+  data-i18n-attr="aria-label:hero.credentialLabel"
+>
+  <span class="credential__seal">
+    <img
+      class="credential__image"
+      src={withBase('/images/badges/cisco-ethical-hacker-192.webp')}
+      srcset={srcset}
+      sizes="(min-width: 1024px) 76px, 64px"
+      width="256"
+      height="255"
+      alt=""
+      loading="lazy"
+      decoding="async"
+    />
+    <span class="credential__scan" aria-hidden="true"></span>
+  </span>
+
+  <span class="credential__text">
+    <span class="credential__eyebrow">
+      <span class="credential__check" aria-hidden="true">
+        <svg viewBox="0 0 16 16" width="11" height="11" fill="none" aria-hidden="true">
+          <path
+            d="M3 8.4 6.2 11.6 13 4.8"
+            stroke="currentColor"
+            stroke-width="2.4"
+            stroke-linecap="square"></path>
+        </svg>
+      </span>
+      <span data-i18n="hero.credentialCaption">{t('hero.credentialCaption')}</span>
+    </span>
+    <span class="credential__course" data-i18n="hero.credentialCourse">
+      {t('hero.credentialCourse')}
+    </span>
+    <span class="credential__issuer">Cisco Networking Academy</span>
+  </span>
+</a>
+
+<style>
+  .credential {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-2);
+    width: max-content;
+    max-width: 100%;
+    padding: var(--space-3) var(--space-5) var(--space-4);
+    text-decoration: none;
+    color: inherit;
+    background-color: var(--color-surface);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-medium);
+    box-shadow: var(--shadow-small);
+    transition:
+      transform var(--duration-base) var(--ease-out),
+      box-shadow var(--duration-base) var(--ease-out);
+  }
+
+  .credential:hover,
+  .credential:focus-visible {
+    transform: translate(-3px, -3px);
+    box-shadow: var(--shadow-medium);
+  }
+
+  /* --- O selo ------------------------------------------------------------ */
+
+  .credential__seal {
+    position: relative;
+    flex-shrink: 0;
+    display: block;
+    width: 64px;
+    overflow: hidden;
+    border-radius: var(--radius-small);
+    line-height: 0;
+  }
+
+  .credential__image {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* Mesma varredura da foto, em escala menor: o selo "respira". */
+  .credential__scan {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
+    opacity: 0;
+    pointer-events: none;
+    animation: credential-scan 6s var(--ease-out) infinite;
+  }
+
+  @keyframes credential-scan {
+    0%,
+    60% {
+      top: 2%;
+      opacity: 0;
+    }
+    68% {
+      opacity: 0.9;
+    }
+    94% {
+      opacity: 0.9;
+    }
+    100% {
+      top: 96%;
+      opacity: 0;
+    }
+  }
+
+  /* --- O texto ----------------------------------------------------------- */
+
+  .credential__text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.12rem;
+    min-width: 0;
+    text-align: center;
+  }
+
+  .credential__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: var(--text-xs);
+    font-weight: 700;
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--color-primary-ink);
+  }
+
+  .credential__check {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+    border-radius: var(--radius-pill);
+    color: var(--color-on-primary);
+    background-color: var(--color-primary);
+  }
+
+  .credential__course {
+    font-family: var(--font-display);
+    font-size: var(--text-base);
+    font-weight: 700;
+    line-height: var(--leading-snug);
+    color: var(--color-text);
+  }
+
+  .credential__issuer {
+    font-size: var(--text-xs);
+    color: var(--color-text-muted);
+  }
+
+  @media (min-width: 1024px) {
+    .credential__seal {
+      width: 76px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .credential__scan {
+      display: none;
+    }
+
+    .credential {
+      transition: none;
+    }
+
+    .credential:hover,
+    .credential:focus-visible {
+      transform: none;
+    }
+  }
+</style>

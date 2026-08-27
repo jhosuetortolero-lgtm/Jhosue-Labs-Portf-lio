@@ -119,6 +119,10 @@ export const ptBR = {
     photoAlt:
       'Jhosue, fundador da Jhosue Labs, em retrato com estética tecnológica e equipamento tático.',
     photoBadge: 'Fundador',
+    credentialLabel:
+      'Credencial verificada: Ethical Hacker pela Cisco Networking Academy. Ver todos os certificados.',
+    credentialCaption: 'Selo verificado',
+    credentialCourse: 'Hacker Ético',
     photoTag: 'Jhosue Labs',
     rotate: {
       saas: 'Sistemas SaaS',
