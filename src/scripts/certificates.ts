@@ -106,9 +106,12 @@ function initLightbox(): void {
     lastFocused?.focus();
   }
 
-  for (const button of qsa<HTMLButtonElement>('[data-certificate-open]')) {
-    button.addEventListener('click', () => {
-      const index = Number(button.dataset.certificateOpen ?? '0');
+  // Aceita botão ou link: o selo do hero é um <a href="#certificates"> para
+  // continuar levando a algum lugar quando não há JavaScript.
+  for (const trigger of qsa<HTMLElement>('[data-certificate-open]')) {
+    trigger.addEventListener('click', (event) => {
+      event.preventDefault();
+      const index = Number(trigger.dataset.certificateOpen ?? '0');
       open(Number.isNaN(index) ? 0 : index);
     });
   }

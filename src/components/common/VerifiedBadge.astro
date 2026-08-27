@@ -1,4 +1,7 @@
 ---
+import Icon from './Icon.astro';
+import { certificates } from '../../data/certificates';
+import { features } from '../../config/features';
 import { useTranslations } from '../../i18n';
 import { DEFAULT_LANGUAGE } from '../../types/i18n';
 import { withBase } from '../../utils/paths';
@@ -16,6 +19,15 @@ import { withBase } from '../../utils/paths';
  */
 const t = useTranslations(DEFAULT_LANGUAGE);
 
+/**
+ * O clique abre o mesmo visualizador ampliado dos certificados, já no
+ * certificado da Cisco. Procura pelo id — assim continua certo se a ordem
+ * da lista mudar.
+ */
+const CERTIFICATE_ID = 'ethical-hacker-cisco';
+const certificateIndex = certificates.findIndex((item) => item.id === CERTIFICATE_ID);
+const canOpen = features.certificates && certificateIndex >= 0;
+
 const sizes = [128, 192, 256];
 const srcset = sizes
   .map((width) => `${withBase(`/images/badges/cisco-ethical-hacker-${width}.webp`)} ${width}w`)
@@ -27,20 +39,31 @@ const srcset = sizes
   href="#certificates"
   aria-label={t('hero.credentialLabel')}
   data-i18n-attr="aria-label:hero.credentialLabel"
+  data-certificate-open={canOpen ? certificateIndex : undefined}
 >
-  <span class="credential__seal">
-    <img
-      class="credential__image"
-      src={withBase('/images/badges/cisco-ethical-hacker-192.webp')}
-      srcset={srcset}
-      sizes="(min-width: 1024px) 76px, 64px"
-      width="256"
-      height="255"
-      alt=""
-      loading="lazy"
-      decoding="async"
-    />
-    <span class="credential__scan" aria-hidden="true"></span>
+  <span class="credential__sealwrap">
+    <span class="credential__seal">
+      <img
+        class="credential__image"
+        src={withBase('/images/badges/cisco-ethical-hacker-192.webp')}
+        srcset={srcset}
+        sizes="(min-width: 1024px) 76px, 64px"
+        width="256"
+        height="255"
+        alt=""
+        loading="lazy"
+        decoding="async"
+      />
+      <span class="credential__scan" aria-hidden="true"></span>
+    </span>
+
+    {
+      canOpen && (
+        <span class="credential__zoom" aria-hidden="true">
+          <Icon name="search" size={13} />
+        </span>
+      )
+    }
   </span>
 
   <span class="credential__text">
@@ -91,14 +114,46 @@ const srcset = sizes
 
   /* --- O selo ------------------------------------------------------------ */
 
-  .credential__seal {
+  /* A lupa fica fora do recorte: só o selo esconde o excesso da varredura. */
+  .credential__sealwrap {
     position: relative;
     flex-shrink: 0;
     display: block;
     width: 64px;
+    line-height: 0;
+  }
+
+  .credential__seal {
+    position: relative;
+    display: block;
     overflow: hidden;
     border-radius: var(--radius-small);
-    line-height: 0;
+  }
+
+  /* Lupa: avisa que o selo abre o certificado ampliado. */
+  .credential__zoom {
+    position: absolute;
+    /* À esquerda de propósito: à direita cobriria o "Ethical Hacker" do selo. */
+    left: -8px;
+    bottom: -8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-pill);
+    color: var(--color-text);
+    background-color: var(--color-surface);
+    transition:
+      color var(--duration-fast) var(--ease-out),
+      background-color var(--duration-fast) var(--ease-out);
+  }
+
+  .credential:hover .credential__zoom,
+  .credential:focus-visible .credential__zoom {
+    color: var(--color-on-primary);
+    background-color: var(--color-primary);
   }
 
   .credential__image {
@@ -185,7 +240,7 @@ const srcset = sizes
   }
 
   @media (min-width: 1024px) {
-    .credential__seal {
+    .credential__sealwrap {
       width: 76px;
     }
   }
@@ -193,6 +248,10 @@ const srcset = sizes
   @media (prefers-reduced-motion: reduce) {
     .credential__scan {
       display: none;
+    }
+
+    .credential__zoom {
+      transition: none;
     }
 
     .credential {
