@@ -24,7 +24,7 @@ terminal interativo e paleta de comandos.
 12. [Projetos](#projetos)
 13. [Serviços](#serviços)
 14. [Fundo animado (shader)](#fundo-animado-shader)
-15. [Foto do Hero](#foto-do-hero)
+15. [Vídeo do Hero](#vídeo-do-hero)
 16. [Certificados](#certificados)
 17. [Depoimentos](#depoimentos)
 18. [Timeline](#timeline)
@@ -116,8 +116,9 @@ elemento com `data-i18n="chave"`. No navegador, trocar de idioma só troca o
 │   ├── robots.txt
 │   ├── sitemap.xml
 │   ├── manifest.webmanifest
+│   ├── videos/                  # vídeo do Hero (.mp4 + .webm)
 │   ├── images/
-│   │   ├── profile/             # foto do Hero em 3 tamanhos (.webp)
+│   │   ├── profile/             # pôster do vídeo do Hero (.webp)
 │   │   ├── projects/            # capas dos projetos
 │   │   ├── certificates/        # imagens dos certificados (.webp)
 │   │   ├── testimonials/        # prints dos depoimentos (.webp)
@@ -231,7 +232,7 @@ horizontal em 8 larguras (320 → 1920px).
 | Nome, marca, slogan            | `src/config/site.ts` → `brand`                              |
 | Cargo / título profissional    | `src/config/site.ts` → `brand.professionalTitle`            |
 | Textos do Hero                 | `src/config/site.ts` → `hero` e `src/i18n/*.ts` → `hero`     |
-| Foto do Hero                   | `src/config/site.ts` → `photo` + `public/images/profile/`    |
+| Vídeo do Hero                  | `src/config/site.ts` → `video` + `public/videos/`            |
 | Biografia (3 idiomas)          | `src/data/owner.ts` → `owner.bio`                           |
 | Diferenciais e idiomas falados | `src/data/owner.ts` → `highlights`, `languages`             |
 | Indicadores numéricos          | `src/data/owner.ts` → `statistics`                          |
@@ -453,30 +454,42 @@ de fundo continua nos dois casos.
 
 ---
 
-## Foto do Hero
+## Vídeo do Hero
 
-A foto de destaque aparece no lado direito do Hero (no mobile, **acima** do
-título — é a primeira coisa que se vê).
+O vídeo de destaque aparece no lado direito do Hero (no mobile, **acima** do
+título — é a primeira coisa que se vê). É mudo, em loop e `playsinline`, a
+combinação que iPhone e Android aceitam tocar sozinha, sem abrir em tela cheia.
 
-### Trocar a foto
+### Trocar o vídeo
+
+Recorte em 4/5 (retrato), tire o áudio e gere MP4 + WebM + pôster com o
+[ffmpeg](https://ffmpeg.org/). Para um vídeo 1280×720, `crop=576:720:X:0`
+escolhe a faixa de 576 px a partir de `X` (ajuste até o rosto ficar centrado):
 
 ```bash
-node tools/image-to-webp.mjs "C:/caminho/foto.png" public/images/profile jhosue 560,840,1120
+ffmpeg -i original.mp4 -vf "crop=576:720:480:0,format=yuv420p" -c:v libx264 -profile:v high -crf 21 -movflags +faststart -an public/videos/jhosue-fundador.mp4
+ffmpeg -i original.mp4 -vf "crop=576:720:480:0,format=yuv420p" -c:v libvpx-vp9 -b:v 0 -crf 33 -an public/videos/jhosue-fundador.webm
+ffmpeg -i original.mp4 -vf "crop=576:720:480:0" -frames:v 1 -c:v libwebp -quality 84 public/images/profile/jhosue-fundador-poster.webp
 ```
 
-Gera três `.webp` (para `srcset`) e imprime o tamanho de cada um. Depois ajuste
-`src/config/site.ts` → `photo` se os nomes mudarem.
+Depois ajuste `src/config/site.ts` → `video` se os nomes ou o tamanho mudarem.
 
-- **Proporção recomendada:** 4/5 (retrato).
-- **`objectPosition`**: controla o recorte. `'50% 22%'` mantém o rosto no lugar
-  certo quando a moldura corta a imagem — suba o segundo valor se o rosto ficar
-  baixo demais.
-- O texto alternativo fica em `src/i18n/*.ts` → `hero.photoAlt` (traduzido).
+- **MP4 (H.264) vem primeiro:** toca em qualquer celular. O WebM é a reserva
+  para navegadores sem H.264.
+- **`-movflags +faststart`** põe o índice no início: o vídeo começa antes de
+  baixar inteiro.
+- **Pôster = primeiro quadro:** aparece enquanto o vídeo carrega, sem salto.
+- A descrição fica em `src/i18n/*.ts` → `hero.photoAlt` (traduzida).
+
+Quem dá o play é `src/scripts/heroVideo.ts`: fora da tela o vídeo pausa (poupa
+bateria) e volta ao reaparecer. Com `prefers-reduced-motion` ou economia de
+dados ele fica no primeiro quadro. Se o celular bloquear a reprodução
+automática (ex.: iPhone em modo de pouca energia), o vídeo começa no primeiro
+toque na página. O botão ao lado do selo pausa e retoma.
 
 A moldura traz cantos de mira, uma linha de varredura animada, selo de status e
 legenda com nome e cargo. A varredura e o efeito de hover são desligados por
-`prefers-reduced-motion`. A imagem é carregada com `fetchpriority="high"`, por
-estar acima da dobra.
+`prefers-reduced-motion`.
 
 O "perfil em código" que ficava no Hero foi para a seção **Sobre**
 (`src/components/common/CodePanel.astro`).

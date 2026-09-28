@@ -118,23 +118,21 @@ export const siteConfig = {
   },
 
   /**
-   * Foto de destaque do Hero.
-   * Gere os tamanhos com:
-   *   node tools/image-to-webp.mjs "foto.png" public/images/profile jhosue 560,840,1120
-   * Proporção recomendada: 4/5 (retrato). `src` é o tamanho padrão;
-   * `srcset` cobre telas menores e de alta densidade.
+   * Vídeo de destaque do Hero (mudo, em loop).
+   * Já vem recortado em 4/5 (retrato), a proporção da moldura, sem áudio e
+   * com o índice no início do arquivo (começa a tocar antes de baixar tudo).
+   * O MP4 (H.264) vem primeiro porque toca em qualquer celular; o WebM (VP9)
+   * cobre navegadores sem H.264. `poster` é o primeiro quadro: aparece
+   * enquanto o vídeo carrega e quando a reprodução automática é bloqueada.
    */
-  photo: {
-    src: '/images/profile/jhosue-840.webp',
-    srcset: [
-      { path: '/images/profile/jhosue-560.webp', width: 560 },
-      { path: '/images/profile/jhosue-840.webp', width: 840 },
-      { path: '/images/profile/jhosue-1120.webp', width: 1120 },
+  video: {
+    sources: [
+      { path: '/videos/jhosue-fundador.mp4', type: 'video/mp4' },
+      { path: '/videos/jhosue-fundador.webm', type: 'video/webm' },
     ],
-    width: 840,
-    height: 1050,
-    /** Recorte: mantém o rosto visível quando a moldura corta a imagem. */
-    objectPosition: '50% 22%',
+    poster: '/images/profile/jhosue-fundador-poster.webp',
+    width: 576,
+    height: 720,
   },
 
   /** Aparece como selo de disponibilidade no hero e no contato. */

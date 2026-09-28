@@ -1,40 +1,40 @@
 ---
+import Icon from './Icon.astro';
 import { siteConfig } from '../../config/site';
 import { useTranslations } from '../../i18n';
 import { DEFAULT_LANGUAGE } from '../../types/i18n';
 import { withBase } from '../../utils/paths';
 
 /**
- * Foto de destaque com moldura tecnológica.
- * A imagem é servida em três tamanhos (srcset) e carregada com prioridade
- * alta, porque fica acima da dobra.
+ * Vídeo de destaque com moldura tecnológica.
+ * Mudo, em loop e inline (toca no celular sem abrir em tela cheia). Quem dá
+ * o play é src/scripts/heroVideo.ts; sem JavaScript fica o pôster, que é o
+ * primeiro quadro do vídeo.
  */
 const t = useTranslations(DEFAULT_LANGUAGE);
-const { photo, availability, brand } = siteConfig;
-
-const srcset = photo.srcset
-  .map((item) => `${withBase(item.path)} ${item.width}w`)
-  .join(', ');
+const { video, availability, brand } = siteConfig;
 
 const available = availability.open;
 ---
 
 <figure class="photo">
   <div class="photo__frame">
-    <img
-      class="photo__image"
-      src={withBase(photo.src)}
-      srcset={srcset}
-      sizes="(min-width: 1024px) 30rem, (min-width: 640px) 22rem, 78vw"
-      width={photo.width}
-      height={photo.height}
-      alt={t('hero.photoAlt')}
-      data-i18n-attr="alt:hero.photoAlt"
-      loading="eager"
-      fetchpriority="high"
-      decoding="async"
-      style={`object-position: ${photo.objectPosition}`}
-    />
+    <video
+      class="photo__video"
+      width={video.width}
+      height={video.height}
+      poster={withBase(video.poster)}
+      preload="metadata"
+      muted
+      loop
+      playsinline
+      disablepictureinpicture
+      aria-label={t('hero.photoAlt')}
+      data-i18n-attr="aria-label:hero.photoAlt"
+      data-hero-video
+    >
+      {video.sources.map((source) => <source src={withBase(source.path)} type={source.type} />)}
+    </video>
 
     {/* Cantos de mira — puramente decorativos. */}
     <span class="photo__corner photo__corner--tl" aria-hidden="true"></span>
@@ -44,10 +44,24 @@ const available = availability.open;
 
     <span class="photo__scan" aria-hidden="true"></span>
 
-    <span class="photo__badge">
-      <span class:list={['status-dot', !available && 'status-dot--off']} aria-hidden="true"></span>
-      <span data-i18n="hero.photoBadge">{t('hero.photoBadge')}</span>
-    </span>
+    <div class="photo__hud">
+      <button
+        type="button"
+        class="photo__toggle"
+        aria-label={t('hero.videoPlay')}
+        data-i18n-attr="aria-label:hero.videoPlay"
+        data-playing="false"
+        data-hero-video-toggle
+      >
+        <Icon name="play" size={13} strokeWidth={2.2} class="photo__icon photo__icon--play" />
+        <Icon name="pause" size={13} strokeWidth={2.6} class="photo__icon photo__icon--pause" />
+      </button>
+
+      <span class="photo__badge">
+        <span class:list={['status-dot', !available && 'status-dot--off']} aria-hidden="true"></span>
+        <span data-i18n="hero.photoBadge">{t('hero.photoBadge')}</span>
+      </span>
+    </div>
 
     <figcaption class="photo__caption">
       <span class="photo__name">{brand.owner}</span>
@@ -90,11 +104,14 @@ const available = availability.open;
     box-shadow: var(--shadow-large);
   }
 
-  .photo__image {
+  /* O vídeo já vem em 4/5; cover só absorve diferenças de arredondamento. */
+  .photo__video {
+    display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    /* Leve ajuste para a foto casar com a paleta do site. */
+    object-position: 50% 30%;
+    /* Leve ajuste para o vídeo casar com a paleta do site. */
     filter: contrast(1.04) saturate(0.96);
   }
 
@@ -182,13 +199,74 @@ const available = availability.open;
     }
   }
 
-  /* --- Selo e legenda ---------------------------------------------------- */
+  /* --- Selo, botão do vídeo e legenda ----------------------------------- */
 
-  .photo__badge {
+  .photo__hud {
     position: absolute;
     top: var(--space-4);
     right: var(--space-4);
     z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  /* Sem JavaScript o vídeo não toca: o botão só aparece com JS ativo. */
+  .photo__toggle {
+    position: relative;
+    display: none;
+    place-items: center;
+    width: 1.9rem;
+    height: 1.9rem;
+    padding: 0;
+    color: #f2f7f3;
+    background-color: rgb(6 14 11 / 72%);
+    border: 1px solid rgb(255 255 255 / 22%);
+    border-radius: 50%;
+    backdrop-filter: blur(6px);
+    cursor: pointer;
+    transition:
+      color var(--duration-fast) var(--ease-out),
+      border-color var(--duration-fast) var(--ease-out);
+  }
+
+  :global(.js) .photo__toggle {
+    display: grid;
+  }
+
+  .photo__toggle:hover {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+  }
+
+  .photo__toggle:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  /* Área de toque maior que o círculo, sem mudar o visual. */
+  .photo__toggle::before {
+    content: '';
+    position: absolute;
+    inset: -0.45rem;
+  }
+
+  .photo__toggle :global(.photo__icon) {
+    grid-area: 1 / 1;
+  }
+
+  /* Triângulo do play cheio, com o centro ótico um pouco à direita. */
+  .photo__toggle :global(.photo__icon--play) {
+    fill: currentColor;
+    translate: 1px 0;
+  }
+
+  .photo__toggle[data-playing='true'] :global(.photo__icon--play),
+  .photo__toggle[data-playing='false'] :global(.photo__icon--pause) {
+    display: none;
+  }
+
+  .photo__badge {
     display: inline-flex;
     align-items: center;
     gap: var(--space-2);
@@ -249,7 +327,7 @@ const available = availability.open;
     background-color: var(--color-border-soft);
   }
 
-  /* No mobile a foto vai para o topo: menor, para o título continuar visível. */
+  /* No mobile o vídeo vai para o topo: menor, para o título continuar visível. */
   @media (max-width: 1023px) {
     .photo {
       width: min(74vw, 19rem);

@@ -117,8 +117,10 @@ export const ptBR = {
     scrollHint: 'Role para explorar',
     panelTitle: 'jhosue@labs: ~',
     photoAlt:
-      'Jhosue, fundador da Jhosue Labs, em retrato com estética tecnológica e equipamento tático.',
+      'Vídeo de Jhosue, fundador da Jhosue Labs, trabalhando no notebook em seu escritório de tecnologia.',
     photoBadge: 'Fundador',
+    videoPlay: 'Reproduzir vídeo',
+    videoPause: 'Pausar vídeo',
     credentialLabel:
       'Credencial verificada: Ethical Hacker pela Cisco Networking Academy. Ampliar o certificado.',
     credentialCaption: 'Selo verificado',

@@ -21,6 +21,7 @@ import { initTestimonials } from './testimonials';
 import { initBootScreen } from './boot';
 import { initWhatsappLinks } from './whatsapp';
 import { initCvLinks } from './cv';
+import { initHeroVideo } from './heroVideo';
 
 function boot(): void {
   const root = document.documentElement;
@@ -34,6 +35,8 @@ function boot(): void {
   // Depois do idioma: WhatsApp e currículo seguem a língua ativa.
   initWhatsappLinks();
   initCvLinks();
+  // Depois do idioma: o rótulo do botão de reproduzir sai traduzido.
+  initHeroVideo();
   if (features.themeToggle) initTheme();
 
   initNavigation();

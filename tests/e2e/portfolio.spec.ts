@@ -92,23 +92,61 @@ test('com movimento reduzido as especialidades aparecem todas de uma vez', async
 /* Os testes do fundo em WebGL ficam em tests/e2e/shader.spec.ts, em um
    projeto separado do Playwright (precisa de GPU emulada, que e lenta). */
 
-test('a foto de destaque carrega no hero com texto alternativo', async ({ page }) => {
-  const foto = page.locator('#hero .photo__image');
-  await expect(foto).toBeVisible();
+test('o vídeo de destaque toca sozinho no hero, mudo e inline', async ({ page }) => {
+  const video = page.locator('#hero .photo__video');
+  await expect(video).toBeVisible();
 
-  // alt preenchido e imagem realmente decodificada pelo navegador
-  const alt = await foto.getAttribute('alt');
-  expect(alt?.length ?? 0).toBeGreaterThan(20);
+  // Descrição para leitores de tela
+  const rotulo = await video.getAttribute('aria-label');
+  expect(rotulo?.length ?? 0).toBeGreaterThan(20);
 
-  const carregou = await foto.evaluate(
-    (img) => img instanceof HTMLImageElement && img.complete && img.naturalWidth > 0,
+  // O que iPhone e Android exigem para tocar sem toque: mudo e inline
+  const estado = await video.evaluate((el: HTMLVideoElement) => ({
+    muted: el.muted,
+    inline: el.hasAttribute('playsinline'),
+    loop: el.loop,
+    poster: el.getAttribute('poster') ?? '',
+  }));
+  expect(estado).toMatchObject({ muted: true, inline: true, loop: true });
+  expect(estado.poster).toContain('jhosue-fundador-poster.webp');
+
+  // MP4 (H.264) primeiro, WebM de reserva
+  const tipos = await video
+    .locator('source')
+    .evaluateAll((fontes) => fontes.map((fonte) => fonte.getAttribute('type')));
+  expect(tipos).toEqual(['video/mp4', 'video/webm']);
+
+  await expect
+    .poll(() => video.evaluate((el: HTMLVideoElement) => !el.paused && el.readyState >= 2))
+    .toBe(true);
+
+  // O botão alterna entre pausar e reproduzir
+  const botao = page.locator('#hero [data-hero-video-toggle]');
+  await expect(botao).toHaveAttribute('data-playing', 'true');
+  await expect(botao).toHaveAttribute('aria-label', 'Pausar vídeo');
+  await botao.click();
+  await expect(botao).toHaveAttribute('data-playing', 'false');
+  await expect(botao).toHaveAttribute('aria-label', 'Reproduzir vídeo');
+  expect(await video.evaluate((el: HTMLVideoElement) => el.paused)).toBe(true);
+});
+
+test('com movimento reduzido o vídeo fica parado no primeiro quadro', async ({ browser }) => {
+  const context = await browser.newContext({ reducedMotion: 'reduce' });
+  const reduced = await context.newPage();
+  await reduced.addInitScript(() => {
+    window.sessionStorage.setItem('portfolioBootSeen', '1');
+  });
+  await reduced.goto('/', { waitUntil: 'domcontentloaded' });
+  await reduced.waitForTimeout(800);
+
+  const video = reduced.locator('#hero .photo__video');
+  expect(await video.evaluate((el: HTMLVideoElement) => el.paused)).toBe(true);
+  await expect(reduced.locator('#hero [data-hero-video-toggle]')).toHaveAttribute(
+    'data-playing',
+    'false',
   );
-  expect(carregou).toBe(true);
 
-  // srcset com os três tamanhos
-  const srcset = await foto.getAttribute('srcset');
-  expect(srcset).toContain('560w');
-  expect(srcset).toContain('1120w');
+  await context.close();
 });
 
 test('no mobile a foto aparece antes do título', async ({ page }) => {

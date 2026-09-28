@@ -115,8 +115,10 @@ export const es: DictionaryShape = {
     scrollHint: 'Desplázate para explorar',
     panelTitle: 'jhosue@labs: ~',
     photoAlt:
-      'Jhosue, fundador de Jhosue Labs, en un retrato con estética tecnológica y equipo táctico.',
+      'Video de Jhosue, fundador de Jhosue Labs, trabajando en su portátil en su oficina de tecnología.',
     photoBadge: 'Fundador',
+    videoPlay: 'Reproducir video',
+    videoPause: 'Pausar video',
     credentialLabel:
       'Credencial verificada: Ethical Hacker de Cisco Networking Academy. Ampliar el certificado.',
     credentialCaption: 'Sello verificado',
