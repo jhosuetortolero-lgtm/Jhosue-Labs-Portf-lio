@@ -10,6 +10,7 @@ import { withBase } from '../../utils/paths';
  * Mudo, em loop e inline (toca no celular sem abrir em tela cheia). Quem dá
  * o play é src/scripts/heroVideo.ts; sem JavaScript fica o pôster, que é o
  * primeiro quadro do vídeo.
+ * A moldura herda a proporção do vídeo: ele aparece inteiro, sem recorte.
  */
 const t = useTranslations(DEFAULT_LANGUAGE);
 const { video, availability, brand } = siteConfig;
@@ -18,7 +19,7 @@ const available = availability.open;
 ---
 
 <figure class="photo">
-  <div class="photo__frame">
+  <div class="photo__frame" style={`aspect-ratio: ${video.width} / ${video.height}`}>
     <video
       class="photo__video"
       width={video.width}
@@ -44,24 +45,22 @@ const available = availability.open;
 
     <span class="photo__scan" aria-hidden="true"></span>
 
-    <div class="photo__hud">
-      <button
-        type="button"
-        class="photo__toggle"
-        aria-label={t('hero.videoPlay')}
-        data-i18n-attr="aria-label:hero.videoPlay"
-        data-playing="false"
-        data-hero-video-toggle
-      >
-        <Icon name="play" size={13} strokeWidth={2.2} class="photo__icon photo__icon--play" />
-        <Icon name="pause" size={13} strokeWidth={2.6} class="photo__icon photo__icon--pause" />
-      </button>
+    <button
+      type="button"
+      class="photo__toggle"
+      aria-label={t('hero.videoPlay')}
+      data-i18n-attr="aria-label:hero.videoPlay"
+      data-playing="false"
+      data-hero-video-toggle
+    >
+      <Icon name="play" size={13} strokeWidth={2.2} class="photo__icon photo__icon--play" />
+      <Icon name="pause" size={13} strokeWidth={2.6} class="photo__icon photo__icon--pause" />
+    </button>
 
-      <span class="photo__badge">
-        <span class:list={['status-dot', !available && 'status-dot--off']} aria-hidden="true"></span>
-        <span data-i18n="hero.photoBadge">{t('hero.photoBadge')}</span>
-      </span>
-    </div>
+    <span class="photo__badge">
+      <span class:list={['status-dot', !available && 'status-dot--off']} aria-hidden="true"></span>
+      <span data-i18n="hero.photoBadge">{t('hero.photoBadge')}</span>
+    </span>
 
     <figcaption class="photo__caption">
       <span class="photo__name">{brand.owner}</span>
@@ -82,13 +81,15 @@ const available = availability.open;
     display: flex;
     flex-direction: column;
     gap: var(--space-3);
-    width: min(100%, 30rem);
+    width: min(100%, 38rem);
     margin-inline: auto;
   }
 
   .photo__frame {
     position: relative;
-    aspect-ratio: 4 / 5;
+    /* A proporção (inline, vinda do vídeo) vale para a área interna, sem a
+       borda: assim o vídeo ocupa a moldura exata, sem sobra nem corte. */
+    box-sizing: content-box;
     border: var(--border-width) solid var(--color-border);
     border-radius: var(--radius-medium);
     background-color: var(--terminal-bg);
@@ -104,13 +105,12 @@ const available = availability.open;
     box-shadow: var(--shadow-large);
   }
 
-  /* O vídeo já vem em 4/5; cover só absorve diferenças de arredondamento. */
+  /* contain: o quadro inteiro sempre aparece, nada é cortado. */
   .photo__video {
     display: block;
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    object-position: 50% 30%;
+    object-fit: contain;
     /* Leve ajuste para o vídeo casar com a paleta do site. */
     filter: contrast(1.04) saturate(0.96);
   }
@@ -201,19 +201,13 @@ const available = availability.open;
 
   /* --- Selo, botão do vídeo e legenda ----------------------------------- */
 
-  .photo__hud {
+  /* Canto esquerdo, espelhando o selo: longe do rosto em qualquer tela.
+     Sem JavaScript o vídeo não toca, então o botão só aparece com JS ativo. */
+  .photo__toggle {
     position: absolute;
     top: var(--space-4);
-    right: var(--space-4);
+    left: var(--space-4);
     z-index: 3;
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-  }
-
-  /* Sem JavaScript o vídeo não toca: o botão só aparece com JS ativo. */
-  .photo__toggle {
-    position: relative;
     display: none;
     place-items: center;
     width: 1.9rem;
@@ -267,6 +261,10 @@ const available = availability.open;
   }
 
   .photo__badge {
+    position: absolute;
+    top: var(--space-4);
+    right: var(--space-4);
+    z-index: 3;
     display: inline-flex;
     align-items: center;
     gap: var(--space-2);
@@ -327,10 +325,11 @@ const available = availability.open;
     background-color: var(--color-border-soft);
   }
 
-  /* No mobile o vídeo vai para o topo: menor, para o título continuar visível. */
+  /* No mobile o vídeo vai para o topo, na largura toda: em 16:9 ele fica
+     baixo o bastante para o título continuar visível. */
   @media (max-width: 1023px) {
     .photo {
-      width: min(74vw, 19rem);
+      width: min(100%, 36rem);
     }
 
     .photo__name {

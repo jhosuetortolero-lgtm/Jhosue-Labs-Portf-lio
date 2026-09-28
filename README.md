@@ -462,14 +462,14 @@ combinação que iPhone e Android aceitam tocar sozinha, sem abrir em tela cheia
 
 ### Trocar o vídeo
 
-Recorte em 4/5 (retrato), tire o áudio e gere MP4 + WebM + pôster com o
-[ffmpeg](https://ffmpeg.org/). Para um vídeo 1280×720, `crop=576:720:X:0`
-escolhe a faixa de 576 px a partir de `X` (ajuste até o rosto ficar centrado):
+O vídeo aparece inteiro, sem recorte: a moldura segue a proporção dele
+(`width`/`height` em `src/config/site.ts` → `video`). Tire o áudio e gere
+MP4 + WebM + pôster com o [ffmpeg](https://ffmpeg.org/):
 
 ```bash
-ffmpeg -i original.mp4 -vf "crop=576:720:480:0,format=yuv420p" -c:v libx264 -profile:v high -crf 21 -movflags +faststart -an public/videos/jhosue-fundador.mp4
-ffmpeg -i original.mp4 -vf "crop=576:720:480:0,format=yuv420p" -c:v libvpx-vp9 -b:v 0 -crf 33 -an public/videos/jhosue-fundador.webm
-ffmpeg -i original.mp4 -vf "crop=576:720:480:0" -frames:v 1 -c:v libwebp -quality 84 public/images/profile/jhosue-fundador-poster.webp
+ffmpeg -i original.mp4 -vf "format=yuv420p" -c:v libx264 -profile:v high -crf 22 -movflags +faststart -an public/videos/jhosue-fundador-16x9.mp4
+ffmpeg -i original.mp4 -vf "format=yuv420p" -c:v libvpx-vp9 -b:v 0 -crf 34 -an public/videos/jhosue-fundador-16x9.webm
+ffmpeg -i original.mp4 -frames:v 1 -c:v libwebp -quality 84 public/images/profile/jhosue-fundador-16x9-poster.webp
 ```
 
 Depois ajuste `src/config/site.ts` → `video` se os nomes ou o tamanho mudarem.
@@ -485,7 +485,7 @@ Quem dá o play é `src/scripts/heroVideo.ts`: fora da tela o vídeo pausa (poup
 bateria) e volta ao reaparecer. Com `prefers-reduced-motion` ou economia de
 dados ele fica no primeiro quadro. Se o celular bloquear a reprodução
 automática (ex.: iPhone em modo de pouca energia), o vídeo começa no primeiro
-toque na página. O botão ao lado do selo pausa e retoma.
+toque na página. O botão no canto superior esquerdo pausa e retoma.
 
 A moldura traz cantos de mira, uma linha de varredura animada, selo de status e
 legenda com nome e cargo. A varredura e o efeito de hover são desligados por

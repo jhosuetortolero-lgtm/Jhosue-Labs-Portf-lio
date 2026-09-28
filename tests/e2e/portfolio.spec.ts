@@ -108,7 +108,15 @@ test('o vídeo de destaque toca sozinho no hero, mudo e inline', async ({ page }
     poster: el.getAttribute('poster') ?? '',
   }));
   expect(estado).toMatchObject({ muted: true, inline: true, loop: true });
-  expect(estado.poster).toContain('jhosue-fundador-poster.webp');
+  expect(estado.poster).toContain('jhosue-fundador-16x9-poster.webp');
+
+  // Quadro inteiro, sem recorte: a moldura tem a proporção do vídeo
+  const proporcao = await video.evaluate((el: HTMLVideoElement) => {
+    const caixa = el.getBoundingClientRect();
+    return { caixa: caixa.width / caixa.height, fit: getComputedStyle(el).objectFit };
+  });
+  expect(proporcao.fit).toBe('contain');
+  expect(proporcao.caixa).toBeCloseTo(16 / 9, 1);
 
   // MP4 (H.264) primeiro, WebM de reserva
   const tipos = await video

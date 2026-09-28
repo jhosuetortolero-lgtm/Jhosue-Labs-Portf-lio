@@ -119,19 +119,20 @@ export const siteConfig = {
 
   /**
    * Vídeo de destaque do Hero (mudo, em loop).
-   * Já vem recortado em 4/5 (retrato), a proporção da moldura, sem áudio e
-   * com o índice no início do arquivo (começa a tocar antes de baixar tudo).
+   * Quadro inteiro, sem recorte: a moldura segue a proporção do vídeo
+   * (`width`/`height`). Sem áudio e com o índice no início do arquivo
+   * (começa a tocar antes de baixar tudo).
    * O MP4 (H.264) vem primeiro porque toca em qualquer celular; o WebM (VP9)
    * cobre navegadores sem H.264. `poster` é o primeiro quadro: aparece
    * enquanto o vídeo carrega e quando a reprodução automática é bloqueada.
    */
   video: {
     sources: [
-      { path: '/videos/jhosue-fundador.mp4', type: 'video/mp4' },
-      { path: '/videos/jhosue-fundador.webm', type: 'video/webm' },
+      { path: '/videos/jhosue-fundador-16x9.mp4', type: 'video/mp4' },
+      { path: '/videos/jhosue-fundador-16x9.webm', type: 'video/webm' },
     ],
-    poster: '/images/profile/jhosue-fundador-poster.webp',
-    width: 576,
+    poster: '/images/profile/jhosue-fundador-16x9-poster.webp',
+    width: 1280,
     height: 720,
   },
 
