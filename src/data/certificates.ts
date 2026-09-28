@@ -30,6 +30,15 @@ export const certificates: Certificate[] = [
     credentialUrl: 'https://ude.my/UC-968e3a5e-e1d7-4045-a1c5-f601b1ecae62',
   },
   {
+    id: 'curso-claude-desde-cero',
+    title: 'Curso de Claude desde Cero',
+    issuer: 'HoyAprendo',
+    year: '2026',
+    workload: null,
+    image: '/images/certificates/curso-claude-desde-cero-hoyaprendo.webp',
+    credentialUrl: null,
+  },
+  {
     id: 'do-zero-ao-mvp-com-ia',
     title: 'Do zero ao MVP: Como transformar sua ideia em produto real com IA',
     issuer: 'Skills & Go · Alura · FIAP · PM3',
