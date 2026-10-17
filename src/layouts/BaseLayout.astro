@@ -19,6 +19,7 @@ import BootScreen from '../components/terminal/BootScreen.astro';
 import CommandPalette from '../components/terminal/CommandPalette.astro';
 import CertificateLightbox from '../components/certificates/CertificateLightbox.astro';
 import TestimonialDialog from '../components/testimonials/TestimonialDialog.astro';
+import ProjectDialog from '../components/projects/ProjectDialog.astro';
 
 import { features } from '../config/features';
 import { siteConfig } from '../config/site';
@@ -103,6 +104,7 @@ const lightColor = siteConfig.seo.themeColorLight;
     {features.commandPalette && <CommandPalette />}
     {features.certificates && showChrome && <CertificateLightbox />}
     {features.testimonials && showChrome && <TestimonialDialog />}
+    {features.projectDetails && showChrome && <ProjectDialog />}
 
     <script>
       import '../scripts/main';

@@ -8,6 +8,8 @@ export const features = {
   particles: true,
   commandPalette: true,
   projectFilters: true,
+  /** Botão "Detalhes" nos cartões de projeto, com a descrição completa em diálogo. */
+  projectDetails: true,
   languageToggle: true,
   themeToggle: true,
   contactForm: true,

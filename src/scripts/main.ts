@@ -18,6 +18,7 @@ import { initCountrySelect } from './countrySelect';
 import { initCarousels } from './carousel';
 import { initCertificates } from './certificates';
 import { initTestimonials } from './testimonials';
+import { initProjectDetails } from './projectDetails';
 import { initBootScreen } from './boot';
 import { initWhatsappLinks } from './whatsapp';
 import { initCvLinks } from './cv';
@@ -44,6 +45,7 @@ function boot(): void {
   initTextReveal();
 
   if (features.projectFilters) initProjectFilters();
+  if (features.projectDetails) initProjectDetails();
   if (features.commandPalette) initCommandPalette();
   if (features.animatedTerminal) initTerminal();
   if (features.shaderBackground) initShaderBackground();

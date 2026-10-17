@@ -263,6 +263,28 @@ test('filtra projetos por categoria', async ({ page }) => {
   await expect(cards.first()).toBeVisible();
 });
 
+test('detalhes do projeto abrem em diálogo com a descrição completa', async ({ page }) => {
+  await page.locator('#projects').scrollIntoViewIfNeeded();
+
+  const botao = page.locator('[data-project-open="intellizap-ai"]').first();
+  await expect(botao).toBeVisible();
+  await botao.click();
+
+  const dialogo = page.locator('[data-project-dialog]');
+  await expect(dialogo).toBeVisible();
+  await expect(page.locator('[data-project-dialog-title]')).toHaveText('IntelliZap AI');
+
+  // Só o projeto escolhido fica visível, com o texto completo e todas as tecnologias.
+  const item = dialogo.locator('[data-project-item]:not([hidden])');
+  await expect(item).toHaveCount(1);
+  await expect(item.locator('.pdialog__text')).toContainText('Row-Level Security');
+  await expect(item.locator('.pdialog__tech li')).toHaveCount(10);
+
+  await page.keyboard.press('Escape');
+  await expect(dialogo).toBeHidden();
+  await expect(botao).toBeFocused();
+});
+
 test('command palette abre, executa "projetos" e fecha com Escape', async ({ page }) => {
   const palette = page.locator('[data-palette]');
 

@@ -165,6 +165,9 @@ export const es: DictionaryShape = {
     next: 'Proyecto siguiente',
     pause: 'Pausar rotación',
     play: 'Reanudar rotación',
+    details: 'Detalles',
+    close: 'Cerrar detalles del proyecto',
+    technologies: 'Tecnologías',
     status: {
       online: 'En línea',
       development: 'En desarrollo',

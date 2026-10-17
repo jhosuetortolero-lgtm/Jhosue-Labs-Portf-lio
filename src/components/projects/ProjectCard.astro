@@ -1,5 +1,6 @@
 ---
 import Icon from '../common/Icon.astro';
+import { features } from '../../config/features';
 import { useTranslations } from '../../i18n';
 import { DEFAULT_LANGUAGE } from '../../types/i18n';
 import { withBase } from '../../utils/paths';
@@ -131,6 +132,19 @@ const hasLink = Boolean(project.projectUrl);
                 {t('a11y.externalLink')}
               </span>
             </a>
+          )
+        }
+        {
+          features.projectDetails && (
+            <button
+              type="button"
+              class="project__action project__action--details"
+              data-project-open={project.id}
+              tabindex={clone ? -1 : 0}
+            >
+              <span data-i18n="projects.details">{t('projects.details')}</span>
+              <span class="visually-hidden">— {project.title}</span>
+            </button>
           )
         }
         {
@@ -488,6 +502,16 @@ const hasLink = Boolean(project.projectUrl);
   .project__action[aria-label] {
     width: 44px;
     padding-inline: 0;
+  }
+
+  .project__action--details {
+    background-color: transparent;
+    cursor: pointer;
+  }
+
+  /* Sem JavaScript o diálogo não abre: o botão nem aparece. */
+  :global(.no-js) .project__action--details {
+    display: none;
   }
 
   .project__action--locked {

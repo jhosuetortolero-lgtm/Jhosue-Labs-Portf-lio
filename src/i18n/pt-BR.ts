@@ -167,6 +167,9 @@ export const ptBR = {
     next: 'Próximo projeto',
     pause: 'Pausar rotação',
     play: 'Retomar rotação',
+    details: 'Detalhes',
+    close: 'Fechar detalhes do projeto',
+    technologies: 'Tecnologias',
     status: {
       online: 'No ar',
       development: 'Em desenvolvimento',
