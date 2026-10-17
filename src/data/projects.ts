@@ -11,6 +11,50 @@ import type { Project, ProjectCategory } from '../types/project';
  */
 export const projects: Project[] = [
   {
+    id: 'intellizap-ai',
+    title: 'IntelliZap AI',
+    category: 'AI',
+    year: '2026',
+    featured: true,
+    status: 'online',
+    technologies: [
+      'Laravel',
+      'React',
+      'TypeScript',
+      'PostgreSQL',
+      'Redis',
+      'OpenAI',
+      'Anthropic',
+      'Evolution Go',
+      'Stripe',
+      'Docker',
+    ],
+    projectUrl: 'https://intellizap-ai.site/',
+    repositoryUrl: null,
+    image: '/images/projects/intellizap-ai-640.webp',
+    shortDescription: {
+      'pt-BR':
+        'SaaS multi-tenant de funcionários de IA que atendem, agendam e vendem pelo WhatsApp 24/7, com painel, inbox da equipe e cobrança integrada.',
+      'en-US':
+        'Multi-tenant SaaS of AI employees that answer, book and sell over WhatsApp 24/7, with a dashboard, team inbox and built-in billing.',
+      es: 'SaaS multi-tenant de empleados de IA que atienden, agendan y venden por WhatsApp 24/7, con panel, inbox del equipo y cobro integrado.',
+    },
+    fullDescription: {
+      'pt-BR':
+        'Plataforma B2B em produção que coloca uma equipe de agentes de IA (recepção, vendas, suporte e cobrança) no WhatsApp de clínicas, barbearias, escritórios e imobiliárias, com até seis números por empresa. Os agentes entendem texto e áudio, consultam a agenda integrada ao Google Agenda, marcam horários sem overbooking, transferem a conversa entre si e ficam em silêncio quando a equipe assume pelo inbox. Por trás, Laravel 13 com filas no Horizon, isolamento entre empresas por Row-Level Security no PostgreSQL, segredos cifrados com XChaCha20, débito atômico da cota de tokens, roteador OpenAI ⇄ Anthropic com circuit breaker e assinaturas por cartão (Stripe) ou USDT com webhooks idempotentes. Painel em React 19 e TypeScript, em português, inglês e espanhol.',
+      'en-US':
+        'B2B platform in production that puts a team of AI agents (reception, sales, support and collections) on the WhatsApp of clinics, barbershops, firms and real estate agencies, with up to six numbers per business. The agents understand text and voice messages, check a schedule synced with Google Calendar, book appointments without double booking, hand conversations off to each other and stay silent when the team takes over from the inbox. Under the hood: Laravel 13 with Horizon queues, tenant isolation through PostgreSQL Row-Level Security, secrets encrypted with XChaCha20, atomic token quota charging, an OpenAI ⇄ Anthropic router with a circuit breaker, and card (Stripe) or USDT subscriptions backed by idempotent webhooks. Dashboard in React 19 and TypeScript, in Portuguese, English and Spanish.',
+      es: 'Plataforma B2B en producción que pone un equipo de agentes de IA (recepción, ventas, soporte y cobranza) en el WhatsApp de clínicas, barberías, despachos e inmobiliarias, con hasta seis números por empresa. Los agentes entienden texto y audio, consultan la agenda sincronizada con Google Calendar, reservan citas sin sobreagendar, se transfieren la conversación entre sí y guardan silencio cuando el equipo toma el control desde el inbox. Por detrás, Laravel 13 con colas en Horizon, aislamiento entre empresas mediante Row-Level Security en PostgreSQL, secretos cifrados con XChaCha20, débito atómico de la cuota de tokens, un enrutador OpenAI ⇄ Anthropic con circuit breaker y suscripciones con tarjeta (Stripe) o USDT respaldadas por webhooks idempotentes. Panel en React 19 y TypeScript, en portugués, inglés y español.',
+    },
+    imageAlt: {
+      'pt-BR':
+        'Página inicial do IntelliZap AI com o título “Nenhum cliente esperando. Nenhuma venda perdida.”',
+      'en-US':
+        'IntelliZap AI home page with the headline “Nenhum cliente esperando. Nenhuma venda perdida.”',
+      es: 'Página de inicio de IntelliZap AI con el titular “Nenhum cliente esperando. Nenhuma venda perdida.”',
+    },
+  },
+  {
     id: 'inovar-sertao',
     title: 'Inovar Sertão',
     category: 'WEB',
