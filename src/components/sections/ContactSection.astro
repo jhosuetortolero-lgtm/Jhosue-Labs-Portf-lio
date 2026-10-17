@@ -82,6 +82,12 @@ const projectTypes = [
   'other',
 ];
 const budgets = ['undefined', 'upTo5k', 'from5to15k', 'from15to40k', 'above40k'];
+
+/** Passos do painel "Como começamos". */
+const steps = ['tell', 'plan', 'build'];
+
+const whatsappHref = channels.find((channel) => channel.id === 'whatsapp')?.href ?? null;
+const emailHref = channels.find((channel) => channel.id === 'email')?.href ?? null;
 ---
 
 <section id="contact" class="section" aria-labelledby="contact-title">
@@ -97,7 +103,67 @@ const budgets = ['undefined', 'upTo5k', 'from5to15k', 'from15to40k', 'above40k']
     />
 
     <div class="contact">
-      <div class="contact__channels" data-reveal>
+      <div class="contact__panel" data-reveal>
+        <div class="contact__bar" aria-hidden="true">
+          <span class="contact__dot contact__dot--red"></span>
+          <span class="contact__dot contact__dot--yellow"></span>
+          <span class="contact__dot contact__dot--green"></span>
+          <span class="contact__path" data-i18n="contact.panelPath">{t('contact.panelPath')}</span>
+        </div>
+
+        <div class="contact__panel-body">
+          <h3 class="contact__panel-title" data-i18n="contact.panelTitle">
+            {t('contact.panelTitle')}
+          </h3>
+
+          <ol class="contact__steps" role="list">
+            {
+              steps.map((step, index) => (
+                <li class="contact__step">
+                  <span class="contact__step-number" aria-hidden="true">
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+                  <span class="contact__step-text">
+                    <strong data-i18n={`contact.steps.${step}.title`}>
+                      {t(`contact.steps.${step}.title`)}
+                    </strong>
+                    <span data-i18n={`contact.steps.${step}.text`}>
+                      {t(`contact.steps.${step}.text`)}
+                    </span>
+                  </span>
+                </li>
+              ))
+            }
+          </ol>
+
+          {
+            (whatsappHref || emailHref) && (
+              <div class="contact__actions">
+                {whatsappHref && (
+                  <Button
+                    href={whatsappHref}
+                    variant="primary"
+                    size="lg"
+                    icon="whatsapp"
+                    iconPosition="start"
+                    external
+                    data-whatsapp-message="contact.whatsappMessage"
+                  >
+                    <span data-i18n="contact.whatsappCta">{t('contact.whatsappCta')}</span>
+                  </Button>
+                )}
+                {emailHref && (
+                  <Button href={emailHref} variant="secondary" size="lg" icon="mail" iconPosition="start">
+                    <span data-i18n="contact.emailCta">{t('contact.emailCta')}</span>
+                  </Button>
+                )}
+              </div>
+            )
+          }
+        </div>
+      </div>
+
+      <div class="contact__channels" data-reveal style="--reveal-delay: 90ms">
         <p class="contact__status">
           <span class:list={['status-dot', !available && 'status-dot--off']} aria-hidden="true"></span>
           <span data-i18n={statusKey}>{t(statusKey)}</span>
@@ -155,7 +221,7 @@ const budgets = ['undefined', 'upTo5k', 'from5to15k', 'from15to40k', 'above40k']
 
       {
         features.contactForm && (
-          <div class="contact__form-wrapper card" data-reveal style="--reveal-delay: 90ms">
+          <div class="contact__form-wrapper card" data-reveal style="--reveal-delay: 180ms">
             <h3 class="contact__heading" data-i18n="contact.formTitle">
               {t('contact.formTitle')}
             </h3>
@@ -349,6 +415,121 @@ const budgets = ['undefined', 'upTo5k', 'from5to15k', 'from15to40k', 'above40k']
     align-items: start;
   }
 
+  /* --- Painel "Como começamos" (janela de terminal) ---------------------- */
+
+  .contact__panel {
+    background-color: var(--terminal-bg);
+    color: var(--terminal-text);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-large);
+    box-shadow: var(--shadow-medium);
+    overflow: hidden;
+  }
+
+  .contact__bar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 0.6rem 0.8rem;
+    background-color: color-mix(in srgb, var(--terminal-bg) 70%, #ffffff 12%);
+    border-bottom: 1px solid rgb(255 255 255 / 12%);
+  }
+
+  .contact__dot {
+    width: 0.65rem;
+    height: 0.65rem;
+    border-radius: 50%;
+  }
+
+  .contact__dot--red {
+    background-color: #ff5f57;
+  }
+  .contact__dot--yellow {
+    background-color: #febc2e;
+  }
+  .contact__dot--green {
+    background-color: #28c840;
+  }
+
+  .contact__path {
+    margin-left: auto;
+    font-size: var(--text-xs);
+    color: rgb(255 255 255 / 65%);
+  }
+
+  .contact__panel-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    padding: clamp(var(--space-5), 4vw, var(--space-6));
+  }
+
+  .contact__panel-title {
+    font-size: var(--text-2xl);
+    line-height: 1.15;
+    color: #f2f7f3;
+  }
+
+  .contact__steps {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .contact__step {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-4);
+  }
+
+  .contact__step-number {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: var(--text-sm);
+    font-weight: 700;
+    border: 1px solid color-mix(in srgb, var(--terminal-prompt) 55%, transparent);
+    border-radius: var(--radius-small);
+    background-color: color-mix(in srgb, var(--terminal-prompt) 14%, transparent);
+    color: var(--terminal-prompt);
+  }
+
+  .contact__step-text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    font-size: var(--text-sm);
+    line-height: 1.6;
+    color: rgb(216 227 220 / 78%);
+  }
+
+  .contact__step-text strong {
+    font-size: var(--text-base);
+    color: #f2f7f3;
+  }
+
+  .contact__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    padding-top: var(--space-5);
+    border-top: 1px solid rgb(255 255 255 / 12%);
+  }
+
+  /* No celular os dois botões ficam com a mesma largura. */
+  @media (max-width: 479px) {
+    .contact__actions > :global(.button) {
+      flex: 1 1 100%;
+    }
+  }
+
+  /* --- Canais diretos ---------------------------------------------------- */
+
   .contact__status {
     display: inline-flex;
     align-items: center;
@@ -425,7 +606,9 @@ const budgets = ['undefined', 'upTo5k', 'from5to15k', 'from15to40k', 'above40k']
 
   /* --- Formulário ------------------------------------------------------- */
 
+  /* Ligado em config/features.ts, o formulário ocupa a linha inteira. */
   .contact__form-wrapper {
+    grid-column: 1 / -1;
     padding: var(--space-5);
   }
 
@@ -593,7 +776,7 @@ const budgets = ['undefined', 'upTo5k', 'from5to15k', 'from15to40k', 'above40k']
 
   @media (min-width: 1024px) {
     .contact {
-      grid-template-columns: 0.8fr 1.2fr;
+      grid-template-columns: 1.2fr 0.8fr;
       gap: var(--space-7);
     }
   }

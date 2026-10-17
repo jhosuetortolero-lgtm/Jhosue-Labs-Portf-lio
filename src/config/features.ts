@@ -12,7 +12,12 @@ export const features = {
   projectDetails: true,
   languageToggle: true,
   themeToggle: true,
-  contactForm: true,
+  /**
+   * Formulário "Envie uma mensagem" na seção de contato. Desligado: o
+   * contato vai pelo painel "Como começamos" e pelos canais diretos. O
+   * código e as variáveis do Formspree continuam prontos para religar.
+   */
+  contactForm: false,
   scrollProgress: true,
   animatedTerminal: true,
   /** Seção de certificados com carrossel e visualizador ampliado. */

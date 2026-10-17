@@ -230,6 +230,24 @@ export const ptBR = {
     unavailable: 'Agenda fechada no momento',
     notConfigured: 'Canal ainda não configurado.',
     whatsappMessage: 'Olá Jhosue! Vim pelo site da Jhosue Labs e quero falar sobre um projeto.',
+    panelPath: 'jhosue@labs: ~/novo-projeto',
+    panelTitle: 'Como começamos',
+    steps: {
+      tell: {
+        title: 'Você conta o desafio',
+        text: 'Pelo WhatsApp ou por e-mail, com o que a sua operação precisa hoje.',
+      },
+      plan: {
+        title: 'Recebe um caminho técnico',
+        text: 'Arquitetura, etapas e uma estimativa realista para o projeto.',
+      },
+      build: {
+        title: 'Começamos a construir',
+        text: 'Com entregas acompanhadas de perto até o sistema estar no ar.',
+      },
+    },
+    whatsappCta: 'Conversar no WhatsApp',
+    emailCta: 'Enviar e-mail',
   },
 
   form: {

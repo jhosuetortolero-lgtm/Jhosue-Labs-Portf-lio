@@ -229,6 +229,24 @@ export const es: DictionaryShape = {
     notConfigured: 'Canal aún no configurado.',
     whatsappMessage:
       '¡Hola Jhosue! Vengo desde el sitio de Jhosue Labs y quiero hablar sobre un proyecto.',
+    panelPath: 'jhosue@labs: ~/nuevo-proyecto',
+    panelTitle: 'Cómo empezamos',
+    steps: {
+      tell: {
+        title: 'Cuentas el desafío',
+        text: 'Por WhatsApp o por correo, con lo que tu operación necesita hoy.',
+      },
+      plan: {
+        title: 'Recibes un camino técnico',
+        text: 'Arquitectura, etapas y una estimación realista para el proyecto.',
+      },
+      build: {
+        title: 'Empezamos a construir',
+        text: 'Con entregas acompañadas de cerca hasta que el sistema esté en línea.',
+      },
+    },
+    whatsappCta: 'Hablar por WhatsApp',
+    emailCta: 'Enviar correo',
   },
 
   form: {

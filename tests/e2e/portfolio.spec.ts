@@ -1,4 +1,5 @@
 import { test, expect, type Page } from '@playwright/test';
+import { features } from '../../src/config/features';
 
 /** Pula a tela de boot para não interferir nos testes. */
 async function gotoHome(page: Page): Promise<void> {
@@ -307,6 +308,9 @@ test('command palette abre com "/" mas não enquanto digita no formulário', asy
   await expect(page.locator('[data-palette]')).toBeVisible();
   await page.keyboard.press('Escape');
 
+  // Sem o formulário (config/features.ts) não há campo de texto para digitar.
+  if (!features.contactForm) return;
+
   const nameInput = page.locator('#contact-name');
   await nameInput.scrollIntoViewIfNeeded();
   await nameInput.click();
@@ -325,7 +329,19 @@ test('comando desconhecido não injeta HTML', async ({ page }) => {
   await expect(output.locator('img')).toHaveCount(0);
 });
 
+test('contato mostra os passos e chama no WhatsApp e no e-mail', async ({ page }) => {
+  const contato = page.locator('#contact');
+  await contato.scrollIntoViewIfNeeded();
+
+  await expect(contato.locator('.contact__step')).toHaveCount(3);
+  await expect(contato.locator('.contact__actions a[href^="https://wa.me/"]')).toBeVisible();
+  await expect(contato.locator('.contact__actions a[href^="mailto:"]')).toBeVisible();
+  await expect(contato.locator('[data-contact-form]')).toHaveCount(features.contactForm ? 1 : 0);
+});
+
 test('formulário valida campos obrigatórios', async ({ page }) => {
+  test.skip(!features.contactForm, 'formulário desligado em config/features.ts');
+
   await page.locator('#contact').scrollIntoViewIfNeeded();
   await page.locator('[data-contact-submit]').click();
 
@@ -335,6 +351,8 @@ test('formulário valida campos obrigatórios', async ({ page }) => {
 });
 
 test('formulário aceita envio válido e responde em modo demonstração', async ({ page }) => {
+  test.skip(!features.contactForm, 'formulário desligado em config/features.ts');
+
   /*
     Só faz sentido quando o build NAO tem provedor configurado. Com um
     provedor real (`PUBLIC_CONTACT_PROVIDER` no .env ou nas vars do CI) este

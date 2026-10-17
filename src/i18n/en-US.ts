@@ -229,6 +229,24 @@ export const enUS: DictionaryShape = {
     notConfigured: 'Channel not configured yet.',
     whatsappMessage:
       'Hi Jhosue! I came from the Jhosue Labs website and I would like to talk about a project.',
+    panelPath: 'jhosue@labs: ~/new-project',
+    panelTitle: 'How we get started',
+    steps: {
+      tell: {
+        title: 'You share the challenge',
+        text: 'Over WhatsApp or email, with what your operation needs today.',
+      },
+      plan: {
+        title: 'You get a technical path',
+        text: 'Architecture, milestones and a realistic estimate for the project.',
+      },
+      build: {
+        title: 'We start building',
+        text: 'With closely followed deliveries until the system is live.',
+      },
+    },
+    whatsappCta: 'Chat on WhatsApp',
+    emailCta: 'Send an email',
   },
 
   form: {
