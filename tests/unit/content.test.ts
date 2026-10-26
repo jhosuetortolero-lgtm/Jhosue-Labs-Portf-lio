@@ -69,4 +69,10 @@ describe('conteúdo', () => {
       if (!link.configured) expect(link.href).toBe('');
     }
   });
+
+  it('o Instagram profissional está configurado', () => {
+    const instagram = socialLinks.find((link) => link.id === 'instagram');
+    expect(instagram?.configured).toBe(true);
+    expect(instagram?.href).toBe('https://www.instagram.com/jhosuedev25/');
+  });
 });

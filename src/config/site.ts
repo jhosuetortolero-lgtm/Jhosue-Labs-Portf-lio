@@ -80,7 +80,7 @@ export const siteConfig = {
     whatsapp: '5581994401675',
     github: 'https://github.com/jhosuetortolero-lgtm',
     linkedin: 'https://www.linkedin.com/in/jhosue-tortolero-379756133/',
-    instagram: '[INSERIR_INSTAGRAM]',
+    instagram: 'https://www.instagram.com/jhosuedev25/',
   },
 
   /**

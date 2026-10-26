@@ -26,6 +26,7 @@ const statusKey = available ? 'contact.availableNow' : 'contact.unavailable';
 
 const githubHref = socialHref('github');
 const linkedinHref = socialHref('linkedin');
+const instagramHref = socialHref('instagram');
 
 /** Cada canal mostra um valor legível; os não configurados viram aviso. */
 type Channel = {
@@ -67,6 +68,13 @@ const channels: Channel[] = [
     labelKey: 'social.linkedin',
     href: linkedinHref,
     value: linkedinHref ? profileHandle(linkedinHref) : null,
+  },
+  {
+    id: 'instagram',
+    icon: 'instagram',
+    labelKey: 'social.instagram',
+    href: instagramHref,
+    value: instagramHref ? profileHandle(instagramHref) : null,
   },
 ];
 
